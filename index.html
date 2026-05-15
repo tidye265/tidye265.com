@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>tidye265 | Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #fbbf24; /* Malawi Gold */
+            --dark: #0f172a;
+            --card: #1e293b;
+            --text: #f8fafc;
+            --success: #22c55e;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--dark);
+            color: var(--text);
+        }
+
+        /* Navbar */
+        nav {
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--card);
+            border-bottom: 1px solid #334155;
+        }
+
+        .logo { font-weight: 800; font-size: 1.5rem; color: var(--primary); }
+
+        /* Mode Switcher */
+        .mode-toggle {
+            background: #334155;
+            padding: 5px;
+            border-radius: 50px;
+            display: flex;
+            gap: 5px;
+        }
+
+        .mode-btn {
+            padding: 8px 15px;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            color: #94a3b8;
+            background: transparent;
+            transition: 0.3s;
+        }
+
+        .mode-btn.active { background: var(--primary); color: var(--dark); }
+
+        /* Dashboard Stats */
+        .dashboard { padding: 20px; }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: var(--card);
+            padding: 20px;
+            border-radius: 16px;
+            border: 1px solid #334155;
+        }
+
+        .stat-label { color: #94a3b8; font-size: 0.8rem; margin-bottom: 5px; }
+        .stat-value { font-size: 1.2rem; font-weight: 800; }
+
+        /* Live Pool Section */
+        .live-pool {
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            padding: 25px;
+            border-radius: 20px;
+            text-align: center;
+            border: 2px solid var(--primary);
+            margin-bottom: 25px;
+        }
+
+        /* Game Grid */
+        .game-title { margin-bottom: 15px; font-weight: 700; }
+        .game-list { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .game-card {
+            background: var(--card);
+            height: 150px;
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid #475569;
+            cursor: pointer;
+        }
+        .game-card:hover { border-color: var(--primary); }
+        .game-icon { font-size: 2rem; margin-bottom: 10px; }
+
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="logo">tidye265</div>
+    <div class="mode-toggle">
+        <button id="testBtn" class="mode-btn active" onclick="setMode('test')">TEST</button>
+        <button id="liveBtn" class="mode-btn" onclick="setMode('live')">LIVE</button>
+    </div>
+</nav>
+
+<div class="dashboard">
+    <div class="stat-grid">
+        <div class="stat-card">
+            <div class="stat-label">Wallets (MWK)</div>
+            <div id="balance" class="stat-value">0.00</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Rank</div>
+            <div id="rank" class="stat-value">#--</div>
+        </div>
+    </div>
+
+    <div class="live-pool">
+        <div class="stat-label" style="color: var(--primary);">ACTIVE GLOBAL POOL</div>
+        <div id="poolValue" style="font-size: 2.5rem; font-weight: 900;">MWK 339,000</div>
+        <div style="font-size: 0.8rem; margin-top: 10px; color: var(--success);">● 1,420 Players Online</div>
+    </div>
+
+    <h2 class="game-title">Select Game (2P2)</h2>
+    <div class="game-list">
+        <div class="game-card" onclick="playGame('Bawo')">
+            <div class="game-icon">🕳️</div>
+            <div>BAWO</div>
+        </div>
+        <div class="game-card" onclick="playGame('Draft')">
+            <div class="game-icon">🏁</div>
+            <div>DRAFT</div>
+        </div>
+        <div class="game-card" onclick="playGame('Chess')">
+            <div class="game-icon">♟️</div>
+            <div>CHESS</div>
+        </div>
+        <div class="game-card" onclick="playGame('Shooter')">
+            <div class="game-icon">🎯</div>
+            <div>SHOOTER</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 1. Supabase Initialization (Idzawerenga Variables kuchoka ku Cloudflare)
+    // Cloudflare Pages Environment Variables sazimawoneka pa frontend mwa njira imeneyo, 
+    // ndiye pakali pano, replace kaye pamanja ndi URL ndi Key yanu yomwe muli nayo.
+    const supabaseUrl = 'YOUR_SUPABASE_URL';
+    const supabaseKey = 'YOUR_SUPABASE_ANON_KEY';
+    const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+    let currentMode = 'test';
+
+    function setMode(mode) {
+        currentMode = mode;
+        document.getElementById('testBtn').classList.toggle('active', mode === 'test');
+        document.getElementById('liveBtn').classList.toggle('active', mode === 'live');
+        
+        if(mode === 'live') {
+            alert("Mwalowa mu LIVE Mode. Masewera onse ndi a ndalama!");
+        }
+    }
+
+    function playGame(game) {
+        if(currentMode === 'live') {
+            const confirmPlay = confirm(`Entry fee ya ${game} ndi MWK 350. Mulowelere?`);
+            if(!confirmPlay) return;
+        }
+        alert(`Starting ${game} in ${currentMode} mode...`);
+    }
+
+    // 2. Realtime Listener (Global Pool Update)
+    // Izi zithandiza kuti Pool izisintha yokha ngati wina wapanga Bet kwina kulikonse
+    async function listenToPool() {
+        supabase
+            .channel('public:transactions')
+            .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'transactions' }, payload => {
+                // Apa logic yowonjezera pa Pool value
+                console.log('Ndalama zawonjezeka pa Pool!');
+            })
+            .subscribe();
+    }
+
+    listenToPool();
+</script>
+
+</body>
+</html>
