@@ -1,0 +1,273 @@
+<!-- Styles partition dynamic for footer context components -->  
+<style>  
+    /* New Traditional Footer Layout (Charcoal Black Section) */  
+    .site-footer {  
+        background: #1C1D21;  
+        color: #ffffff;  
+        padding: 40px 20px 100px 20px; /* Padding ya pansi yokwanira kuti isasitike ndi fixed nav */  
+        font-family: 'Inter', sans-serif;  
+        border-top: 1px solid #2E2F33;  
+    }  
+    .footer-brand {  
+        text-align: center;  
+        margin-bottom: 25px;  
+    }  
+    .footer-logo {  
+        height: 35px;  
+        width: auto;  
+        margin-bottom: 8px;  
+        border-radius: 6px;  
+    }  
+    .footer-tagline {  
+        font-size: 11px;  
+        color: #9ca3af;  
+        font-family: 'Lexend';  
+    }  
+    .footer-divider {  
+        border: 0;  
+        border-top: 1px solid #2E2F33;  
+        margin: 25px 0;  
+    }  
+    .footer-links-grid {  
+        display: grid;  
+        grid-template-columns: 1fr 1fr;  
+        gap: 25px;  
+    }  
+    .footer-col h5 {  
+        font-family: 'Lexend';  
+        font-size: 12px;  
+        color: #FFD700;  
+        margin-bottom: 12px;  
+        text-transform: uppercase;  
+        letter-spacing: 0.5px;  
+    }  
+    .footer-col a {  
+        display: block;  
+        color: #e5e7eb;  
+        text-decoration: none;  
+        font-size: 12px;  
+        margin-bottom: 8px;  
+        transition: color 0.2s;  
+    }  
+    .footer-col p {  
+        font-size: 12px;  
+        color: #e5e7eb;  
+        display: flex;  
+        align-items: center;  
+        gap: 6px;  
+    }  
+    .footer-col i {  
+        color: #FFD700;  
+    }  
+    .footer-bottom {  
+        text-align: center;  
+        font-size: 11px;  
+        color: #9ca3af;  
+        font-family: 'Lexend';  
+    }  
+  
+    /* FIXED & PERFECTLY BALANCED BOTTOM NAV BAR */  
+    .bottom-nav {   
+        position: fixed; 
+        bottom: 0; 
+        left: 0;
+        width: 100%; 
+        background: #2E2F33;   
+        display: flex; 
+        justify-content: space-between; 
+        align-items: center;   
+        z-index: 1000; 
+        height: 50px;  /* Height yokwanira bwino kuti zinthu zisapanikizane */
+        border-top: 1px solid #404247; 
+        padding: 0 5px;
+    }  
+    .nav-item, .trade-btn-container {   
+        display: flex; 
+        flex-direction: column; 
+        align-items: center; 
+        justify-content: center;
+        color: #b9bbc0;    
+        text-decoration: none; 
+        font-size: 10px; 
+        font-family: 'Lexend', sans-serif; 
+        transition: all 0.2s ease; 
+        cursor: pointer;  
+        border: none; 
+        background: none; 
+        flex: 1; /* Izi zimapangitsa kuti item iliyonse itenge malo ofanana ndendende popanda kukanikizana */
+        height: 100%;
+        min-width: 0;
+    }  
+    .nav-item i, .trade-btn-container i { 
+        font-size: 20px; 
+        margin-bottom: 4px; 
+        display: block;
+    }  
+    .nav-item span {
+        display: block;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .nav-item.active { 
+        color: #FFD700; 
+    }  
+    .nav-item:active, .trade-btn-container:active { 
+        transform: scale(0.9); 
+    }  
+  
+    /* Modals & Bottom Drawers Overlay Layouts */  
+    .menu-overlay, .modal-overlay {  
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7);  
+        display: none; z-index: 2000; align-items: flex-end; backdrop-filter: blur(4px); opacity: 0; transition: opacity 0.3s;  
+    }  
+    .menu-overlay.show, .modal-overlay.show { display: flex; opacity: 1; }  
+    .modal-overlay { align-items: center; justify-content: center; }  
+          
+    .bottom-menu { width: 100%; background: #1C1D21; border-radius: 25px 25px 0 0; padding: 25px; transform: translateY(100%); transition: transform 0.3s ease-out; }  
+    .menu-overlay.show .bottom-menu { transform: translateY(0); }  
+          
+    .menu-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; text-align: center; }  
+    .menu-item { text-decoration: none; color: #e5e7eb; display: flex; flex-direction: column; align-items: center; gap: 8px; font-family: 'Lexend'; font-size: 11px; font-weight: 600; }  
+    .menu-item i { width: 45px; height: 45px; background: #2E2F33; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 18px; color: #FFD700; }  
+  
+    .modal-content { background: #2E2F33; padding: 30px; border-radius: 28px; width: 90%; max-width: 320px; text-align: center; transform: scale(0.9); transition: transform 0.3s; color: #ffffff; border: 1px solid #404247; }  
+    .modal-overlay.show .modal-content { transform: scale(1); }  
+    .modal-btn { background: #FFD700; border: none; padding: 14px; border-radius: 12px; margin-top: 20px; font-weight: 700; width: 100%; cursor: pointer; color: #1a1d21; }  
+</style>  
+  
+<!-- Traditional Professional Footer -->  
+<footer class="site-footer">  
+    <div class="footer-brand">  
+        <img src="logo.jpg" alt="tidye265 Logo" class="footer-logo">  
+        <p class="footer-tagline">Professional Malawi Gaming & Trading Platform</p>  
+    </div>  
+        
+    <div class="footer-links-grid">  
+        <div class="footer-col">  
+            <h5>Support & Help</h5>  
+            <a href="#" class="generic-soon">Help Center</a>  
+            <a href="#" class="generic-soon">FAQs</a>  
+            <a href="#" class="generic-soon">Live Support</a>  
+            <a href="#" class="generic-soon">Contacts</a>  
+        </div>  
+        <div class="footer-col">  
+            <h5>Location</h5>  
+            <p><i class="fa-solid fa-location-dot"></i> Blantyre, Malawi</p>  
+        </div>  
+    </div>  
+        
+    <hr class="footer-divider">  
+        
+    <div class="footer-bottom">  
+        <p>&copy; 2026 tidye265. All rights reserved.</p>  
+    </div>  
+</footer>  
+  
+<!-- FIXED AND EQUALLY DISTRIBUTED BOTTOM NAVIGATION -->  
+<nav class="bottom-nav" aria-label="Main Navigation">  
+    <a href="index.php" class="nav-item active" aria-label="Home">  
+        <i class="fa-solid fa-house"></i>  
+        <span>Home</span>  
+    </a>  
+    <a href="game.html" class="nav-item generic-soon" aria-label="Games">  
+        <i class="fa-solid fa-gamepad"></i>  
+        <span>Games</span>  
+    </a>  
+    <button class="trade-btn-container generic-soon" aria-label="Tidye Special">  
+        <i class="fa-solid fa-crosshairs" style="color: #FFD700;"></i>  
+        <span style="color: #FFD700;">tidye</span>  
+    </button>  
+    <a href="wallet.html" class="nav-item generic-soon" aria-label="Wallet">  
+        <i class="fa-solid fa-wallet"></i>  
+        <span>Wallet</span>  
+    </a>  
+    <button class="nav-item" id="menuToggleBtn" aria-label="Open Menu">  
+        <i class="fa-solid fa-bars"></i>  
+        <span>Menu</span>  
+    </button>  
+</nav>  
+  
+<!-- Accessible Slide Drawer Modal Layout -->  
+<div id="menuOverlay" class="menu-overlay" aria-hidden="true">  
+    <div class="bottom-menu">  
+        <div style="width: 40px; height: 5px; background: #404247; border-radius: 10px; margin: 0 auto 20px auto;"></div>  
+        <div class="menu-grid">  
+            <a href="#" class="menu-item generic-soon"><i class="fa-solid fa-user"></i>Profile</a>  
+            <a href="#" class="menu-item generic-soon"><i class="fa-solid fa-clock-rotate-left"></i>History</a>  
+            <a href="#" class="menu-item generic-soon"><i class="fa-solid fa-headset"></i>Support</a>  
+            <a href="#" class="menu-item generic-soon"><i class="fa-solid fa-users"></i>Affiliate</a>  
+            <a href="#" class="menu-item generic-soon"><i class="fa-solid fa-gift"></i>Bonuses</a>  
+            <a href="#" class="menu-item generic-soon"><i class="fa-solid fa-gear"></i>Settings</a>  
+        </div>  
+    </div>  
+</div>  
+  
+<!-- Accessible Interactive Alert Dialog Modal Layout -->  
+<div id="comingSoon" class="modal-overlay" aria-hidden="true" role="dialog">  
+    <div class="modal-content">  
+        <i class="fa-solid fa-rocket" style="font-size: 40px; color: #FFD700; margin-bottom: 15px;"></i>  
+        <h3 style="font-family:'Lexend'; margin-bottom: 10px;">Coming Soon</h3>  
+        <p style="font-size:13px; color:#b9bbc0;">This feature is currently under development.</p>  
+        <button class="modal-btn" id="closeModalBtn">Got it</button>  
+    </div>  
+</div>  
+  
+<script>  
+    // Interactive execution block for footer overlay components  
+    const menuToggleBtn = document.getElementById('menuToggleBtn');  
+    const menuOverlay = document.getElementById('menuOverlay');  
+  
+    if (menuToggleBtn && menuOverlay) {  
+        menuToggleBtn.addEventListener('click', () => {  
+            menuOverlay.classList.add('show');  
+            menuOverlay.setAttribute('aria-hidden', 'false');  
+        });  
+          
+        menuOverlay.addEventListener('click', (e) => {  
+            if(e.target === menuOverlay) {  
+                menuOverlay.classList.remove('show');  
+                menuOverlay.setAttribute('aria-hidden', 'true');  
+            }  
+        });  
+    }  
+  
+    // Interactive execution block for alert dynamic components  
+    const comingSoonModal = document.getElementById('comingSoon');  
+    const closeModalBtn = document.getElementById('closeModalBtn');  
+  
+    const openComingSoon = () => {  
+        if (comingSoonModal) {  
+            comingSoonModal.classList.add('show');  
+            comingSoonModal.setAttribute('aria-hidden', 'false');  
+        }  
+    };  
+  
+    const closeComingSoon = () => {  
+        if (comingSoonModal) {  
+            comingSoonModal.classList.remove('show');  
+            comingSoonModal.setAttribute('aria-hidden', 'true');  
+        }  
+    };  
+  
+    if (closeModalBtn) closeModalBtn.addEventListener('click', closeComingSoon);  
+      
+    // Global Event Delegation Model  
+    document.body.addEventListener('click', (e) => {  
+        const target = e.target.closest('.generic-soon');  
+        if (target) {  
+            e.preventDefault();  
+            openComingSoon();  
+        }  
+    });  
+  
+    document.body.addEventListener('keydown', (e) => {  
+        if (e.key === 'Enter' || e.key === ' ') {  
+            const target = e.target.closest('.generic-soon');  
+            if (target) {  
+                e.preventDefault();  
+                openComingSoon();  
+            }  
+        }  
+    });  
+</script>
