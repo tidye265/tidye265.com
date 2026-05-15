@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <title>tidye265 | Professional Malawi Gaming & Trading</title>
+    <meta name="theme-color" content="#FFD700">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Lexend:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #F8F9FA;
+            --primary: #FFD700;
+            --soft-black: #FFFFFF;
+            --container-grey: #f0f2f5;
+            --text-light: #1a1d21;
+            --text-dim: #4b5563;
+            --success: #10b981;
+            --border: #e5e7eb;
+            --footer-bg: #000000; /* Black footer */
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { background-color: var(--bg); color: var(--text-light); font-family: 'Inter', sans-serif; padding-bottom: 90px; overflow-x: hidden; }
+        
+        /* 1. Background Loader (Animations removed) */
+        #loader { 
+            position: fixed; 
+            top: 0; left: 0; 
+            width: 100%; height: 100%; 
+            background: var(--bg); 
+            display: flex; 
+            flex-direction: column;
+            justify-content: center; 
+            align-items: center; 
+            z-index: 9999; 
+        }
+        .loader-logo-big { height: 120px; width: auto; }
+
+        /* 3. Header: Logo Left, Search Center, No Notification */
+        header { 
+            padding: 0 15px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            background: #fff; 
+            position: sticky; 
+            top: 0; 
+            z-index: 1000; 
+            border-bottom: 1px solid var(--border); 
+            height: 70px; 
+        }
+        .logo-container img { height: 50px; width: auto; object-fit: contain; }
+        .header-search-center {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            margin: 0 15px;
+        }
+        .search-box-header {
+            background: #f3f4f6;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            padding: 0 12px;
+            height: 38px;
+            width: 100%;
+            max-width: 200px;
+        }
+        .search-box-header input { border: none; background: transparent; outline: none; font-size: 13px; width: 100%; margin-left: 8px; }
+
+        /* 4. Grid Layout for Casino & P2P (4X4) */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            padding: 0 20px;
+        }
+        .grid-item {
+            background: var(--soft-black);
+            aspect-ratio: 1/1;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--text-dim);
+        }
+        .grid-item i { font-size: 20px; color: var(--primary); margin-bottom: 5px; }
+
+        .list-title { padding: 15px 20px 10px 20px; font-family: 'Lexend', sans-serif; font-weight: 700; font-size: 12px; color: var(--text-dim); text-transform: uppercase; }
+
+        .balance-card { margin: 15px 20px; background: var(--soft-black); padding: 20px; border-radius: 22px; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
+        .amount { font-family: 'Lexend', sans-serif; font-size: 22px; font-weight: 800; }
+
+        /* 5. Footer: Smaller, Black BG, White Icons */
+        .bottom-nav { 
+            position: fixed; 
+            bottom: 0; 
+            width: 100%; 
+            background: var(--footer-bg); 
+            display: flex; 
+            justify-content: space-around; 
+            align-items: center;
+            padding: 8px 0 20px 0; 
+            z-index: 1000; 
+            height: 70px;
+        }
+        .nav-item { 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            color: #ffffff; 
+            text-decoration: none; 
+            font-size: 9px; 
+            font-family: 'Lexend'; 
+        }
+        .nav-item i { font-size: 18px; margin-bottom: 3px; }
+        .nav-item.active { color: var(--primary); }
+
+        /* Center Footer Button: tidye */
+        .trade-btn-main { 
+            width: 50px; 
+            height: 50px; 
+            background: var(--primary); 
+            color: #000; 
+            border-radius: 50%; 
+            display: flex; 
+            flex-direction: column;
+            align-items: center; 
+            justify-content: center; 
+            font-size: 10px; 
+            font-weight: 800;
+            font-family: 'Lexend';
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+        }
+
+        /* Modal & Side Menu */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); display: none; align-items: center; justify-content: center; z-index: 3000; padding: 20px; backdrop-filter: blur(4px); }
+        .modal-content { background: #ffffff; padding: 30px; border-radius: 28px; width: 100%; max-width: 300px; text-align: center; }
+        .modal-btn { background: var(--primary); color: #000; border: none; padding: 12px; border-radius: 12px; margin-top: 20px; font-weight: 700; width: 100%; }
+    </style>
+</head>
+<body>
+    
+    <div id="loader">
+        <img src="IMG_20260504_221316.jpg" alt="tidye265" class="loader-logo-big">
+        <div style="margin-top: 15px; font-family: 'Lexend'; font-size: 11px; color: var(--text-dim); letter-spacing: 1px;">LOADING...</div>
+    </div>
+
+    <header>
+        <div class="logo-container">
+            <img src="IMG_20260504_221316.jpg" alt="tidye265">
+        </div>
+        <div class="header-search-center">
+            <div class="search-box-header">
+                <i class="fa-solid fa-magnifying-glass" style="font-size: 12px; color: #9ca3af;"></i>
+                <input type="text" placeholder="Search...">
+            </div>
+        </div>
+        <div style="width: 40px;"></div> </header>
+
+    <div class="balance-card">
+        <div>
+            <div style="color: var(--text-dim); font-size: 10px; font-weight: 700; text-transform: uppercase;">Balance</div>
+            <div class="amount">MWK 1,250,496</div>
+        </div>
+        <button style="background: var(--primary); border:none; padding: 10px 15px; border-radius: 10px; font-weight: 700; font-size: 11px;" onclick="showSoon()">+ DEPOSIT</button>
+    </div>
+
+    <div class="list-title">265 Pool (Casino)</div>
+    <div class="grid-container">
+        <div class="grid-item" onclick="showSoon()"><i class="fa-solid fa-clover"></i>Slot</div>
+        <div class="grid-item" onclick="showSoon()"><i class="fa-solid fa-diamond"></i>Poker</div>
+        <div class="grid-item" onclick="showSoon()"><i class="fa-solid fa-circle-dot"></i>Dice</div>
+        <div class="grid-item" onclick="showSoon()"><i class="fa-solid fa-star"></i>Crash</div>
+        <div class="grid-item" onclick="showSoon()"><i class="fa-solid fa-heart"></i>Baccarat</div>
+        <div class="grid-item" onclick="showSoon()"><i class="fa-solid fa-spade"></i>Blackjack</div>
+        <div class="grid-item" onclick="showSoon()"><i class="fa-solid fa-bolt"></i>Mines</div>
+        <div class="grid-item" onclick="showSoon()"><i class="fa-solid fa-trophy"></i>Lotto</div>
+    </div>
+
+    <div class="list-title">265 P2P Games</div>
+    <div class="grid-container" style="margin-bottom: 20px;">
+        <div class="grid-item" onclick="showSoon()"><i class="fa-solid fa-chess"></i>Chess</div>
+        <div class="grid-item" onclick="showSoon()"><i class="fa-solid fa-chess-board"></i>Draft</div>
+        <div class="grid-item" onclick="showSoon()"><i class="fa-solid fa-table-cells"></i>Bawo</div>
+        <div class="grid-item" onclick="showSoon()"><i class="fa-solid fa-gamepad"></i>Cards</div>
+    </div>
+
+    <nav class="bottom-nav">
+        <a href="#" class="nav-item active">
+            <i class="fa-solid fa-house"></i>
+            <span>Home</span>
+        </a>
+        <a href="javascript:void(0)" class="nav-item" onclick="showSoon()">
+            <i class="fa-solid fa-gamepad"></i>
+            <span>Games</span>
+        </a>
+        <div class="trade-btn-container" onclick="showSoon()">
+            <div class="trade-btn-main">
+                <span style="font-size: 12px;">tidye</span>
+            </div>
+        </div>
+        <a href="javascript:void(0)" class="nav-item" onclick="showSoon()">
+            <i class="fa-solid fa-wallet"></i>
+            <span>Wallet</span>
+        </a>
+        <a href="javascript:void(0)" class="nav-item" onclick="showSoon()">
+            <i class="fa-solid fa-bars"></i>
+            <span>Menu</span>
+        </a>
+    </nav>
+
+    <div id="comingSoon" class="modal-overlay" onclick="closeModal()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <i class="fa-solid fa-rocket" style="font-size: 40px; color: var(--primary); margin-bottom: 15px;"></i>
+            <h3 style="font-family:'Lexend'; margin-bottom: 10px;">Coming Soon</h3>
+            <p style="font-size:13px; color:var(--text-dim);">Tidye265 Game features are under development.</p>
+            <button class="modal-btn" onclick="closeModal()">Got it</button>
+        </div>
+    </div>
+
+    <script>
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const loader = document.getElementById('loader');
+                if(loader) {
+                    loader.style.opacity = '0';
+                    setTimeout(() => { loader.style.display = 'none'; }, 500);
+                }
+            }, 1000);
+        });
+
+        function showSoon() { document.getElementById('comingSoon').style.display = 'flex'; }
+        function closeModal() { document.getElementById('comingSoon').style.display = 'none'; }
+    </script>
+</body>
+</html>
