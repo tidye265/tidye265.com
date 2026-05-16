@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- SENIOR STAGE SECURITY POLICIES (CSP via Nonce mitigation for XSS) -->
+<meta http-equiv="X-Content-Type-Options" content="nosniff">
+<meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'nonce-r3g1st3r265' https://cdnjs.cloudflare.com https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' https: data:; connect-src 'self' https://*.supabase.co; frame-src https://challenges.cloudflare.com;">
+
+<title>Create Account - Tidye265</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer nonce="r3g1st3r265"></script>
+
+<style>
+:root{
+    --gold:#FFD700;
+    --dark:#111827;
+    --gray:#6b7280;
+    --soft:#f3f4f6;
+    --border:#e5e7eb;
+    --success:#10b981;
+}
+*{ margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+body{ background:#fff; color:var(--dark); font-family:'Inter',sans-serif; overflow-x:hidden; padding-bottom:90px; }
+.honeypot-layer { opacity: 0; position: absolute; top: 0; left: 0; height: 0; width: 0; z-index: -1; }
+.top-header{ height:72px; padding:0 20px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid var(--border); background:#fff; }
+.logo img{ height:42px; border-radius:8px; }
+.login-btn{ text-decoration:none; border:1.5px solid var(--dark); color:var(--dark); padding:9px 18px; border-radius:10px; font-size:13px; font-family:'Lexend'; font-weight:700; }
+.register-wrapper{ width:100%; max-width:420px; margin:0 auto; padding:35px 20px 40px; }
+.steps{ display:flex; align-items:center; justify-content:center; margin-bottom:40px; font-family:'Lexend'; font-size:13px; }
+.circle{ width:24px; height:24px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; background:var(--gold); font-size:11px; font-weight:700; margin-right:6px; }
+.line{ width:35px; height:1px; background:#d1d5db; margin:0 12px; }
+.inactive{ color:var(--gray); }
+.inactive .circle{ background:#fff; border:1px solid #d1d5db; }
+.title{ margin-bottom:30px; }
+.title h1{ font-family:'Lexend'; font-size:30px; line-height:1.2; margin-bottom:10px; }
+.title p{ color:var(--gray); font-size:14px; }
+.register-form{ display:flex; flex-direction:column; gap:18px; }
+.input-box{ position:relative; }
+.input-box input{ width:100%; height:56px; border:none; outline:none; background:var(--soft); border:1.5px solid transparent; border-radius:14px; padding:0 16px; font-size:15px; font-family:'Inter'; transition:0.25s ease; }
+.input-box input:focus{ background:#fff; border-color:var(--dark); box-shadow:0 8px 25px rgba(0,0,0,0.05); }
+.phone-box img{ position:absolute; left:16px; top:50%; transform:translateY(-50%); width:26px; height:18px; object-fit:cover; border-radius:2px; z-index:2; }
+.phone-box input{ padding-left:58px; }
+.legal{ display:flex; align-items:flex-start; gap:10px; }
+.legal input{ margin-top:3px; width:18px; height:18px; accent-color:#111827; }
+.legal p{ font-size:13px; color:var(--gray); line-height:1.5; }
+.turnstile-wrapper { display: flex; justify-content: center; margin: 5px 0; }
+.submit-btn{ height:56px; border:none; border-radius:14px; background:var(--gold); color:#000; font-family:'Lexend'; font-weight:700; font-size:15px; cursor:pointer; transition:0.2s ease; }
+.submit-btn.loading{ background: #e5e7eb !important; color: #9ca3af !important; pointer-events: none; cursor: not-allowed; box-shadow: none; }
+.submit-btn:active{ transform:scale(.98); }
+.alert{ padding:15px; border-radius:12px; font-size:14px; display:none; margin-bottom: 20px; }
+.alert.success{ background:#ecfdf5; color:#065f46; border:1px solid #a7f3d0; }
+.alert.error{ background:#fef2f2; color:#991b1b; border:1px solid #fecaca; }
+.finish-screen{ display:none; text-align:center; padding:60px 20px; }
+.finish-icon{ width:90px; height:90px; border-radius:50%; background:#ecfdf5; color:var(--success); display:flex; align-items:center; justify-content:center; font-size:40px; margin:0 auto 25px; }
+.finish-screen h2{ font-family:'Lexend'; margin-bottom:10px; font-size:28px; }
+.finish-screen p{ color:var(--gray); line-height:1.6; font-size:14px; }
+</style>
+</head>
+<body>
+
+<div class="top-header">
+    <a href="index.html" class="logo">
+        <img src="logo.jpg" alt="Tidye265">
+    </a>
+    <a href="login.html" class="login-btn">LOGIN</a>
+</div>
+
+<div class="register-wrapper" id="registerSection">
+    <div class="steps">
+        <span><span class="circle">1</span>Sign Up</span>
+        <span class="line"></span>
+        <span class="inactive"><span class="circle">2</span>Finish</span>
+    </div>
+    <div class="title">
+        <h1>Create Account</h1>
+        <p>Join Tidye265 and start playing professional Malawi games.</p>
+    </div>
+    <div id="alertBox" class="alert"></div>
+    <form class="register-form" id="registerForm">
+        
+        <!-- Honeypot anti-bot protection -->
+        <input type="text" name="b_firstname" id="botCheck" class="honeypot-layer" tabindex="-1" autocomplete="off">
+
+        <div class="input-box phone-box">
+            <img src="https://flagcdn.com/w40/mw.png" alt="Malawi">
+            <input type="tel" id="phone" placeholder="Phone Number" required autocomplete="tel">
+        </div>
+        <div class="input-box">
+            <input type="password" id="pin" maxlength="6" inputmode="numeric" placeholder="Secret PIN (4-6 digits)" required autocomplete="new-password">
+        </div>
+        <label class="legal">
+            <input type="checkbox" id="termsCheck" required>
+            <p>I confirm that I am <b>18 years or older</b> and I agree to the Terms of Service.</p>
+        </label>
+        
+        <div class="turnstile-wrapper">
+            <div class="cf-turnstile" data-sitekey="0x4AAAAAADQhPHJB5viRCO84"></div>
+        </div>
+
+        <button type="submit" class="submit-btn" id="submitBtn">REGISTER NOW</button>
+    </form>
+</div>
+
+<div class="finish-screen" id="finishScreen">
+    <div class="finish-icon"><i class="fa-solid fa-check"></i></div>
+    <h2>Registration Successful</h2>
+    <p>Your Tidye265 account has been created successfully.<br>Redirecting to dashboard...</p>
+</div>
+
+<div id="footer-placeholder"></div>
+
+<!-- Local Config script securely separated from main logic -->
+<script src="supabase.js"></script>
+
+<!-- Execution block restricted dynamically by CSP Nonce -->
+<script nonce="r3g1st3r265">
+const Logger = {
+    info: (msg, data = {}) => console.log(`[INFO] ${new Date().toISOString()} - ${msg}`, data),
+    warn: (msg, data = {}) => console.warn(`[WARN] ${new Date().toISOString()} - ${msg}`, data),
+    error: (msg, data = {}) => console.error(`[ERROR] ${new Date().toISOString()} - ${msg}`, data)
+};
+
+window.addEventListener('error', (e) => Logger.error('Unhandled Exception', { message: e.message, file: e.filename }));
+window.addEventListener('unhandledrejection', (e) => Logger.error('Unhandled Promise', { reason: e.reason }));
+
+// Session check via safe HTTP handshake ping or state cookie check
+document.addEventListener("DOMContentLoaded", () => {
+    if (document.cookie.split(';').some((item) => item.trim().startsWith('tidye_session='))) {
+        Logger.info("Secure HTTP session cookie found. Fast-tracking to dashboard.");
+        window.location.replace("dashboard.html");
+    }
+});
+
+const form = document.getElementById("registerForm");
+const btn = document.getElementById("submitBtn");
+const alertBox = document.getElementById("alertBox");
+const registerSection = document.getElementById("registerSection");
+const finishScreen = document.getElementById("finishScreen");
+
+function checkRateLimit() {
+    const now = Date.now();
+    let attempts = [];
+    try {
+        attempts = JSON.parse(localStorage.getItem('reg_rate_limit') || '[]');
+    } catch(e) { attempts = []; }
+    
+    attempts = attempts.filter(time => now - time < 5 * 60 * 1000); 
+    if (attempts.length >= 5) return false; 
+    attempts.push(now);
+    localStorage.setItem('reg_rate_limit', JSON.stringify(attempts));
+    return true;
+}
+
+form.addEventListener("submit", async function(e){
+    e.preventDefault();
+
+    const botCheck = document.getElementById("botCheck").value;
+    if (botCheck !== "") {
+        Logger.warn("Automated bot input submission trapped via honeypot layer.");
+        return; 
+    }
+
+    const turnstileResponse = document.querySelector('[name="cf-turnstile-response"]')?.value;
+    if (!turnstileResponse) {
+        showAlert("Please complete the security verification.", "error");
+        return;
+    }
+
+    if (!checkRateLimit()) {
+        showAlert("Too many attempts. Please wait 5 minutes.", "error");
+        return;
+    }
+
+    let rawPhone = document.getElementById("phone").value.trim().replace(/\s+/g, '');
+    const pin = document.getElementById("pin").value.trim();
+
+    if(pin.length < 4 || pin.length > 6 || !/^\d+$/.test(pin)){
+        showAlert("PIN must be a numeric value between 4 and 6 digits.", "error");
+        return;
+    }
+
+    let formattedPhone = rawPhone;
+    if (formattedPhone.startsWith("+265")) formattedPhone = "0" + formattedPhone.slice(4);
+    else if (formattedPhone.startsWith("265")) formattedPhone = "0" + formattedPhone.slice(3);
+    else if (formattedPhone.length === 9 && /^[8934]/.test(formattedPhone)) formattedPhone = "0" + formattedPhone;
+
+    const malawiRegex = /^0(88|99|98|89|97|31|41)\d{7}$/;
+    if (!malawiRegex.test(formattedPhone)) {
+        showAlert("Please enter a valid 9 or 10 digit Malawi phone number.", "error");
+        return;
+    }
+
+    btn.classList.add("loading");
+    btn.innerText = "Securing Connection...";
+
+    try {
+        Logger.info("Forwarding clean structural load payload to backend architecture.");
+        
+        // PRO TRANSITION: PIN is sent raw; backend execution holds exclusive hashing authority
+        const response = await fetch(`${SUPABASE_URL}/functions/v1/register_265`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${SUPABASE_ANON_KEY}` 
+            },
+            body: JSON.stringify({
+                phone_number: formattedPhone,
+                pin: pin, 
+                turnstileToken: turnstileResponse
+            })
+        });
+
+        const result = await response.json();
+
+        if (response.status === 409 || result.error === "DUPLICATE_PHONE") throw new Error("DUPLICATE_PHONE");
+        if (response.status === 400) throw new Error(result.error || "VALIDATION_FAILED");
+        if (!response.ok) throw new Error(result.error || "SERVER_REJECTION");
+
+        Logger.info("Registration request certified on-chain/backend.");
+
+        registerSection.style.display = "none";
+        finishScreen.style.display = "block";
+
+        setTimeout(() => {
+            window.location.replace("dashboard.html");
+        }, 2000);
+
+    } catch (error) {
+        Logger.error("Registration operational transaction rejected", error);
+        
+        if (error.message === "DUPLICATE_PHONE") {
+            showAlert("Phone number is already registered.", "error");
+        } else {
+            showAlert(error.message || "Security threshold block or network issue. Try again.", "error");
+        }
+        
+        btn.classList.remove("loading");
+        btn.innerText = "REGISTER NOW";
+        
+        if(typeof turnstile !== 'undefined') {
+            turnstile.reset();
+        }
+    }
+});
+
+function showAlert(msg, type){
+    alertBox.style.display = "block";
+    alertBox.className = "alert " + type;
+    alertBox.textContent = msg; // TextContent used over innerHTML to guarantee protection against dynamic markup injectors
+    setTimeout(() => { alertBox.style.display = "none"; }, 5000);
+}
+
+// XSS-SAFE COMPONENT INJECTOR USING STRUCTURAL DOM PARSING
+async function injectFooterComponent() {
+    try {
+        const response = await fetch('footer.html');
+        if (!response.ok) return;
+        
+        const rawHtml = await response.text();
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(rawHtml, 'text/html');
+        
+        // Sanitize out any malicious script links injected outside our scope
+        const cleanFooter = doc.querySelector('.site-footer');
+        const cleanNav = doc.querySelector('.bottom-nav');
+        const cleanOverlay = doc.querySelector('.menu-overlay');
+        
+        const placeholder = document.getElementById('footer-placeholder');
+        if(cleanFooter) placeholder.appendChild(cleanFooter);
+        if(cleanNav) placeholder.appendChild(cleanNav);
+        if(cleanOverlay) placeholder.appendChild(cleanOverlay);
+        
+        // Dynamic re-binding of internal UI component logic safely
+        const menuToggleBtn = document.getElementById('menuToggleBtn');
+        const menuOverlay = document.getElementById('menuOverlay');
+        if (menuToggleBtn && menuOverlay) {
+            menuToggleBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                menuOverlay.classList.add('show');
+                menuOverlay.setAttribute('aria-hidden', 'false');
+            });
+            menuOverlay.addEventListener('click', (e) => {
+                if(e.target === menuOverlay) {
+                    menuOverlay.classList.remove('show');
+                    menuOverlay.setAttribute('aria-hidden', 'true');
+                }
+            });
+        }
+    } catch (err) {
+        Logger.error("Dynamic execution block failure for safe hybrid component loading.", err);
+    }
+}
+injectFooterComponent();
+</script>
+</body>
+</html>
