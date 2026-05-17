@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Tidye265 | Professional Malawi Gaming & Trading</title>
+    
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://*.supabase.co https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' https: data:; connect-src 'self' https://*.supabase.co;">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lexend:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        :root { --bg: #F8F9FA; --primary: #FFD700; --text-light: #1a1d21; --text-dim: #4b5563; --border: #e5e7eb; }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { background: var(--bg); color: var(--text-light); font-family: 'Inter', sans-serif; padding-bottom: 95px; }
+        
+        #loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff; z-index: 9999; display: flex; align-items: center; justify-content: center; transition: 0.5s; }
+        .spinner { width: 40px; height: 40px; border: 4px solid var(--border); border-top: 4px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        .sticky-nav-holder { position: sticky; top: 0; z-index: 1000; background: #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        header { padding: 0 15px; display: flex; justify-content: space-between; align-items: center; height: 75px; border-bottom: 1px solid var(--border); }
+        .logo-container img { height: 48px; border-radius: 8px; }
+
+        .auth-actions { display: none; gap: 10px; }
+        .btn-login, .btn-join { font-family: 'Lexend'; font-weight: 700; font-size: 13px; padding: 9px 18px; border-radius: 10px; text-decoration: none; }
+        .btn-login { color: var(--text-light); border: 1.5px solid var(--border); }
+        .btn-join { background: var(--primary); color: #000; }
+
+        .header-balance-container { display: none; align-items: center; gap: 10px; background: #f3f4f6; padding: 6px 12px; border-radius: 12px; font-weight: 800; font-family: 'Lexend'; cursor: pointer; }
+
+        .sub-header { display: flex; overflow-x: auto; padding: 12px 15px; gap: 20px; background: #fff; scrollbar-width: none; }
+        .sub-header::-webkit-scrollbar { display: none; }
+        .sub-item { text-decoration: none; color: var(--text-dim); font-size: 13px; font-weight: 600; white-space: nowrap; }
+
+        .list-title { padding: 25px 20px 10px; font-family: 'Lexend'; font-size: 14px; text-transform: uppercase; }
+        .grid-container { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 0 20px; min-height: 100px; }
+        .grid-item { position: relative; height: 170px; border-radius: 20px; overflow: hidden; display: flex; align-items: flex-end; padding: 15px; color: #fff; text-decoration: none; }
+        .grid-item img { position: absolute; top:0; left:0; width: 100%; height: 100%; object-fit: cover; z-index: 1; }
+        .grid-item::after { content:''; position:absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(180deg, transparent 40%, rgba(0,0,0,0.8)); z-index: 2; }
+        .grid-item span { position: relative; z-index: 3; font-family: 'Lexend'; font-weight: 700; }
+    </style>
+</head>
+<body>
+
+<div id="loader"><div class="spinner"></div></div>
+
+<div class="sticky-nav-holder">
+    <header>
+        <a href="index.html" class="logo-container"><img src="logo.jpg" alt="Tidye265"></a>
+        <div class="header-controls">
+            <div class="auth-actions" id="authActions">
+                <a href="login.html" class="btn-login">LOGIN</a>
+                <a href="register.html" class="btn-join">JOIN</a>
+            </div>
+            <div class="header-balance-container" id="balanceWidget" onclick="window.location.href='wallet.html'">
+                <span id="userBalanceField">K 0.00</span>
+                <i class="fa-solid fa-plus-circle" style="color:var(--primary)"></i>
+            </div>
+        </div>
+    </header>
+    <nav class="sub-header">
+        <a href="#" class="sub-item"><i class="fa-solid fa-fire"></i> Trending</a>
+        <a href="shoot.html" class="sub-item"><i class="fa-solid fa-gun"></i> Shooter265</a>
+    </nav>
+</div>
+
+<main>
+    <h2 class="list-title">265 Pool Casino</h2>
+    <section class="grid-container" id="casinoGrid"></section>
+    
+    <h2 class="list-title">265 P2P Games</h2>
+    <section class="grid-container" id="p2pGrid" style="margin-bottom: 20px;"></section>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+
+<script>
+    // 1. DYNAMIC RENDER (Kutenga mu DB)
+    async function loadApp() {
+        const authEl = document.getElementById('authActions');
+        const balEl = document.getElementById('balanceWidget');
+        const balField = document.getElementById('userBalanceField');
+
+        try {
+            // A. Tenga Session
+            const { data: { session } } = await supabase.auth.getSession();
+
+            // B. Tenga Magame onse kuchokera ku Edge Function
+            const { data: games, error: gError } = await supabase.functions.invoke('games_265', {
+                body: { action: 'get_all_games' }
+            });
+
+            if (games) {
+                renderGrid('casinoGrid', games.filter(g => g.category === 'casino'));
+                renderGrid('p2pGrid', games.filter(g => g.category === 'p2p'));
+            }
+
+            // C. Ngati analowa (Logged in), tenga profile
+            if (session) {
+                authEl.style.display = 'none';
+                balEl.style.display = 'flex';
+                
+                const { data: profile } = await supabase.functions.invoke('games_265', {
+                    body: { action: 'get_profile' }
+                });
+                if (profile) balField.innerText = `K ${profile.balance.toLocaleString()}`;
+            } else {
+                authEl.style.display = 'flex';
+                balEl.style.display = 'none';
+            }
+
+        } catch (e) {
+            console.error("System Error:", e);
+        } finally {
+            // Chotsa Loader
+            const loader = document.getElementById('loader');
+            loader.style.opacity = '0';
+            setTimeout(() => loader.remove(), 500);
+        }
+    }
+
+    function renderGrid(id, items) {
+        const container = document.getElementById(id);
+        if (!container) return;
+        container.innerHTML = items.map(item => `
+            <a href="${item.game_url}" class="grid-item">
+                <img src="${item.image_path}" alt="${item.name}" loading="lazy">
+                <span>${item.name}</span>
+            </a>
+        `).join('');
+    }
+
+    loadApp();
+</script>
+</body>
+</html>
