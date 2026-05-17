@@ -1,0 +1,151 @@
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">  
+    <title>Tidye265 | Malawi Gaming & Trading</title>  
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://*.supabase.co https://cdn.jsdelivr.net; img-src 'self' https: data:; connect-src 'self' https://*.supabase.co;">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Lexend:wght@400;700;800&display=swap" rel="stylesheet">  
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">  
+  
+    <style>  
+        :root { --bg: #F8F9FA; --primary: #FFD700; --card-bg: #FFFFFF; --text-light: #1a1d21; --border: #e5e7eb; }  
+        * { margin: 0; padding: 0; box-sizing: border-box; }  
+        body { background: var(--bg); color: var(--text-light); font-family: 'Inter', sans-serif; padding-bottom: 90px; }  
+        
+        .sticky-nav-holder { position: sticky; top: 0; z-index: 1000; background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        header { padding: 0 15px; display: flex; justify-content: space-between; align-items: center; height: 75px; border-bottom: 1px solid var(--border); }
+        .logo-container img { height: 48px; border-radius: 8px; }
+
+        #loader { position: fixed; inset: 0; background: #F8F9FA; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: 0.4s; }
+        .skeleton { background: linear-gradient(90deg, #eee 25%, #ddd 50%, #eee 75%); background-size: 200% 100%; animation: load 1.5s infinite; border-radius: 10px; margin: 10px; }
+        @keyframes load { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+        .grid-container { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 15px; }  
+        .grid-item { position: relative; height: 160px; border-radius: 20px; overflow: hidden; background: #ddd; display: flex; align-items: flex-end; padding: 15px; text-decoration: none; color: #fff; }  
+        .grid-item img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; }
+        .grid-item::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 40%, rgba(0,0,0,0.8)); z-index: 2; }
+        .grid-item span { position: relative; z-index: 3; font-family: 'Lexend'; font-weight: 700; font-size: 14px; }
+        
+        .list-title { padding: 20px 15px 5px; font-family: 'Lexend'; font-size: 14px; text-transform: uppercase; color: #666; }
+        
+        /* Chidindo cha Error Alamu */
+        .system-alert { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; padding: 15px; margin: 15px; border-radius: 12px; font-size: 14px; display: none; }
+        .system-alert strong { font-family: 'Lexend'; display: block; margin-bottom: 5px; }
+    </style>  
+</head>  
+<body>  
+
+<div id="loader">
+    <div class="skeleton" style="width: 90%; height: 60px;"></div>
+    <div class="skeleton" style="width: 90%; height: 150px;"></div>
+</div>
+
+<div class="sticky-nav-holder">
+    <header>  
+        <a href="index.html" class="logo-container">  
+            <img src="./logo.jpg" alt="Logo" onerror="this.src='https://via.placeholder.com/100?text=Tidye265'">  
+        </a>  
+        <div style="display:flex; gap:10px;">
+            <a href="login.html" style="text-decoration:none; color:#000; font-weight:bold; font-size:12px;">LOGIN</a>
+            <a href="register.html" style="background:var(--primary); padding:8px 15px; border-radius:8px; text-decoration:none; color:#000; font-weight:bold; font-size:12px;">JOIN</a>
+        </div>
+    </header>  
+</div>
+
+<main>  
+    <div id="errorContainer" class="system-alert"></div>
+
+    <h2 class="list-title">265 Pool Casino</h2>  
+    <section class="grid-container" id="casinoGrid"></section>  
+  
+    <h2 class="list-title">265 P2P Games</h2>  
+    <section class="grid-container" id="p2pGrid"></section>  
+</main>  
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>  
+<script>  
+    const loader = document.getElementById('loader');
+    const errorContainer = document.getElementById('errorContainer');
+
+    // Ntchito yosonyeza vuto pa screen mwa ukatswiri
+    function showAppError(message) {
+        errorContainer.style.display = 'block';
+        errorContainer.innerHTML = `<strong><i class="fa-solid fa-triangle-exclamation"></i> Initialization Error</strong> ${message}`;
+    }
+
+    // Ntchito otenga magame kuchokera ku Edge Function
+    async function loadGames() {
+        console.log("[INFO] Attempting to invoke Edge Function 'games_265'...");
+        
+        try {
+            // FIX Check 1: Onetsetsani kuti connection yomwe tinalenga mu supabase.js ilipo
+            if (typeof window.supabaseClient === 'undefined') {
+                throw new Error("window.supabaseClient is undefined. Check your supabase.js configuration and ensure your tokens are correct.");
+            }
+
+            // FIX Check 2: Itanani edge function pogwiritsa ntchito variable yatsopano ija
+            const response = await window.supabaseClient.functions.invoke('games_265', {
+                body: { action: 'get_public_catalog' }
+            });
+
+            console.log("[INFO] Raw edge function response received:", response);
+
+            // Gulu A: Gwirani network errors kapena kulephera kwa kuitana function kudzera pa Supabase
+            if (response.error) {
+                throw new Error(`Edge Function Core Error: ${response.error.message || 'Unknown Network Error'}`);
+            }
+
+            // Gulu B: Gwirani logic errors zomwe zadzaza mkati mwa response data ya edge function yanu
+            const result = response.data;
+            if (!result || result.success === false) {
+                throw new Error(`Database/Logic Error: ${result?.error || 'Failed to fetch catalog from backend.'}`);
+            }
+
+            // Ngati zonse zili bwino, tenga data yoyenera
+            const gamesList = result.data;
+
+            if (gamesList && gamesList.length > 0) {
+                const casino = gamesList.filter(g => g.category === 'casino');
+                const p2p = gamesList.filter(g => g.category === 'p2p');
+
+                if (casino.length) renderList('casinoGrid', casino);
+                if (p2p.length) renderList('p2pGrid', p2p);
+            } else {
+                showAppError("The games catalog is currently empty. Add data to your 'games' table.");
+            }
+
+        } catch (err) {
+            console.error("[CRITICAL] Frontend execution blocked:", err);
+            showAppError(err.message);
+        } finally {
+            // Chotsani Loader mode mosamala data ikatha (kaya yapita bwino kapena ndi error)
+            setTimeout(() => {
+                loader.style.opacity = '0';
+                setTimeout(() => loader.style.display = 'none', 400);
+            }, 500);
+        }
+    }
+
+    function renderList(targetId, games) {
+        const container = document.getElementById(targetId);
+        if (!container) return;
+        container.innerHTML = ''; 
+
+        games.forEach(game => {
+            const imgPath = game.image_url.startsWith('http') ? game.image_url : `./${game.image_url}`;
+            container.innerHTML += `
+                <a href="${game.game_url}" class="grid-item">
+                    <img src="${imgPath}" alt="${game.name}" onerror="this.src='https://via.placeholder.com/300x160?text=No+Image'">
+                    <span>${game.name}</span>
+                </a>`;
+        });
+    }
+
+    // Yambitsani ntchito nthawi yomweyo pamene tsamba (DOM) latha kukonzeka
+    document.addEventListener("DOMContentLoaded", loadGames);
+</script>  
+</body>  
+</html>
