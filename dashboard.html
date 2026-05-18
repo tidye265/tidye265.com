@@ -1,0 +1,248 @@
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">  
+    
+    <title>Tidye265 | Dashboard</title>  
+    
+    <meta name="theme-color" content="#FFD700">  
+    <meta name="robots" content="noindex, nofollow">
+
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://*.supabase.co https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' https: data: blob:; connect-src 'self' https://*.supabase.co;">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lexend:wght@400;600;700;800&display=swap" rel="stylesheet">  
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">  
+
+    <style>  
+        /* Global Structural Engineering tokens (Asungidwa 100%) */  
+        :root { 
+            --bg: #F8F9FA; 
+            --primary: #FFD700; 
+            --card-bg: #FFFFFF; 
+            --text-light: #1a1d21; 
+            --text-dim: #4b5563; 
+            --success: #10b981; 
+            --border: #e5e7eb; 
+        }  
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }  
+        body { background-color: var(--bg); color: var(--text-light); font-family: 'Inter', sans-serif; padding-bottom: 95px; overflow-x: hidden; }  
+        
+        /* Layout Persistence */
+        .sticky-nav-holder { position: -webkit-sticky; position: sticky; top: 0; z-index: 1000; background: #ffffff; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }  
+        
+        /* Skeleton Loader Engine */
+        #loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #F8F9FA; z-index: 9999; padding: 0; display: flex; flex-direction: column; align-items: center; }  
+        .skeleton { background: #e5e7eb; background: linear-gradient(90deg, #f0f2f5 25%, #e5e7eb 50%, #f0f2f5 75%); background-size: 200% 100%; animation: skeleton-loading 1.5s infinite; }  
+        @keyframes skeleton-loading { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }  
+        
+        .sk-header { height: 75px; width: 100%; margin-bottom: 10px; }  
+        .sk-sub-header { height: 45px; width: 100%; margin-bottom: 15px; }  
+        .sk-promo-box { height: 80px; width: 90%; margin: 5px auto; border-radius: 18px; }  
+        .sk-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 20px; width: 100%; }  
+        .sk-grid-item { height: 150px; border-radius: 20px; }  
+        
+        /* Header & Balance Styling - LOGO 50PX */  
+        header { padding: 0 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e5e7eb; height: 75px; position: relative; background: #fff; }  
+        .logo-container img { height: 50px; border-radius: 6px; object-fit: contain; }  
+        
+        .search-wrapper { position: absolute; left: 0; top: 0; width: 100%; height: 100%; background: #ffffff; display: flex; align-items: center; padding: 0 15px; gap: 12px; transform: translateY(-100%); opacity: 0; pointer-events: none; transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1); z-index: 20; }  
+        .search-wrapper.active { transform: translateY(0); opacity: 1; pointer-events: auto; }  
+        .search-inner-box { flex: 1; background: #f3f4f6; height: 46px; border-radius: 12px; display: flex; align-items: center; padding: 0 15px; }  
+        .search-inner-box input { background: transparent; border: none; outline: none; width: 100%; font-size: 15px; font-family: 'Lexend'; margin-left: 10px; color: #1a1d21; }  
+        .search-close-btn { background: none; border: none; font-size: 20px; color: #4b5563; cursor: pointer; display: flex; align-items: center; }  
+        
+        .header-controls { display: flex; align-items: center; gap: 15px; z-index: 10; }  
+        .search-trigger { cursor: pointer; color: #4b5563; padding: 8px; font-size: 17px; background: none; border: none; }  
+        
+        .header-balance-container { display: flex; align-items: center; gap: 10px; background: #f3f4f6; padding: 6px 6px 6px 14px; border-radius: 12px; border: 1px solid #e5e7eb; cursor: pointer; transition: 0.2s; }  
+        .header-balance-container:active { transform: scale(0.96); }  
+        .bal-label { font-size: 9px; font-weight: 800; color: #4b5563; text-transform: uppercase; display: block; line-height: 1.1; }  
+        .bal-amount { font-size: 15px; font-weight: 800; font-family: 'Lexend'; }  
+        .bal-cents { opacity: 0.4; font-size: 14px; margin-left: 1px; }  
+        .header-dep-btn { background: var(--primary); color: #000; width: 40px; height: 37px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; border: none; font-weight: 800; }  
+
+        /* Navigation Sub-header */
+        .sub-header { display: flex; overflow-x: auto; white-space: nowrap; padding: 12px 15px; gap: 20px; background: #fff; border-bottom: 1px solid #e5e7eb; scrollbar-width: none; }  
+        .sub-header::-webkit-scrollbar { display: none; }  
+        .sub-item { font-family: 'Lexend'; font-size: 13px; font-weight: 600; color: #4b5563; text-decoration: none; display: flex; align-items: center; gap: 6px; }  
+        .sub-item.active { color: #000; border-bottom: 2px solid var(--primary); padding-bottom: 2px; }  
+
+        /* PROMO SECTION */  
+        .promo-section { padding: 20px 20px 5px 20px; display: flex; flex-direction: column; gap: 12px; }  
+        .promo-card { background: white; padding: 15px; border-radius: 18px; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--border); text-decoration: none; color: inherit; transition: 0.2s; }  
+        .promo-card:active { transform: scale(0.98); }
+        .promo-info h4 { font-family: 'Lexend'; font-size: 14px; font-weight: 800; }  
+        .promo-info span { font-size: 11px; color: var(--text-dim); display: block; }  
+
+        /* GRID SYSTEM */  
+        .grid-container { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 0 20px; min-height: 50px; }  
+        .grid-item { position: relative; background: #e5e7eb; height: 160px; border-radius: 20px; border: 1px solid var(--border); display: flex; flex-direction: column; justify-content: flex-end; padding: 15px; color: #ffffff; text-decoration: none; overflow: hidden; transition: transform 0.2s ease; }  
+        .grid-item img { position: absolute; top:0; left:0; width:100%; height:100%; object-fit: cover; z-index: 1; }  
+        .grid-item::after { content: ''; position: absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(180deg, rgba(0,0,0,0) 35%, rgba(0,0,0,0.9) 100%); z-index: 2; }  
+        .grid-item span { position: relative; z-index: 3; font-family: 'Lexend'; font-weight: 700; font-size: 14px; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }  
+        
+        .list-title { padding: 25px 20px 15px 20px; font-family: 'Lexend', sans-serif; font-weight: 800; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; }  
+        
+        /* Status Elements */
+        .system-alert { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; padding: 15px; margin: 20px; border-radius: 12px; font-size: 14px; display: none; }  
+        .system-alert.show { display: block; }  
+    </style>  
+</head>  
+<body>  
+
+    <div id="loader" aria-hidden="true">  
+        <div class="skeleton sk-header"></div>
+        <div class="skeleton sk-sub-header"></div>  
+        <div class="skeleton sk-promo-box"></div>
+        <div class="sk-grid">
+            <div class="skeleton sk-grid-item"></div><div class="skeleton sk-grid-item"></div>
+            <div class="skeleton sk-grid-item"></div><div class="skeleton sk-grid-item"></div>
+        </div>  
+    </div>  
+
+    <div class="sticky-nav-holder">  
+        <header id="mainHeader">  
+            <div class="logo-container"><img src="logo.jpg" alt="Tidye265" id="mainLogo"></div>  
+            
+            <div class="search-wrapper" id="searchBar" aria-hidden="true">  
+                <div class="search-inner-box">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" placeholder="Search operational catalog..." id="searchInput">
+                </div>  
+                <button class="search-close-btn" id="searchClose"><i class="fa-solid fa-xmark"></i></button>  
+            </div>  
+
+            <div class="header-controls">  
+                <button class="search-trigger" id="searchToggle"><i class="fa-solid fa-magnifying-glass"></i></button>  
+                
+                <div class="header-balance-container" id="walletTrigger" role="button" tabindex="0">  
+                    <div class="header-balance-info">
+                        <span class="bal-label">Balance</span>
+                        <span class="bal-amount" id="balanceDisplay">MWK 0<span class="bal-cents">.00</span></span>
+                    </div>  
+                    <button class="header-dep-btn"><i class="fa-solid fa-plus"></i></button>  
+                </div>  
+            </div>  
+        </header>  
+
+        <nav class="sub-header" id="categoryNav">  
+            <a href="#" class="sub-item active"><i class="fa-solid fa-fire"></i> Trending</a>  
+            <a href="#" class="sub-item"><i class="fa-solid fa-heart"></i> Favorites</a>  
+            <a href="shoot.html" class="sub-item"><i class="fa-solid fa-fire" style="color: #ff4500;"></i> Shooter265</a>  
+            <a href="#" class="sub-item"><i class="fa-solid fa-chess"></i> Chess</a>  
+            <a href="#" class="sub-item"><i class="fa-solid fa-table-cells"></i> Bawo</a>  
+            <a href="#" class="sub-item"><i class="fa-solid fa-chess-board"></i> Draughts</a>  
+        </nav>  
+    </div>  
+
+    <main role="main" id="mainContent">  
+        <section id="errorContainer" class="system-alert" role="alert"></section>  
+
+        <section class="promo-section">
+            <a href="#" class="promo-card" id="tournamentCard">
+                <div class="promo-info">
+                    <h4>Tidye265 Tournament</h4>
+                    <span>Join the tournament and win up to MWK 500,000</span>
+                </div>
+                <i class="fa-solid fa-chevron-right" style="color: #ccc;"></i>
+            </a>
+
+            <a href="#" class="promo-card" id="leaderboardCard">
+                <div class="promo-info">
+                    <h4>Leaderboard</h4>
+                    <span>Top active players of the week 🥇🥈🥉</span>
+                </div>
+                <span style="font-size: 16px;">🏆</span>
+            </a>
+        </section>  
+
+        <h2 class="list-title">265 Pool</h2>
+        <section class="grid-container" id="casinoGrid"></section>  
+
+        <h2 class="list-title">265 P2P Games</h2>
+        <section class="grid-container" id="p2pGrid" style="margin-bottom: 30px;"></section>  
+    </main>  
+
+    <div id="footer-placeholder"></div>  
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>  
+    <script src="supabase.js"></script>  
+    <script>  
+        const AppState = { user: null, catalog: [], favorites: [], selectedCategory: 'Trending', stillLoading: true };  
+        const loader = document.getElementById('loader'), errorContainer = document.getElementById('errorContainer'), balanceDisplay = document.getElementById('balanceDisplay');  
+
+        function dismissLoaderBackdrop() { 
+            AppState.stillLoading = false; 
+            if (loader) { loader.style.opacity = '0'; setTimeout(() => loader.remove(), 400); } 
+        }  
+
+        async function enforceUserSessionContext() {  
+            try {  
+                const sessionToken = localStorage.getItem('tidye_session_token');
+                if (!sessionToken) { window.location.href = 'login.html'; return; }
+                const response = await fetch(`${window.SUPABASE_URL}/functions/v1/all-games-api`, {  
+                    method: 'POST',  
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${sessionToken}` },  
+                    body: JSON.stringify({ action: 'get_dashboard' })  
+                });  
+                const result = await response.json();  
+                if (!result.success) throw new Error(result.error);  
+                AppState.user = result.user;  
+                AppState.catalog = result.data || [];  
+                renderUserWalletBalance(AppState.user?.balance || 0);  
+                executeLiveCatalogFilter('');  
+            } catch (ex) { console.error(ex); } finally { dismissLoaderBackdrop(); }  
+        }  
+
+        function renderUserWalletBalance(amountValue) { 
+            const val = parseFloat(amountValue).toFixed(2); 
+            const [main, cents] = val.split('.'); 
+            balanceDisplay.innerHTML = `MWK ${parseInt(main).toLocaleString()}<span class="bal-cents">.${cents}</span>`; 
+        }  
+
+        function executeLiveCatalogFilter(q) {  
+            const filtered = AppState.catalog.filter(game => game.name.toLowerCase().includes(q.toLowerCase()));  
+            renderGamesGrid('casinoGrid', filtered.filter(g => g.category === 'casino'), "No items found.");  
+            renderGamesGrid('p2pGrid', filtered.filter(g => g.category === 'p2p'), "No items found.");  
+        }  
+
+        function renderGamesGrid(containerId, dataArray, emptyMsg) { 
+            const target = document.getElementById(containerId); 
+            if (!target) return; 
+            target.innerHTML = dataArray.length ? '' : `<div class="empty-state-card"><p>${emptyMsg}</p></div>`; 
+            dataArray.forEach(g => { 
+                const a = document.createElement('a'); a.className = 'grid-item'; a.href = g.game_url || '#'; 
+                a.innerHTML = `<img src="${g.image_url}" loading="lazy"><span>${g.name}</span>`; 
+                target.appendChild(a); 
+            }); 
+        }  
+
+        // FOOTER & MENU LOGIC
+        async function processFooterModularInjection() { 
+            try { 
+                const res = await fetch('footer.html'); 
+                if (res.ok) { 
+                    const html = await res.text(); 
+                    const placeholder = document.getElementById('footer-placeholder');
+                    placeholder.innerHTML = html;
+
+                    // Re-initialize scripts inside the footer (including menu toggle)
+                    const scripts = placeholder.querySelectorAll('script');
+                    scripts.forEach(oldScript => {
+                        const newScript = document.createElement('script');
+                        newScript.textContent = oldScript.textContent;
+                        document.body.appendChild(newScript).parentNode.removeChild(newScript);
+                    });
+                } 
+            } catch(ex) { console.error("Footer Load Fail:", ex); } 
+        }  
+
+        document.addEventListener("DOMContentLoaded", () => { 
+            enforceUserSessionContext(); 
+            processFooterModularInjection(); 
+        });  
+    </script>  
+</body>  
+</html>
