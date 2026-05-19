@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>tidye265 Platform - Account Panel</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Lexend:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style nonce="tidye265SecureNonce">  
+        /* Global Page Structure Optimization to eliminate bottom spacing bugs */
+        html, body {
+            height: 100%;
+            margin: 0;
+            background-color: #141517; /* Dark Tech Canvas for seamless blend */
+            color: #ffffff;
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Profile Layout Content Container */
+        .account-main-viewport {
+            padding: 30px 20px calc(120px + env(safe-area-inset-bottom, 0px)) 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .profile-card-premium {
+            background: #1C1D21;
+            border: 1px solid #2E2F33;
+            border-radius: 16px;
+            padding: 24px;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+            margin-bottom: 24px;
+        }
+
+        .profile-avatar-wrapper {
+            width: 80px;
+            height: 80px;
+            background: #2E2F33;
+            border: 2px solid #FFD700;
+            border-radius: 50%;
+            margin: 0 auto 16px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            color: #FFD700;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);
+        }
+
+        .user-data-title {
+            font-family: 'Lexend';
+            font-size: 20px;
+            font-weight: 700;
+            margin: 0 0 6px 0;
+            letter-spacing: 0.5px;
+            color: #ffffff;
+        }
+
+        .user-data-subtitle {
+            font-size: 14px;
+            color: #b9bbc0;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        /* Settings Sub-grid options built for quick navigation */
+        .settings-action-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .action-row-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #1C1D21;
+            border: 1px solid #2E2F33;
+            padding: 16px;
+            border-radius: 12px;
+            text-decoration: none;
+            color: #e5e7eb;
+            transition: all 0.2s ease;
+        }
+
+        .action-row-item:active {
+            transform: scale(0.98);
+            background: #2E2F33;
+        }
+
+        .action-left-context {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            font-family: 'Lexend';
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .action-left-context i {
+            color: #FFD700;
+            font-size: 16px;
+            width: 24px;
+            text-align: center;
+        }
+
+        .action-row-item .fa-chevron-right {
+            color: #4b5563;
+            font-size: 12px;
+        }
+
+        .logout-premium-btn {
+            margin-top: 12px;
+            border: 1px solid rgba(239, 68, 68, 0.3) !important;
+            background: rgba(239, 68, 68, 0.05) !important;
+            color: #ef4444 !important;
+        }
+        .logout-premium-btn i {
+            color: #ef4444 !important;
+        }
+
+        /* New Traditional Footer Layout (Charcoal Black Section) */  
+        .site-footer {  
+            background: #2E2F35;  
+            color: #ffffff;  
+            padding: 40px 20px calc(100px + env(safe-area-inset-bottom, 0px)) 20px;  
+            font-family: 'Inter', sans-serif;  
+            border-top: 1px solid #404247;  
+            position: relative;
+            z-index: 10;
+        }  
+        .footer-brand { text-align: left; margin-bottom: 30px; }  
+        .footer-logo { height: 50px; width: auto; margin-bottom: 12px; border-radius: 6px; }  
+        .footer-tagline { font-size: 12px; color: #b9bbc0; font-family: 'Lexend'; line-height: 1.6; max-width: 500px; }  
+        .footer-divider { border: 0; border-top: 1px solid #404247; margin: 25px 0; }  
+          
+        /* Responsive Professional Layout Grid */
+        .footer-links-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }  
+        .footer-col h5 { font-family: 'Lexend'; font-size: 14px; color: #FFD700; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 700; }  
+        .footer-col a { display: block; color: #e5e7eb; text-decoration: none; font-size: 13px; margin-bottom: 10px; transition: color 0.2s ease; font-family: 'Inter', sans-serif; }  
+        .footer-col a:hover { color: #FFD700; }
+        .footer-col p { font-size: 13px; color: #e5e7eb; display: flex; align-items: center; gap: 8px; line-height: 1.5; }  
+        .footer-col i { color: #FFD700; font-size: 14px; }  
+          
+        /* Social Media Icons Wrapper */
+        .footer-socials { display: flex; gap: 15px; margin-top: 15px; }
+        .footer-socials a { display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; background: #1C1D21; border-radius: 50%; color: #ffffff; transition: all 0.3s ease; border: 1px solid #404247; }
+        .footer-socials a:hover { background: #FFD700; color: #1C1D21; transform: translateY(-2px); }
+
+        .footer-bottom { text-align: center; font-size: 12px; color: #9ca3af; font-family: 'Lexend'; line-height: 1.6; }  
+        
+        /* FIXED & PERFECTLY BALANCED BOTTOM NAV BAR WITH SAFE AREA COMPLIANCE */  
+        .bottom-nav {   
+            position: fixed; 
+            bottom: 0; 
+            left: 0; 
+            width: 100%; 
+            background: #2E2F32;  
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;  
+            z-index: 5000; 
+            height: calc(50px + env(safe-area-inset-bottom, 0px));  
+            padding-bottom: env(safe-area-inset-bottom, 0px);
+            border-top: 1px solid #404247; 
+            padding-left: 5px;
+            padding-right: 5px;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.3);
+        }  
+        .nav-item, .trade-btn-container {   
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center;
+            color: #b9bbc0;  
+            text-decoration: none; 
+            font-size: 10px; 
+            font-family: 'Lexend', sans-serif; 
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); 
+            cursor: pointer;  
+            border: none; 
+            background: none; 
+            flex: 1; 
+            height: 100%; 
+            min-width: 0;
+        }  
+        .nav-item i, .trade-btn-container i { font-size: 20px; margin-bottom: 4px; display: block; transition: transform 0.2s ease; color: #b9bbc0; }  
+        .nav-item span { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+          
+        /* Native Real Active States with High-Impact Yellow Effects */
+        .nav-item.active, .nav-item.active i, .nav-item.active span { color: #FFD700 !important; font-weight: 600; }  
+        .nav-item.active i { transform: translateY(-2px); }
+        .nav-item:active, .trade-btn-container:active { transform: scale(0.92); }  
+          
+        /* Clean Context Button Optimization */
+        .trade-btn-container.active i, .trade-btn-container.active span { color: #FFD700 !important; }
+
+        /* HIGH-PERFORMANCE SKELETON LOADING ANIMATIONS */
+        .tidye-skeleton {
+            background: linear-gradient(90deg, #2e2f33 25%, #3e4046 50%, #2e2f33 75%);
+            background-size: 200% 100%;
+            animation: tidyePulse 1.5s infinite linear;
+            border-radius: 6px;
+            display: inline-block;
+        }
+        .skeleton-text-lg { width: 60%; height: 24px; margin-bottom: 8px; }
+        .skeleton-text-sm { width: 40%; height: 16px; }
+
+        @keyframes tidyePulse {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <main class="account-main-viewport">
+        <div class="profile-card-premium">
+            <div class="profile-avatar-wrapper">
+                <i class="fa-solid fa-user-gear"></i>
+            </div>
+            
+            <div id="profileLoadingState">
+                <div class="tidye-skeleton skeleton-text-lg"></div><br>
+                <div class="tidye-skeleton skeleton-text-sm"></div>
+            </div>
+
+            <div id="profileRealState" style="display: none;">
+                <h1 class="user-data-title" id="displayUsername">user_265</h1>
+                <p class="user-data-subtitle">
+                    <i class="fa-solid fa-phone" style="color: #FFD700; font-size: 12px;"></i>
+                    <span id="displayPhone">0000000000</span>
+                </p>
+            </div>
+        </div>
+
+        <div class="settings-action-list">
+            <a href="history.html" class="action-row-item">
+                <div class="action-left-context"><i class="fa-solid fa-clock-rotate-left"></i> Transaction History</div>
+                <i class="fa-solid fa-chevron-right"></i>
+            </a>
+            <a href="affiliate.html" class="action-row-item">
+                <div class="action-left-context"><i class="fa-solid fa-users"></i> Affiliate Dashboard</div>
+                <i class="fa-solid fa-chevron-right"></i>
+            </a>
+            <a href="bonuses.html" class="action-row-item">
+                <div class="action-left-context"><i class="fa-solid fa-gift"></i> My Bonuses</div>
+                <i class="fa-solid fa-chevron-right"></i>
+            </a>
+            <a href="support.html" class="action-row-item">
+                <div class="action-left-context"><i class="fa-solid fa-headset"></i> Customer Support 24/7</div>
+                <i class="fa-solid fa-chevron-right"></i>
+            </a>
+            <a href="logout.html" class="action-row-item logout-premium-btn" id="accountLogoutTrigger">
+                <div class="action-left-context"><i class="fa-solid fa-right-from-bracket"></i> Secure Logout</div>
+                <i class="fa-solid fa-chevron-right"></i>
+            </a>
+        </div>
+    </main>
+
+    <footer class="site-footer">  
+        <div class="footer-brand">  
+            <img src="logo2.jpg" alt="tidye265 Logo" class="footer-logo">  
+            <p class="footer-tagline">The premier professional Malawian high-frequency asset trading and localized peer-to-peer interactive gaming ecosystem. Built safely for the 265 network landscape. Game response 🔞 Enjoy with the best game website ever.</p>  
+        </div>  
+            
+        <div class="footer-links-grid">  
+            <div class="footer-col">  
+                <h5>Support & Help</h5>  
+                <a href="support.html">Help Center</a>  
+                <a href="faq.html">FAQs</a>  
+                <a href="support.html">Live Support</a>  
+                <a href="contact.html">Contacts</a>  
+            </div>  
+            <div class="footer-col">  
+                <h5>Location & Media</h5>  
+                <p><i class="fa-solid fa-location-dot"></i> Blantyre, Malawi</p>  
+                <div class="footer-socials">
+                    <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" aria-label="X"><i class="fa-brands fa-x-twitter"></i></a>
+                    <a href="#" aria-label="Telegram"><i class="fa-brands fa-telegram"></i></a>
+                </div>
+            </div>  
+        </div>  
+            
+        <hr class="footer-divider">  
+            
+        <div class="footer-bottom">  
+            <p>&copy; 2026 tidye265 Platform. Crafted for ultimate reliability and enterprise-grade performance. All rights reserved globally.</p>  
+        </div>  
+    </footer>  
+      
+    <nav class="bottom-nav" aria-label="Main Navigation" id="mainBottomNav">  
+        <a href="dashboard.html" class="nav-item" data-page="dashboard.html" aria-label="Home">  
+            <i class="fa-solid fa-house"></i>  
+            <span>Home</span>  
+        </a>  
+        <a href="game.html" class="nav-item" data-page="game.html" aria-label="Games">  
+            <i class="fa-solid fa-gamepad"></i>  
+            <span>Games</span>  
+        </a>  
+        <a href="trade.html" class="trade-btn-container" data-page="trade.html" aria-label="Tidye Special">  
+            <i class="fa-solid fa-crosshairs"></i>  
+            <span>tidye</span>  
+        </a>  
+        <a href="wallet.html" class="nav-item" data-page="wallet.html" aria-label="Wallet">  
+            <i class="fa-solid fa-wallet"></i>  
+            <span>Wallet</span>  
+        </a>  
+        <a href="account.html" class="nav-item" data-page="account.html" aria-label="Account">  
+            <i class="fa-solid fa-user-gear"></i>  
+            <span>Account</span>  
+        </a>  
+    </nav>  
+      
+    <script nonce="tidye265SecureNonce">  
+        // ===================================================
+        // SECURE HIGH-PERFORMANCE DATA DISPATCH ENGINE
+        // ===================================================
+        document.addEventListener("DOMContentLoaded", () => {
+            const currentFileName = window.location.pathname.split("/").pop() || "account.html";
+            const navElements = document.querySelectorAll("#mainBottomNav .nav-item, #mainBottomNav .trade-btn-container");
+            
+            // High-Speed Active States UI Controller
+            navElements.forEach(element => {
+                const dataPage = element.getAttribute("data-page");
+                if (dataPage && currentFileName.includes(dataPage)) {
+                    element.classList.add("active");
+                } else {
+                    element.classList.remove("active");
+                }
+            });
+
+            // ---------------------------------------------------
+            // API CONFIGURATION & REAL-TIME FETCHING SYSTEM
+            // ---------------------------------------------------
+            const EDGE_FUNCTION_URL = "https://your-project-id.supabase.co/functions/v1/settings-api"; 
+            const sessionToken = localStorage.getItem("tidye_session_token"); // kapena cookie yanu ya login_265
+
+            if (!sessionToken) {
+                // Ngati alibe token, bwererani ku login nthawi yomweyo
+                window.location.href = "login.html";
+                return;
+            }
+
+            // Kupita ku backend kukatenga deta ya public.users mwachangu
+            fetch(EDGE_FUNCTION_URL, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${sessionToken}`
+                }
+            })
+            .then(response => {
+                if (!response.ok) throw new Error("Deta yalephera kufikira.");
+                return response.json();
+            })
+            .then(data => {
+                if (data.username && data.phone_number) {
+                    // Kusintha UI kuchotsa Skeleton ndikuyika Deta yeniyeni
+                    document.getElementById("displayUsername").textContent = data.username;
+                    document.getElementById("displayPhone").textContent = data.phone_number;
+                    
+                    document.getElementById("profileLoadingState").style.display = "none";
+                    document.getElementById("profileRealState").style.display = "block";
+                }
+            })
+            .catch(err => {
+                console.error("Auth Exception Error:", err);
+                // Fallback yachangu ngati kuli kulumikizana kochepa
+                document.getElementById("displayUsername").textContent = "Error Loading Profile";
+                document.getElementById("displayPhone").textContent = "Please refresh page";
+                document.getElementById("profileLoadingState").style.display = "none";
+                document.getElementById("profileRealState").style.display = "block";
+            });
+        });
+    </script>
+</body>
+</html>
