@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Account</title>
+    <style>
+        body { background-color: #F8F9FA; font-family: sans-serif; padding: 20px; }
+        .card { background: white; padding: 20px; border-radius: 12px; max-width: 400px; margin: auto; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .error-box { background: #fee2e2; color: #991b1b; padding: 10px; border-radius: 8px; margin-bottom: 20px; display: none; }
+        .label { color: #666; font-size: 12px; }
+        .value { font-weight: bold; margin-bottom: 15px; font-size: 16px; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>User Profile</h2>
+    
+    <div id="errorContainer" class="error-box"></div>
+
+    <div id="profileContent">
+        <div class="label">Username</div>
+        <div id="username" class="value">...</div>
+        <div class="label">Phone Number</div>
+        <div id="phone" class="value">...</div>
+        <button onclick="logout()">Logout</button>
+    </div>
+</div>
+
+<script>
+    async function loadUserData() {
+        const token = localStorage.getItem('tidye_session_token');
+        const errorContainer = document.getElementById('errorContainer');
+        const profileContent = document.getElementById('profileContent');
+
+        if (!token) {
+            window.location.href = 'login.html';
+            return;
+        }
+
+        try {
+            const response = await fetch("https://YOUR_PROJECT_ID.supabase.co/functions/v1/settings-api", {
+                method: "GET",
+                headers: { "Authorization": `Bearer ${token}` }
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                // Apa ndipomwe timawonetsa ERROR yomwe backend yatumiza
+                throw new Error(data.error || "Failed to load profile");
+            }
+
+            // Success!
+            document.getElementById('username').innerText = data.username;
+            document.getElementById('phone').innerText = data.phone_number;
+
+        } catch (err) {
+            // Error handling
+            errorContainer.innerText = "Error: " + err.message;
+            errorContainer.style.display = "block";
+            profileContent.style.display = "none";
+            console.error("DEBUG ERROR:", err.message);
+        }
+    }
+
+    function logout() {
+        localStorage.removeItem('tidye_session_token');
+        window.location.href = 'login.html';
+    }
+
+    loadUserData();
+</script>
+</body>
+</html>
