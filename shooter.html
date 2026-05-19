@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Server-Authoritative Shooter Game</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+        body, html {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: linear-gradient(to bottom, #1a2a6c, #b21f1f, #fdbb2d);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #fff;
+        }
+        #bgCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Top Bar Interface */
+        .hud-header {
+            position: absolute;
+            top: 20px;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 30px;
+            z-index: 10;
+        }
+        .hud-card {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            padding: 10px 20px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            font-weight: bold;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .highlight {
+            color: #fdbb2d;
+            font-size: 16px;
+        }
+
+        /* Central Live Timer Circle */
+        #gameTimerCircle {
+            position: absolute;
+            top: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 60px;
+            background: rgba(0, 0, 0, 0.75);
+            border: 3px solid #00ffcc;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 22px;
+            font-weight: bold;
+            color: #00ffcc;
+            z-index: 10;
+            box-shadow: 0 0 15px rgba(0, 255, 204, 0.4);
+            transition: all 0.3s ease;
+        }
+        #gameTimerCircle.warning {
+            border-color: #ff3333;
+            color: #ff3333;
+            animation: pulse 0.5s infinite alternate;
+            box-shadow: 0 0 20px rgba(255, 51, 51, 0.6);
+        }
+
+        /* Target Area Setup */
+        #gameArea {
+            position: absolute;
+            top: 120px;
+            left: 5%;
+            width: 90%;
+            height: 120px;
+            z-index: 5;
+        }
+        #targetContainer {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70px;
+            height: 70px;
+            transition: left 0.1s linear;
+        }
+        #targetBall {
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 30% 30%, #ff4e50, #f9d423);
+            border-radius: 50%;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5), inset -5px -5px 15px rgba(0,0,0,0.4);
+            transition: transform 0.1s ease;
+        }
+
+        /* Shooter Gun / Nozzle Area */
+        #weaponSystem {
+            position: absolute;
+            bottom: 120px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 8;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        #nozzle {
+            width: 24px;
+            height: 50px;
+            background: linear-gradient(to right, #555, #888, #333);
+            border-radius: 5px 5px 0 0;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+
+        /* Action Buttons Area */
+        #controls {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        #redBtn {
+            width: 85px;
+            height: 85px;
+            background: radial-gradient(circle, #ff3333 0%, #990000 100%);
+            border: 4px solid #fff;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4), inset 0 4px 6px rgba(255,255,255,0.4);
+            outline: none;
+            transition: transform 0.1s ease, filter 0.3s ease;
+        }
+        #redBtn:active {
+            transform: scale(0.92);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+        }
+        #soundToggle {
+            width: 50px;
+            height: 50px;
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Floating Bullet Marbles & Live Particles */
+        .marble {
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            background: radial-gradient(circle at 30% 30%, #00ffff, #006699);
+            border-radius: 50%;
+            z-index: 6;
+            box-shadow: 0 0 10px #00ffff;
+            pointer-events: none;
+        }
+        .particle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: #ffcc00;
+            border-radius: 50%;
+            z-index: 7;
+            pointer-events: none;
+        }
+
+        /* Modals & Overlay Screens */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(10px);
+            z-index: 100;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .modal-card {
+            background: linear-gradient(135deg, #2c3e50, #1c2833);
+            padding: 40px;
+            border-radius: 24px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+        }
+        .modal-card h2 { margin-bottom: 10px; color: #fdbb2d; }
+        #modalCountdown { font-size: 48px; color: #fff; font-weight: 800; margin: 15px 0; }
+        #payBtn {
+            background: linear-gradient(to right, #00ffcc, #0099ff);
+            color: #111; border: none; padding: 12px 35px;
+            font-size: 16px; font-weight: bold; border-radius: 30px;
+            cursor: pointer; box-shadow: 0 5px 15px rgba(0,255,204,0.4);
+            transition: transform 0.2s;
+        }
+        #payBtn:hover { transform: translateY(-2px); }
+        
+        #spectatorMsg {
+            position: absolute;
+            top: 55%; left: 50%; transform: translate(-50%, -50%);
+            background: rgba(0,0,0,0.7); padding: 15px 30px;
+            border-radius: 30px; font-weight: bold; z-index: 20;
+            border: 1px solid rgba(255,50,50,0.3); display: none;
+        }
+
+        @keyframes pulse {
+            from { transform: translateX(-50%) scale(1); }
+            to { transform: translateX(-50%) scale(1.15); }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="bgCanvas"></canvas>
+
+    <div class="hud-header">
+        <div class="hud-card">💰 Bal: <span id="balanceVal" class="highlight">0.00</span></div>
+        <div class="hud-card">🏆 Pool: <span id="poolAmount" class="highlight">0</span></div>
+        <div class="hud-card">🎯 Pts: <span id="userPoints" style="color:#00ffcc;">0</span> | Shots: <span id="shotsLeftDisplay" style="color:#ff4e50;">0</span></div>
+    </div>
+
+    <div id="gameTimerCircle">0</div>
+
+    <div id="gameArea">
+        <div id="targetContainer">
+            <div id="targetBall"></div>
+        </div>
+    </div>
+
+    <div id="weaponSystem">
+        <div id="nozzle"></div>
+    </div>
+
+    <div id="spectatorMsg">⚠️ Waiting for next round... Spectating live.</div>
+
+    <div id="controls">
+        <button id="soundToggle"><i class="fas fa-volume-mute"></i></button>
+        <button id="redBtn"></button>
+    </div>
+
+    <div id="entryModal" class="modal-overlay">
+        <div class="modal-card">
+            <h2>NEXT ROUND STARTING</h2>
+            <div id="modalCountdown">0</div>
+            <p id="modalMsg" style="margin-bottom:20px; color:#aaa;">Pay before timer ends to play</p>
+            <button id="payBtn">JOIN ROUND</button>
+        </div>
+    </div>
+
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase.js"></script>
+    <script>
+        // ---------------- LIVE SERVER-AUTHORITATIVE CLIENT ----------------
+        const supabase = window.supabaseClient;
+        let currentUserId = null;
+        let currentRound = 1;
+        let hasJoined = false;
+        let userProfileName = "Player";
+        
+        // Connect to your live Hugging Face server setup
+        const socket = io("https://moskonx-tidye-shooter-game-server.hf.space", {
+            transports: ["websocket"]
+        });
+        
+        // DOM elements
+        const canvas = document.getElementById('bgCanvas');
+        const ctx = canvas.getContext('2d');
+        const btn = document.getElementById('redBtn');
+        const targetContainer = document.getElementById('targetContainer');
+        const targetBall = document.getElementById('targetBall');
+        const balanceEl = document.getElementById('balanceVal');
+        const pointsEl = document.getElementById('userPoints');
+        const gameTimerCircle = document.getElementById('gameTimerCircle');
+        const modal = document.getElementById('entryModal');
+        const modalTimerEl = document.getElementById('modalCountdown');
+        const payBtn = document.getElementById('payBtn');
+        const modalMsg = document.getElementById('modalMsg');
+        const poolAmountSpan = document.getElementById('poolAmount');
+        const shotsLeftDisplay = document.getElementById('shotsLeftDisplay');
+        const spectatorMsgDiv = document.getElementById('spectatorMsg');
+        const soundToggle = document.getElementById('soundToggle');
+        
+        // Background clouds
+        let width, height;
+        let clouds = [];
+        function resize() { width = canvas.width = window.innerWidth; height = canvas.height = window.innerHeight; }
+        window.addEventListener('resize', resize);
+        
+        class Cloud {
+            constructor(randomY = false) {
+                this.x = Math.random() * width;
+                this.y = randomY ? Math.random() * (height * 0.7) : -100;
+                this.size = Math.random() * 50 + 30;
+                this.speed = Math.random() * 0.4 + 0.1;
+                this.opacity = Math.random() * 0.2 + 0.05;
+            }
+            update() { this.y += this.speed; if (this.y > height) { this.y = -100; this.x = Math.random() * width; } }
+            draw() { ctx.fillStyle = `rgba(255,255,255,${this.opacity})`; ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI*2); ctx.fill(); }
+        }
+        
+        function animateClouds() { ctx.clearRect(0, 0, width, height); clouds.forEach(c => { c.update(); c.draw(); }); requestAnimationFrame(animateClouds); }
+        
+        // Helper function for secure edge calls
+        async function getSessionToken() { return localStorage.getItem('tidye_session_token'); }
+        async function callEdgeFunction(funcName, body) {
+            const token = await getSessionToken();
+            if (!token) throw new Error('Not authenticated');
+            const res = await fetch(`${window.SUPABASE_URL}/functions/v1/${funcName}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                body: JSON.stringify(body),
+            });
+            if (!res.ok) { const err = await res.json(); throw new Error(err.error || `HTTP ${res.status}`); }
+            return res.json();
+        }
+        
+        // REAL-TIME ENGINE: Listen to continuous 100ms ticks pushed via WebSockets
+        socket.on('gameTick', (state) => {
+            // Move target sphere based on authoritative computation
+            targetContainer.style.left = state.target_x + '%';
+            
+            // Update Live Countdown Display circle safely
+            gameTimerCircle.innerText = state.timer_seconds;
+            if (state.timer_seconds <= 10 && state.round_status === 'active') {
+                gameTimerCircle.classList.add('warning');
+            } else {
+                gameTimerCircle.classList.remove('warning');
+            }
+            
+            poolAmountSpan.innerText = state.pool_amount;
+            currentRound = state.current_round;
+            
+            // Handle overlay modals for game intervals
+            if (state.round_status === 'waiting') {
+                if (!hasJoined && state.waiting_ends_at) {
+                    const remaining = Math.max(0, Math.ceil((new Date(state.waiting_ends_at) - new Date()) / 1000));
+                    modalTimerEl.innerText = remaining;
+                    modal.classList.add('active');
+                    spectatorMsgDiv.style.display = 'none';
+                } else if (hasJoined) {
+                    modal.classList.remove('active');
+                    spectatorMsgDiv.style.display = 'none';
+                } else {
+                    spectatorMsgDiv.style.display = 'block';
+                    modal.classList.remove('active');
+                    btn.disabled = true;
+                    btn.style.filter = "grayscale(80%)";
+                }
+            } else {
+                modal.classList.remove('active');
+                if (!hasJoined) {
+                    spectatorMsgDiv.style.display = 'block';
+                    btn.disabled = true;
+                    btn.style.filter = "grayscale(80%)";
+                } else {
+                    spectatorMsgDiv.style.display = 'none';
+                    btn.disabled = false;
+                    btn.style.filter = "none";
+                }
+            }
+        });
+
+        // FLASH NOTIFICATION ON TARGET HITS (Shows on every player screen instantly)
+        socket.on('broadcastLiveHit', (data) => {
+            const toast = document.createElement('div');
+            toast.style.position = 'absolute';
+            toast.style.top = '250px';
+            toast.style.left = '50%';
+            toast.style.transform = 'translateX(-50%)';
+            toast.style.background = 'rgba(255, 215, 0, 0.95)';
+            toast.style.color = '#111';
+            toast.style.padding = '8px 20px';
+            toast.style.borderRadius = '20px';
+            toast.style.fontWeight = 'bold';
+            toast.style.fontSize = '14px';
+            toast.style.zIndex = '999';
+            toast.style.boxShadow = '0 5px 15px rgba(0,0,0,0.3)';
+            toast.innerText = `🎯 ${data.username} HIT TARGET! (+${data.points || data.awarded_points} PTS)`;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.transition = 'all 0.5s ease';
+                toast.style.opacity = '0';
+                toast.style.top = '210px';
+                setTimeout(() => toast.remove(), 500);
+            }, 1500);
+
+            if (!soundMuted && hitSound) {
+                hitSound.currentTime = 0;
+                hitSound.play().catch(e => console.log("Audio play blocked"));
+            }
+        });
+
+        socket.on('newRoundStarted', (data) => {
+            hasJoined = false; 
+            pointsEl.innerText = "0";
+            shotsLeftDisplay.innerText = "0";
+        });
+        
+        // Auth Profile and Database tracking rules
+        async function initRealtimeFallback() {
+            const token = await getSessionToken();
+            if (!token) return;
+            const { data: { user } } = await supabase.auth.getUser(token);
+            if (!user) return;
+            currentUserId = user.id;
+            
+            socket.emit('getWalletBalance', user.id);
+            socket.on('balanceData', (data) => {
+                if(data) balanceEl.innerText = parseFloat(data.balance).toFixed(2);
+            });
+            
+            const fetchPlayer = async () => {
+                const { data: player } = await supabase.from('game_players').select('points, shots_left').eq('round_id', currentRound).eq('user_id', user.id).maybeSingle();
+                if (player) {
+                    pointsEl.innerText = player.points || 0;
+                    shotsLeftDisplay.innerText = player.shots_left || 0;
+                    hasJoined = true;
+                }
+            };
+            await fetchPlayer();
+
+            const { data: profile } = await supabase.from('profiles').select('balance, username').eq('id', user.id).maybeSingle();
+            if (profile) {
+                balanceEl.innerText = parseFloat(profile.balance).toFixed(2);
+                if (profile.username) userProfileName = profile.username;
+            }
+
+            // Subscriptions to catch standalone direct player updates
+            supabase.channel('local-player-channel')
+                .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'game_players', filter: `user_id=eq.${user.id}` }, (payload) => {
+                    pointsEl.innerText = payload.new.points || 0;
+                    shotsLeftDisplay.innerText = payload.new.shots_left || 0;
+                })
+                .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'profiles', filter: `id=eq.${user.id}` }, (payload) => {
+                    balanceEl.innerText = parseFloat(payload.new.balance).toFixed(2);
+                })
+                .subscribe();
+        }
+        
+        // Fire Action Event and trigger local animation properties
+        btn.addEventListener('click', async () => {
+            // Yambitsani sound yakumbuyo ngati isanayambitsidwe chifukwa cha malamulo a browser auto-play
+            if (!soundMuted && bgSound.paused) {
+                bgSound.play().catch(e => console.log("BG Audio play waiting for user action"));
+            }
+
+            try {
+                const result = await callEdgeFunction('shoot-action', { round_id: currentRound });
+                if (result.success) {
+                    if (!soundMuted && shootSound) {
+                        shootSound.currentTime = 0;
+                        shootSound.play().catch(e => console.log);
+                    }
+
+                    targetBall.style.transform = "scale(1.25)";
+                    setTimeout(() => targetBall.style.transform = "scale(1)", 100);
+
+                    // Render floating structural shooter marble animations
+                    const marble = document.createElement('div');
+                    marble.className = 'marble';
+                    const nozzleRect = document.getElementById('nozzle').getBoundingClientRect();
+                    let marbleX = nozzleRect.left + (nozzleRect.width / 2) - 8;
+                    let marbleY = nozzleRect.top;
+                    marble.style.left = marbleX + 'px';
+                    marble.style.top = marbleY + 'px';
+                    document.body.appendChild(marble);
+
+                    let bulletInterval = setInterval(() => {
+                        marbleY -= 14;
+                        marble.style.top = marbleY + 'px';
+                        
+                        // Chotsani marbulo ngati yakwera pamwamba kwambiri
+                        if (marbleY < 150) { 
+                            clearInterval(bulletInterval); 
+                            marble.remove(); 
+                        }
+                    }, 14);
+
+                    if (result.is_hit) {
+                        socket.emit('playerHitTarget', {
+                            username: userProfileName,
+                            awarded_points: result.awarded_points || 10
+                        });
+                    }
+
+                    // Particle Exploded elements
+                    for (let i = 0; i < 12; i++) {
+                        const p = document.createElement('div');
+                        p.className = 'particle';
+                        // Pangitsani maparticles kuwalira mosiyana siyana (Gold/Orange/Cyan)
+                        const colors = ['#ffcc00', '#ff3300', '#00ffff'];
+                        p.style.background = colors[Math.floor(Math.random() * colors.length)];
+                        p.style.left = marbleX + 'px';
+                        p.style.top = (result.is_hit ? 160 : 300) + 'px'; 
+                        document.body.appendChild(p);
+                        
+                        const angle = Math.random() * Math.PI * 2;
+                        const vel = Math.random() * 6 + 4;
+                        let px = marbleX;
+                        let py = result.is_hit ? 160 : 300;
+                        let opacity = 1;
+
+                        let moveP = setInterval(() => {
+                            px += Math.cos(angle) * vel;
+                            py += Math.sin(angle) * vel + 0.5; // kuwonjezera mphamvu ya gravity pang'ono
+                            p.style.left = px + 'px';
+                            p.style.top = py + 'px';
+                            opacity -= 0.06;
+                            p.style.opacity = opacity;
+                            
+                            if (opacity <= 0) { 
+                                clearInterval(moveP); 
+                                p.remove(); 
+                            }
+                        }, 20);
+                    }
+                }
+            } catch (err) { console.error(err); }
+        });
+        
+        // Join round action event
+        payBtn.addEventListener('click', async () => {
+            try {
+                const result = await callEdgeFunction('join-round', {});
+                if (result.success) {
+                    modal.classList.remove('active');
+                    modalMsg.innerText = "You have joined!";
+                    hasJoined = true;
+                    // Tsegulani batani la kuwombera nthawi yomweyo
+                    btn.disabled = false;
+                    btn.style.filter = "none";
+                    setTimeout(() => modalMsg.innerText = "Pay before timer ends to play", 2000);
+                }
+            } catch (err) { modalMsg.innerText = err.message; }
+        });
+        
+        // Sound settings configuration setup
+        let soundMuted = true; // Zayambira pa mute kuti zisayambitse error mu browser
+        const hitSound = new Audio('sounds/hit.mp3');
+        const shootSound = new Audio('sounds/shoot.mp3');
+        const bgSound = new Audio('sounds/background.mp3');
+        bgSound.loop = true;
+
+        soundToggle.addEventListener('click', () => {
+            soundMuted = !soundMuted;
+            const icon = soundToggle.querySelector('i');
+            if (soundMuted) {
+                icon.classList.remove('fa-volume-up');
+                icon.classList.add('fa-volume-mute');
+                bgSound.volume = 0;
+                hitSound.volume = 0;
+                shootSound.volume = 0;
+                bgSound.pause();
+            } else {
+                icon.classList.remove('fa-volume-mute');
+                icon.classList.add('fa-volume-up');
+                bgSound.volume = 0.5; // 50% Volume kuti isaphame kwambiri
+                hitSound.volume = 1;
+                shootSound.volume = 1;
+                bgSound.play().catch(e => console.log("Audio acceleration manual block"));
+            }
+        });
+        
+        function init() {
+            resize();
+            for (let i = 0; i < 12; i++) clouds.push(new Cloud(true));
+            animateClouds();
+            initRealtimeFallback();
+        }
+        init();
+    </script>
+</body>
+</html>
