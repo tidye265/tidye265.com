@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tidye265 | My Account</title>
+    <style>
+        body { background-color: #F8F9FA; font-family: 'Inter', sans-serif; padding: 20px; }
+        .card { background: white; padding: 24px; border-radius: 16px; max-width: 400px; margin: auto; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+        .error-card { background: #fee2e2; border: 1px solid #f87171; color: #991b1b; padding: 15px; border-radius: 8px; margin-bottom: 20px; display: none; }
+        .label { color: #6b7280; font-size: 12px; font-weight: 700; text-transform: uppercase; margin-bottom: 4px; }
+        .value { font-weight: 600; font-size: 16px; margin-bottom: 20px; color: #111827; }
+        button { width: 100%; padding: 12px; background: #ef4444; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>User Profile</h2>
+    
+    <div id="errorDisplay" class="error-card"></div>
+
+    <div id="profileContent">
+        <div class="label">Username</div>
+        <div id="username" class="value">Loading...</div>
+        <div class="label">Phone Number</div>
+        <div id="phone" class="value">Loading...</div>
+        <button onclick="logout()">Logout</button>
+    </div>
+</div>
+
+<script src="supabase.js"></script>
+
+<script>
+    async function loadProfile() {
+        const errorDisplay = document.getElementById('errorDisplay');
+        const profileContent = document.getElementById('profileContent');
+        const token = localStorage.getItem('tidye_session_token');
+
+        // Tsimikizani kuti window.SUPABASE_URL ilipo (yachokera ku supabase.js)
+        if (!window.SUPABASE_URL) {
+            showError("System configuration error: SUPABASE_URL not found.");
+            return;
+        }
+
+        if (!token) {
+            window.location.href = 'login.html';
+            return;
+        }
+
+        try {
+            // Kugwiritsa ntchito window.SUPABASE_URL m'malo mwa hardcoded URL
+            const url = `${window.SUPABASE_URL}/functions/v1/settings-api`;
+            
+            const response = await fetch(url, {
+                method: "GET",
+                headers: { 
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                }
+            });
+
+            const result = await response.json();
+
+            if (!response.ok) {
+                // Ngati vuto lachitika pa API, tsimikizani vutolo
+                throw new Error(result.error || `Error ${response.status}`);
+            }
+
+            // Success: Ikani ma details
+            document.getElementById('username').innerText = result.username || "N/A";
+            document.getElementById('phone').innerText = result.phone_number || "N/A";
+
+        } catch (err) {
+            showError("Connection Error: " + err.message);
+            console.error("DEBUG:", err);
+        }
+    }
+
+    function showError(msg) {
+        const errorDisplay = document.getElementById('errorDisplay');
+        const profileContent = document.getElementById('profileContent');
+        errorDisplay.innerText = msg;
+        errorDisplay.style.display = "block";
+        profileContent.style.display = "none";
+    }
+
+    function logout() {
+        localStorage.removeItem('tidye_session_token');
+        window.location.href = 'login.html';
+    }
+
+    // Yambitsani ntchito ikangodzaza
+    document.addEventListener("DOMContentLoaded", loadProfile);
+</script>
+</body>
+</html>
