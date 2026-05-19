@@ -1,0 +1,185 @@
+<style nonce="tidye265SecureNonce">  
+    /* Global Page Structure Optimization to eliminate bottom spacing bugs */
+    html, body {
+        height: 100%;
+        margin: 0;
+        background-color: #F8F9FA; /* Preserves header setup */
+    }
+
+    /* New Traditional Footer Layout (Charcoal Black Section) */  
+    .site-footer {  
+        background: #2E2F35;  
+        color: #ffffff;  
+        padding: 40px 20px calc(100px + env(safe-area-inset-bottom, 0px)) 20px;  
+        font-family: 'Inter', sans-serif;  
+        border-top: 1px solid #404247;  
+        position: relative;
+        z-index: 10;
+    }  
+    .footer-brand { text-align: left; margin-bottom: 30px; }  
+    .footer-logo { height: 50px; width: auto; margin-bottom: 12px; border-radius: 6px; }  
+    .footer-tagline { font-size: 12px; color: #b9bbc0; font-family: 'Lexend'; line-height: 1.6; max-width: 500px; }  
+    .footer-divider { border: 0; border-top: 1px solid #404247; margin: 25px 0; }  
+      
+    /* Responsive Professional Layout Grid */
+    .footer-links-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }  
+    .footer-col h5 { font-family: 'Lexend'; font-size: 14px; color: #FFD700; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 700; }  
+    .footer-col a { display: block; color: #e5e7eb; text-decoration: none; font-size: 13px; margin-bottom: 10px; transition: color 0.2s ease; font-family: 'Inter', sans-serif; }  
+    .footer-col a:hover { color: #FFD700; }
+    .footer-col p { font-size: 13px; color: #e5e7eb; display: flex; align-items: center; gap: 8px; line-height: 1.5; }  
+    .footer-col i { color: #FFD700; font-size: 14px; }  
+      
+    /* Social Media Icons Wrapper */
+    .footer-socials { display: flex; gap: 15px; margin-top: 15px; }
+    .footer-socials a { display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; background: #1C1D21; border-radius: 50%; color: #ffffff; transition: all 0.3s ease; border: 1px solid #404247; }
+    .footer-socials a:hover { background: #FFD700; color: #1C1D21; transform: translateY(-2px); }
+
+    .footer-bottom { text-align: center; font-size: 12px; color: #9ca3af; font-family: 'Lexend'; line-height: 1.6; }  
+    
+    /* FIXED & PERFECTLY BALANCED BOTTOM NAV BAR WITH SAFE AREA COMPLIANCE */  
+    .bottom-nav {   
+        position: fixed; 
+        bottom: 0; 
+        left: 0; 
+        width: 100%; 
+        background: #2E2F32;  
+        display: flex; 
+        justify-content: space-between; 
+        align-items: center;  
+        z-index: 5000; 
+        height: calc(50px + env(safe-area-inset-bottom, 0px));  
+        padding-bottom: env(safe-area-inset-bottom, 0px);
+        border-top: 1px solid #404247; 
+        padding-left: 5px;
+        padding-right: 5px;
+        box-shadow: 0 -4px 20px rgba(0,0,0,0.3);
+    }  
+    .nav-item, .trade-btn-container {   
+        display: flex; 
+        flex-direction: column; 
+        align-items: center; 
+        justify-content: center;
+        color: #b9bbc0;  
+        text-decoration: none; 
+        font-size: 10px; 
+        font-family: 'Lexend', sans-serif; 
+        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); 
+        cursor: pointer;  
+        border: none; 
+        background: none; 
+        flex: 1; 
+        height: 100%; 
+        min-width: 0;
+    }  
+    .nav-item i, .trade-btn-container i { font-size: 20px; margin-bottom: 4px; display: block; transition: transform 0.2s ease; color: #b9bbc0; }  
+    .nav-item span { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+      
+    /* Native Real Active States with High-Impact Yellow Effects */
+    .nav-item.active, .nav-item.active i, .nav-item.active span { color: #FFD700 !important; font-weight: 600; }  
+    .nav-item.active i { transform: translateY(-2px); }
+    .nav-item:active, .trade-btn-container:active { transform: scale(0.92); }  
+      
+    /* Clean Context Button Optimization */
+    .trade-btn-container.active i, .trade-btn-container.active span { color: #FFD700 !important; }
+
+    /* HIGH-PERFORMANCE SKELETON LOADING ANIMATIONS */
+    .tidye-skeleton {
+        background: linear-gradient(90deg, #3a3b40 25%, #46484e 50%, #3a3b40 75%);
+        background-size: 200% 100%;
+        animation: tidyePulse 1.5s infinite linear;
+        border-radius: 4px;
+        display: inline-block;
+    }
+    @keyframes tidyePulse {
+        0% { background-position: 200% 0; }
+        100% { background-position: -200% 0; }
+    }
+</style>  
+  
+<footer class="site-footer">  
+    <div class="footer-brand">  
+        <img src="logo2.jpg" alt="tidye265 Logo" class="footer-logo">  
+        <p class="footer-tagline">The premier professional Malawian high-frequency asset trading and localized peer-to-peer interactive gaming ecosystem. Built safely for the 265 network landscape. Game response 🔞 Enjoy with the best game website ever.</p>  
+    </div>  
+        
+    <div class="footer-links-grid">  
+        <div class="footer-col">  
+            <h5>Support & Help</h5>  
+            <a href="support.html">Help Center</a>  
+            <a href="faq.html">FAQs</a>  
+            <a href="support.html">Live Support</a>  
+            <a href="contact.html">Contacts</a>  
+        </div>  
+        <div class="footer-col">  
+            <h5>Location & Media</h5>  
+            <p><i class="fa-solid fa-location-dot"></i> Blantyre, Malawi</p>  
+            <div class="footer-socials">
+                <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                <a href="#" aria-label="X"><i class="fa-brands fa-x-twitter"></i></a>
+                <a href="#" aria-label="Telegram"><i class="fa-brands fa-telegram"></i></a>
+            </div>
+        </div>  
+    </div>  
+        
+    <hr class="footer-divider">  
+        
+    <div class="footer-bottom">  
+        <p>&copy; 2026 tidye265 Platform. Crafted for ultimate reliability and enterprise-grade performance. All rights reserved globally.</p>  
+    </div>  
+</footer>  
+  
+<nav class="bottom-nav" aria-label="Main Navigation" id="mainBottomNav">  
+    <a href="dashboard.html" class="nav-item" data-page="dashboard.html" aria-label="Home">  
+        <i class="fa-solid fa-house"></i>  
+        <span>Home</span>  
+    </a>  
+    <a href="game.html" class="nav-item" data-page="game.html" aria-label="Games">  
+        <i class="fa-solid fa-gamepad"></i>  
+        <span>Games</span>  
+    </a>  
+    <a href="trade.html" class="trade-btn-container" data-page="trade.html" aria-label="Tidye Special">  
+        <i class="fa-solid fa-crosshairs"></i>  
+        <span>tidye</span>  
+    </a>  
+    <a href="wallet.html" class="nav-item" data-page="wallet.html" aria-label="Wallet">  
+        <i class="fa-solid fa-wallet"></i>  
+        <span>Wallet</span>  
+    </a>  
+    <a href="account.html" class="nav-item" data-page="account.html" aria-label="Account">  
+        <i class="fa-solid fa-circle-user"></i>  
+        <span>Account</span>  
+    </a>  
+</nav>  
+  
+<script nonce="tidye265SecureNonce">  
+    // ===================================================
+    // SECURE HIGH-PERFORMANCE UI INTERACTIONS ENGINE
+    // ===================================================
+    document.addEventListener("DOMContentLoaded", () => {
+        // Robust filename matching architecture that covers full paths, roots, and extensions
+        const currentPath = window.location.pathname.toLowerCase();
+        const navElements = document.querySelectorAll("#mainBottomNav .nav-item, #mainBottomNav .trade-btn-container");
+        
+        let matchFound = false;
+
+        navElements.forEach(element => {
+            const dataPage = element.getAttribute("data-page").toLowerCase();
+            const baseName = dataPage.replace(".html", ""); // Extracts e.g. "dashboard"
+
+            // Matches dashboard.html, /dashboard, or if the path ends exactly with the name
+            if (currentPath.includes(dataPage) || currentPath.endsWith("/" + baseName) || currentPath.endsWith(baseName)) {
+                element.classList.add("active");
+                matchFound = true;
+            } else {
+                element.classList.remove("active");
+            }
+        });
+
+        // Safe Fallback: If you are at the domain root ("/") or index.html, force the Dashboard/Home to be active
+        if (!matchFound && (currentPath === "" || currentPath === "/" || currentPath.includes("index.html") || currentPath.includes("dashboard"))) {
+            const homeTarget = document.querySelector('[data-page="dashboard.html"]');
+            if (homeTarget) homeTarget.classList.add("active");
+        }
+    });
+</script>
