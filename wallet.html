@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>My Wallet | Tidye265</title>
+    
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://*.supabase.co; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' https: data: blob:; connect-src 'self' https://*.supabase.co;">
+    <meta name="theme-color" content="#FFD700">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lexend:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+    <style>
+        /* Global Structural Engineering tokens */
+        :root {
+            --bg: #F4F6F8; --primary: #FFD700; --card-bg: #FFFFFF;
+            --text-light: #1a1d21; --text-dim: #6b7280; --danger: #ef4444; 
+            --border: #e5e7eb; --accent: #f3f4f6;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { background-color: var(--bg); color: var(--text-light); font-family: 'Inter', sans-serif; padding-bottom: 95px; line-height: 1.5; overflow-x: hidden; }
+
+        /* Loader - Skeleton Animation */
+        #loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #F4F6F8; z-index: 9999; display: flex; flex-direction: column; padding: 20px; gap: 15px; }
+        .skeleton { 
+            background: linear-gradient(90deg, #e5e7eb 25%, #f3f4f6 50%, #e5e7eb 75%);
+            background-size: 200% 100%;
+            animation: skeleton-loading 1.5s infinite;
+            border-radius: 12px; 
+        }
+        @keyframes skeleton-loading { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+        /* Header */
+        .header { background: #fff; padding: 12px 15px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; height: 75px; }
+        .header-logo { height: 42px; border-radius: 6px; object-fit: contain; }
+        .page-title { font-family: 'Lexend'; font-weight: 700; font-size: 18px; color: var(--text-light); }
+        .header-action { color: var(--text-dim); font-size: 22px; text-decoration: none; padding: 5px; }
+
+        /* Big Wallet Container */
+        .wallet-card-big { 
+            background: linear-gradient(135deg, #1a1d21 0%, #2d3748 100%); 
+            color: #fff; border-radius: 20px; padding: 25px 20px; 
+            margin: 20px 15px; position: relative; overflow: hidden; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
+            display: flex; flex-direction: column; justify-content: center;
+        }
+        .wallet-card-big .lbl { font-size: 13px; text-transform: uppercase; color: #9ca3af; font-weight: 600; letter-spacing: 1px; }
+        .wallet-card-big .amt { font-family: 'Lexend'; font-size: 34px; font-weight: 800; color: var(--primary); margin-top: 5px; }
+        .wallet-card-big .bg-icon { position: absolute; right: -20px; bottom: -20px; font-size: 120px; opacity: 0.08; transform: rotate(-15deg); pointer-events: none; }
+
+        /* Action Buttons (Deposit / Withdraw) */
+        .action-buttons { display: flex; gap: 15px; padding: 0 15px 25px 15px; }
+        .action-btn { 
+            flex: 1; padding: 16px; border: none; border-radius: 14px; 
+            font-weight: 700; font-size: 15px; font-family: 'Inter';
+            cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; 
+            transition: all 0.2s ease; position: relative;
+        }
+        .action-btn:active { transform: scale(0.96); }
+        .deposit-btn { background: var(--primary); color: #000; box-shadow: 0 4px 12px rgba(255, 215, 0, 0.25); }
+        .withdraw-btn { background: #fff; color: var(--text-light); border: 1px solid var(--border); box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
+        
+        /* Loading Animation pa Buttons */
+        .action-btn:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
+        .spinner-icon { display: none; font-size: 18px; animation: spin 1s linear infinite; }
+        .action-btn.is-loading .spinner-icon { display: inline-block; }
+        .action-btn.is-loading .btn-text-content { display: none; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        /* Single Link Elements (Taken from account.html) */
+        .menu-section-title { padding: 10px 15px 5px; font-size: 12px; font-weight: 700; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.5px; }
+        .menu-list { padding: 0 15px 15px; display: flex; flex-direction: column; gap: 10px; }
+        .single-link { background: #fff; border: 1px solid var(--border); border-radius: 14px; padding: 16px 15px; display: flex; align-items: center; justify-content: space-between; text-decoration: none; color: var(--text-light); font-size: 14.5px; font-weight: 600; transition: background 0.2s; }
+        .single-link:active { background: #f9fafb; }
+        .single-link .main-icon { width: 24px; color: var(--text-dim); }
+    </style>
+</head>
+<body>
+
+    <div id="loader">
+        <div class="skeleton" style="height: 75px; width: 100%;"></div>
+        <div class="skeleton" style="height: 150px; width: 100%; margin-top: 10px;"></div>
+        <div style="display: flex; gap: 15px; margin-top: 10px;">
+            <div class="skeleton" style="height: 55px; width: 50%;"></div>
+            <div class="skeleton" style="height: 55px; width: 50%;"></div>
+        </div>
+        <div class="skeleton" style="height: 60px; width: 100%; margin-top: 20px;"></div>
+    </div>
+
+    <header class="header">
+        <img src="logo.jpg" alt="Logo" class="header-logo">
+        <div class="page-title">My Wallet</div>
+        <a href="dashboard.html" class="header-action"><i class="fa-solid fa-xmark"></i></a>
+    </header>
+
+    <div class="wallet-card-big">
+        <div class="lbl">Total Balance</div>
+        <div class="amt" id="walletBalance">MWK 0.00</div>
+        <i class="fa-solid fa-wallet bg-icon"></i>
+    </div>
+
+    <div class="action-buttons">
+        <button class="action-btn deposit-btn" onclick="executeTransactionAction(this, 'deposit.html')">
+            <i class="fa-solid fa-circle-notch spinner-icon"></i>
+            <span class="btn-text-content"><i class="fa-solid fa-arrow-down"></i> Deposit</span>
+        </button>
+        <button class="action-btn withdraw-btn" onclick="executeTransactionAction(this, 'withdraw.html')">
+            <i class="fa-solid fa-circle-notch spinner-icon"></i>
+            <span class="btn-text-content"><i class="fa-solid fa-arrow-up"></i> Withdraw</span>
+        </button>
+    </div>
+
+    <div class="menu-section-title">Transactions & History</div>
+    <div class="menu-list">
+        <a href="transactions.html" class="single-link">
+            <span><i class="fa-solid fa-clock-rotate-left main-icon"></i> View History</span>
+            <i class="fa-solid fa-chevron-right" style="font-size: 12px; color: #9ca3af;"></i>
+        </a>
+        <a href="account.html" class="single-link">
+            <span><i class="fa-solid fa-user-gear main-icon"></i> Account Settings</span>
+            <i class="fa-solid fa-chevron-right" style="font-size: 12px; color: #9ca3af;"></i>
+        </a>
+    </div>
+
+    <div class="menu-section-title">Help & Support</div>
+    <div class="menu-list">
+        <a href="https://wa.me/265992672764" class="single-link">
+            <span><i class="fa-brands fa-whatsapp main-icon" style="color: #25d366;"></i> WhatsApp Help</span>
+            <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 12px; color: #9ca3af;"></i>
+        </a>
+    </div>
+
+    <footer id="footer-placeholder"></footer>
+
+    <script src="supabase.js"></script>
+    <script>
+        "use strict";
+
+        // Logic Yopanga Disable button ndi Kuwonetsa Circle Animation
+        function executeTransactionAction(buttonElement, targetUrl) {
+            // Disable the button to prevent double clicks
+            buttonElement.disabled = true;
+            buttonElement.classList.add('is-loading');
+
+            // Redirect to the respective page after a short delay (so the user sees the spinner)
+            setTimeout(() => {
+                window.location.href = targetUrl;
+            }, 500); 
+        }
+
+        // Logic yochokera mu account.html yosimikidza login ndikutenga Balance
+        const WalletManager = (function() {
+            const DOM = {
+                loader: document.getElementById('loader'),
+                walletBalance: document.getElementById('walletBalance')
+            };
+
+            async function initialize() {
+                // Kuwona ngati token ilipo based on your account.html logic
+                const token = localStorage.getItem('tidye_session_token');
+                
+                // Ngati kulibe token, apite ku login
+                if (!token) { secureLogout(); return; }
+
+                try {
+                    // Fetch Wallet balance ku wallet-api (kugwiritsa ntchito logic yanu yomwe mudapereka)
+                    const response = await fetch(`${window.SUPABASE_URL}/functions/v1/wallet-api`, {
+                        method: 'GET',
+                        headers: { 'Authorization': `Bearer ${token}` }
+                    });
+
+                    // Ngati token inatha ntchito kapena ili invalid
+                    if (response.status === 401) {
+                        secureLogout();
+                        return;
+                    }
+
+                    const walletData = response.ok ? await response.json() : { balance: 0.00 };
+
+                    // Format balance mwaluso
+                    if (walletData) {
+                        const formattedBalance = Number(walletData.balance).toLocaleString('en-US', { 
+                            minimumFractionDigits: 2, maximumFractionDigits: 2 
+                        });
+                        DOM.walletBalance.textContent = `MWK ${formattedBalance}`;
+                    }
+
+                } catch (err) {
+                    console.error("Wallet initialization failed:", err);
+                    DOM.walletBalance.textContent = "MWK 0.00";
+                } finally {
+                    // Kuchotsa Loader mwaukadaulo
+                    setTimeout(() => {
+                        DOM.loader.style.opacity = '0';
+                        DOM.loader.style.transition = 'opacity 0.4s ease';
+                        setTimeout(() => DOM.loader.remove(), 400);
+                    }, 500);
+                }
+            }
+
+            function secureLogout() {
+                localStorage.clear();
+                window.location.replace('login.html');
+            }
+
+            return { init: initialize };
+        })();
+
+        // Load Footer from external file to maintain standard Design
+        function loadDashboardFooter() {
+            fetch('footer.html')
+                .then(response => {
+                    if(!response.ok) throw new Error("Footer not found");
+                    return response.text();
+                })
+                .then(data => {
+                    const footerEl = document.getElementById('footer-placeholder');
+                    if (footerEl) footerEl.innerHTML = data;
+                })
+                .catch(err => console.log("Standard Footer mode:", err));
+        }
+
+        // Yambitsani zonse tsamba likatsegulidwa
+        document.addEventListener('DOMContentLoaded', () => {
+            WalletManager.init();
+            loadDashboardFooter();
+        });
+    </script>
+</body>
+</html>
