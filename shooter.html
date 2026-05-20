@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SHOOTER 265 | SUPER 3D EDITION</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --sky-top: #050A1F;
+            --sky-bottom: #0B1B3D;
+            --red-main: #ff3b3b;
+            --red-dark: #b30000;
+            --red-deep: #7a0000;
+            --white-glass: rgba(255, 255, 255, 0.7);
+            --blue-light: #5bc0ff;
+            --blue-main: #1a6dff;
+            --blue-dark: #0033aa;
+            --blue-glow: #00a6ff;
+            --warning-color: #eab308;
+            /* Gold Time Palette */
+            --gold-light: #fff176;
+            --gold-main: #ffd700;
+            --gold-dark: #f57f17;
+            --gold-glow: #ffea00;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body, html { height: 100vh; width: 100vw; overflow: hidden; background: linear-gradient(to bottom, var(--sky-top), var(--sky-bottom)); font-family: 'Arial Black', sans-serif; }
+        
+        /* Hardware accelerated container for global screen shakes */
+        #game-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            will-change: transform;
+            transition: transform 0.05s linear;
+        }
+
+        /* --- REFRESH BLACK LOADING SCREEN --- */
+        #loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000000;
+            z-index: 999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #ffffff;
+            font-size: 15px;
+            letter-spacing: 2px;
+            transition: opacity 0.4s ease, visibility 0.4s;
+        }
+
+        /* --- SMALL HEADER SYSTEM --- */
+        .game-header { position: absolute; top: 0; left: 0; width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; z-index: 100; }
+        .header-left {
+            display: flex;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.65);
+            padding: 6px 14px;
+            border-radius: 30px;
+            color: #FFD966;
+            border: 1px solid rgba(255,215,0,0.5);
+            font-size: 13px;
+            font-weight: bold;
+            backdrop-filter: blur(4px);
+            box-shadow: 0 5px 12px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.2);
+        }
+        .header-left i { margin-right: 6px; color: #FFD700; }
+        .header-right { display: flex; align-items: center; gap: 10px; position: relative; }
+        
+        .balance-display {
+            background: rgba(0, 0, 0, 0.65);
+            padding: 6px 14px;
+            border-radius: 30px;
+            color: #FFD966;
+            border: 1px solid rgba(255,215,0,0.5);
+            font-size: 13px;
+            font-weight: bold;
+            backdrop-filter: blur(4px);
+            box-shadow: 0 5px 12px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.2);
+        }
+        .balance-display i { color: #FFD700; margin-right: 4px; }
+
+        .hamburger { display: flex; flex-direction: column; gap: 4px; cursor: pointer; background: rgba(0,0,0,0.6); padding: 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); }
+        .hamburger span { width: 20px; height: 3px; background: white; border-radius: 2px; box-shadow: 0 1px 2px rgba(0,0,0,0.3); }
+        
+        /* --- SUB-HEADER POOL DISPLAY ONLY --- */
+        .pool-display {
+            position: absolute;
+            top: 55px;
+            left: 16px;
+            background: rgba(0,0,0,0.55);
+            backdrop-filter: blur(8px);
+            padding: 6px 14px;
+            border-radius: 40px;
+            border: 1px solid rgba(255,215,0,0.3);
+            font-size: 13px;
+            font-weight: bold;
+            color: #FFE6A3;
+            text-shadow: 0 1px 2px black;
+            z-index: 95;
+            display: flex;
+            gap: 12px;
+        }
+        .pool-display i { color: #FFD966; margin-right: 4px; }
+
+        /* --- HAMBURGER DROPDOWN MENU --- */
+        .dropdown-menu {
+            position: absolute;
+            top: 52px;
+            right: 0;
+            background: rgba(12, 19, 38, 0.95);
+            border: 1px solid #FFD700;
+            border-radius: 12px;
+            width: 160px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 150;
+        }
+        .dropdown-menu.show { display: flex; }
+        .dropdown-item {
+            padding: 12px 16px;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+            text-decoration: none;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            cursor: pointer;
+            transition: background 0.2s;
+            text-align: left;
+        }
+        .dropdown-item:last-child { border-bottom: none; }
+        .dropdown-item:hover, .dropdown-item:active { background: rgba(255, 215, 0, 0.15); color: #FFD700; }
+
+        /* --- GAME ROUND TIMER --- */
+        .timer-circle { position: absolute; top: 105px; right: 16px; width: 85px; height: 42px; border-radius: 20px; background: #0a1428; border: 3px solid #FFD700; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: bold; color: #ffffff; text-shadow: 0 0 4px #0099ff; box-shadow: 0 0 12px rgba(0,160,255,0.4); z-index: 100; transition: all 0.2s ease; }
+        .timer-circle.warning { background: #8b0000; border-color: #ff8800; color: #ffdd44; box-shadow: 0 0 18px red; animation: pulse-red 0.8s infinite; }
+        @keyframes pulse-red { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.06); opacity: 0.95; background: #b22222; } 100% { transform: scale(1); opacity: 1; } }
+        
+        /* --- GAME ENGINE CANVAS & ENVIRONMENT --- */
+        #bgCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
+        .vignette { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle, transparent 35%, rgba(0,0,0,0.5) 100%); z-index: 2; pointer-events: none; }
+        
+        .ornament-container { position: absolute; top: 0; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; z-index: 5; animation: swing 4s ease-in-out infinite; transform-origin: top center; transition: left 0.1s linear; filter: drop-shadow(0 12px 20px rgba(0,0,0,0.4)); }
+        .string { width: 4px; height: 110px; background: repeating-linear-gradient(45deg, #c0c0c0, #f0f0f0 5px, #a0a0a0 8px); box-shadow: 0 0 3px rgba(255,255,255,0.5), inset 0 0 2px black; border-radius: 2px; }
+        .ring { width: 14px; height: 14px; border: 2px solid gold; border-radius: 50%; margin-top: -3px; background: rgba(255,215,0,0.2); box-shadow: 0 0 5px gold; }
+        .cap { width: 16px; height: 9px; background: linear-gradient(135deg, #c0c0c0, #f0f0f0, #a0a0a0); border-radius: 4px 4px 2px 2px; margin-top: -6px; box-shadow: 0 2px 5px black; }
+        
+        /* Baseline Blue Ball */
+        .blue-3d-ball { width: 56px; height: 56px; border-radius: 50%; position: relative; background: radial-gradient(circle at 35% 35%, var(--blue-light) 0%, var(--blue-main) 50%, var(--blue-dark) 100%); box-shadow: 0 30px 40px rgba(0,0,0,0.4), inset -15px -15px 25px rgba(0,0,0,0.6), inset 12px 12px 30px rgba(255,255,255,0.5), 0 0 20px var(--blue-glow); transform-origin: center bottom; transition: transform 0.05s linear, background 0.3s ease, filter 0.1s ease; }
+        .blue-3d-ball::before { content: ''; position: absolute; top: 12%; left: 18%; width: 38%; height: 28%; background: radial-gradient(ellipse, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0) 80%); border-radius: 50%; transform: rotate(-25deg); filter: blur(2px); }
+        .blue-3d-ball::after { content: ''; position: absolute; bottom: 15%; right: 15%; width: 20%; height: 15%; background: radial-gradient(circle, rgba(255,255,255,0.6), transparent); border-radius: 50%; filter: blur(3px); }
+        
+        /* --- GOLD TIME & COMBO PULSE ANIMATION --- */
+        .blue-3d-ball.gold-time-ball {
+            background: radial-gradient(circle at 35% 35%, var(--gold-light) 0%, var(--gold-main) 50%, var(--gold-dark) 100%) !important;
+            box-shadow: 0 30px 40px rgba(0,0,0,0.4), inset -15px -15px 25px rgba(0,0,0,0.6), inset 12px 12px 30px rgba(255,255,255,0.6), 0 0 35px var(--gold-glow) !important;
+            animation: comboPulse 0.5s ease-in-out infinite alternate;
+        }
+        @keyframes comboPulse {
+            0% { transform: scale(1.0); filter: drop-shadow(0 0 5px var(--gold-glow)); }
+            100% { transform: scale(1.18); filter: drop-shadow(0 0 25px #ffaa00); }
+        }
+
+        @keyframes swing { 0%, 100% { transform: translateX(-50%) rotate(-10deg); } 50% { transform: translateX(-50%) rotate(10deg); } }
+        
+        /* --- SHOOTER GRAPHICS --- */
+        .shooter-wrapper { position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; width: 170px; z-index: 10; filter: drop-shadow(0 15px 20px rgba(0,0,0,0.5)); }
+        .nozzle { width: 44px; height: 22px; background: linear-gradient(145deg, #444, #888, #333); border-radius: 10px 10px 0 0; margin-bottom: -6px; box-shadow: inset 0 2px 3px rgba(255,255,255,0.3), 0 2px 4px black; transition: transform 0.1s ease; }
+        .shooter-base { width: 140px; height: 40px; background: linear-gradient(145deg, #b0b0b0, #707070, #505050); border-radius: 60% 60% 15px 15px; box-shadow: 0 15px 25px rgba(0,0,0,0.5), inset 0 1px 2px rgba(255,255,255,0.5); }
+        .red-shooter-btn { width: 85px; height: 85px; border-radius: 50%; border: none; cursor: pointer; position: absolute; bottom: 20px; background: radial-gradient(circle at 40% 35%, #ff6666 0%, var(--red-main) 50%, var(--red-dark) 100%); box-shadow: 0 14px 0 var(--red-deep), 0 25px 35px rgba(0,0,0,0.7), inset 0 6px 12px var(--white-glass), inset 0 -12px 20px rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; transition: all 0.08s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .go-text { color: white; font-size: 22px; text-transform: uppercase; text-shadow: 2px 3px 6px rgba(0,0,0,0.6); pointer-events: none; }
+        .red-shooter-btn:active { transform: translateY(10px); box-shadow: 0 4px 0 var(--red-deep), 0 8px 20px rgba(0,0,0,0.6); }
+        
+        /* --- FOOTER LAYOUT (Mobile Response Optimal) --- */
+        .game-footer { position: absolute; bottom: 15px; left: 0; width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 0 12px; z-index: 100; gap: 8px; }
+        .footer-left { display: flex; align-items: center; background: rgba(0, 5, 30, 0.75); backdrop-filter: blur(10px); padding: 8px 14px; border-radius: 40px; color: #ffffff; border: 1px solid rgba(255,215,0,0.3); box-shadow: 0 6px 15px rgba(0,0,0,0.5); font-size: 11px; font-weight: bold; flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .footer-right { display: flex; align-items: center; gap: 8px; background: rgba(0, 5, 30, 0.75); backdrop-filter: blur(10px); padding: 8px 14px; border-radius: 40px; color: #ffffff; border: 1px solid rgba(255,215,0,0.3); box-shadow: 0 6px 15px rgba(0,0,0,0.5); font-size: 11px; font-weight: bold; }
+        .footer-left i, .footer-right i { font-size: 13px; color: #FFD700; margin-right: 4px; }
+        
+        /* --- REFRESH SMALL RIGHT SIDE MODAL --- */
+        .modal { 
+            position: absolute; 
+            top: 155px; 
+            right: 16px; 
+            width: 210px; 
+            height: auto; 
+            background: transparent; 
+            z-index: 200; 
+            visibility: hidden; 
+            opacity: 0; 
+            transition: opacity 0.3s ease, visibility 0.3s; 
+            pointer-events: none;
+        }
+        .modal.active { visibility: visible; opacity: 1; }
+        .modal-card { 
+            background: rgba(12, 19, 38, 0.96); 
+            width: 100%; 
+            border-radius: 20px; 
+            padding: 14px; 
+            text-align: center; 
+            border: 2px solid #FFD700; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.6); 
+            color: white; 
+            pointer-events: auto;
+        }
+        .modal-card h3 { font-size: 14px; margin-bottom: 4px; font-family: 'Arial Black', sans-serif; color: #ffffff; }
+        .modal-card p { font-size: 11px; opacity: 0.9; margin-bottom: 2px; }
+        .fee-amount { font-size: 20px; font-weight: bold; color: #FFD966; margin: 4px 0; }
+        .modal-timer { font-size: 18px; font-weight: bold; background: #1a1f33; display: inline-block; width: 65px; height: 36px; line-height: 36px; border-radius: 18px; margin: 4px auto; border: 2px solid gold; }
+        .pay-btn { background: #FFD700; border: none; padding: 10px 14px; border-radius: 30px; font-weight: bold; font-size: 13px; margin-top: 6px; width: 100%; cursor: pointer; transition: 0.05s linear; box-shadow: 0 3px 0 #b47c00; color: #1f1f1f; }
+        .pay-btn:active { transform: translateY(2px); box-shadow: 0 1px 0 #b47c00; }
+        
+        .spectator-message { position: absolute; bottom: 130px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); padding: 8px 16px; border-radius: 40px; color: #ffaa33; font-size: 12px; font-weight: bold; border: 1px solid gold; z-index: 110; pointer-events: none; white-space: nowrap; }
+    </style>
+    <script src="https://cdn.socket.io/4.7.4/socket.io.min.js"></script>
+</head>
+<body>
+
+<div id="loading-screen">Loading...</div>
+
+<div id="game-container">
+    <header class="game-header">
+        <div class="header-left">
+            <i class="fas fa-trophy"></i> <span id="rankVal">Rank: --/--</span>
+        </div>
+        <div class="header-right">
+            <div class="balance-display">
+                <i class="fas fa-wallet"></i> MWK <span id="balanceVal">0.00</span>
+            </div>
+            <div class="hamburger" id="hamburgerMenu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            
+            <div class="dropdown-menu" id="dropdownMenu">
+                <div class="dropdown-item">My Round</div>
+                <div class="dropdown-item">Round History</div>
+                <div class="dropdown-item">Settings</div>
+                <div class="dropdown-item">Chat message</div>
+            </div>
+        </div>
+    </header>
+
+    <div class="pool-display">
+        <div><i class="fas fa-coins"></i> Pool MWK: <span id="poolAmount">0</span></div>
+    </div>
+
+    <div class="timer-circle" id="gameTimerCircle">35</div>
+
+    <canvas id="bgCanvas"></canvas>
+    <div class="vignette"></div>
+    
+    <div class="ornament-container" id="targetContainer" style="opacity: 0;">
+        <div class="string"></div>
+        <div class="ring"></div>
+        <div class="cap"></div>
+        <div class="blue-3d-ball" id="targetBall"></div>
+    </div>
+    
+    <div class="shooter-wrapper">
+        <div class="nozzle" id="nozzle"></div>
+        <div class="shooter-base"></div>
+        <button class="red-shooter-btn" id="redBtn" disabled style="filter: grayscale(80%);"><span class="go-text" id="goText">GO!</span></button>
+    </div>
+    
+    <div class="game-footer">
+        <div class="footer-left"><i class="fas fa-star"></i> POINTS: <span id="userPoints">0</span></div>
+        <div class="footer-right">
+            <span><i class="fas fa-crosshairs"></i> LIMIT: <span id="ballLimit">150</span></span>
+        </div>
+    </div>
+</div>
+
+<div id="spectatorMsg" class="spectator-message" style="display: none;">SPECTATOR MODE - Pay MK 150 to play next round</div>
+
+<div id="entryModal" class="modal">
+    <div class="modal-card">
+        <h3><i class="fas fa-hourglass-half"></i> NEXT ROUND</h3>
+        <p>Enter Fee</p>
+        <div class="fee-amount"><i class="fas fa-ticket-alt"></i> MK 150</div>
+        <div id="modalCountdown" class="modal-timer">10</div>
+        <button id="payBtn" class="pay-btn"><i class="fas fa-hand-holding-usd"></i> PAY & ENTER</button>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+<script>
+    "use strict";
+
+    // --- 1. LOGIN_265 AUTHENTICATION & WALLET MANAGER ---
+    const GameAuthManager = (function() {
+        const DOM = {
+            walletBalance: document.getElementById('balanceVal'), 
+        };
+
+        async function checkAuthAndLoadBalance() {
+            const token = localStorage.getItem('tidye_session_token');
+            if (!token) { 
+                secureLogout(); 
+                return; 
+            }
+
+            try {
+                const walletResponse = await fetch(`${window.SUPABASE_URL}/functions/v1/wallet-api`, {
+                    method: 'GET',
+                    headers: { 
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (walletResponse.status === 401) {
+                    secureLogout();
+                    return;
+                }
+
+                const walletData = await walletResponse.json();
+
+                if (walletData && DOM.walletBalance) {
+                    const formattedBalance = Number(walletData.balance).toLocaleString('en-US', { 
+                        minimumFractionDigits: 2, 
+                        maximumFractionDigits: 2 
+                    });
+                    DOM.walletBalance.textContent = formattedBalance;
+                    window.currentUserBalance = Number(walletData.balance);
+                }
+
+            } catch (err) {
+                console.error("Zavuta kutenga zambiri za login/balance:", err);
+            }
+        }
+
+        function secureLogout() {
+            localStorage.clear();
+            window.location.replace('login.html');
+        }
+
+        return {
+            init: checkAuthAndLoadBalance,
+            sync: checkAuthAndLoadBalance,
+            logout: secureLogout
+        };
+    })();
+
+    let currentUserId = localStorage.getItem('user_username'); 
+    let userPhone = localStorage.getItem('user_phone_number');
+
+    document.addEventListener('DOMContentLoaded', GameAuthManager.init);
+
+    // --- 2. DOM ELEMENTS ---
+    const loadingScreen = document.getElementById('loading-screen');
+    const timerEl = document.getElementById('gameTimerCircle');
+    const targetContainer = document.getElementById('targetContainer');
+    const targetBall = document.getElementById('targetBall');
+    const btn = document.getElementById('redBtn');
+    const goText = document.getElementById('goText');
+    const modal = document.getElementById('entryModal');
+    const modalTimerEl = document.getElementById('modalCountdown');
+    const payBtn = document.getElementById('payBtn');
+    const poolAmountSpan = document.getElementById('poolAmount');
+    const rankValSpan = document.getElementById('rankVal');
+    const pointsEl = document.getElementById('userPoints');
+    const ballLimitSpan = document.getElementById('ballLimit');
+    const spectatorMsgDiv = document.getElementById('spectatorMsg');
+    const hamburgerMenu = document.getElementById('hamburgerMenu');
+    const dropdownMenu = document.getElementById('dropdownMenu');
+    const canvas = document.getElementById('bgCanvas');
+    const ctx = canvas.getContext('2d');
+    const gameContainer = document.getElementById('game-container');
+    const nozzle = document.getElementById('nozzle');
+
+    let hasJoined = false; 
+    let shooterLimit = 150;
+    let userPoints = 0;
+    let audioInitialized = false;
+    let currentTargetX = 50; 
+
+    // --- SOUND ENGINE LOGIC ---
+    const sndBg = new Audio('background.mp3'); sndBg.loop = true; sndBg.setAttribute('playsinline', '');
+    const sndHit = new Audio('hit.mp3'); sndHit.setAttribute('playsinline', '');
+    const sndWaiting = new Audio('waiting.mp3'); sndWaiting.loop = true; sndWaiting.setAttribute('playsinline', '');
+    const sndShoot = new Audio('shoot.mp3'); sndShoot.setAttribute('playsinline', '');
+
+    function initAudioContext() {
+        if (audioInitialized) return;
+        if ('mediaSession' in navigator) {
+            navigator.mediaSession.playbackState = 'none';
+        }
+        audioInitialized = true;
+    }
+
+    function safePlay(audioObj) {
+        initAudioContext();
+        audioObj.play().catch(e => console.log("Audio play blocked until tap/interaction"));
+    }
+
+    // --- HAMBURGER MENU INTERACTION ---
+    hamburgerMenu.addEventListener('click', (e) => {
+        e.stopPropagation();
+        dropdownMenu.classList.toggle('show');
+    });
+    document.addEventListener('click', () => {
+        dropdownMenu.classList.remove('show');
+    });
+
+    // --- EXTENDED PREMIUM FX & ENGINE LOGIC Arrays ---
+    let width, height;
+    let clouds = [];
+    let bullets = [];
+    let premiumParticles = [];
+    let shockwaves = [];
+    let screenShakeTime = 0;
+    let screenShakeIntensity = 0;
+
+    function resize() { 
+        width = canvas.width = window.innerWidth; 
+        height = canvas.height = window.innerHeight; 
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    // --- BACKGROUND CLOUDS ENGINE ---
+    class Cloud {
+        constructor(randomY = false) {
+            this.x = Math.random() * width;
+            this.y = randomY ? Math.random() * (height * 0.7) : -100;
+            this.size = Math.random() * 40 + 20;
+            this.speed = Math.random() * 0.3 + 0.1;
+            this.opacity = Math.random() * 0.15 + 0.05;
+        }
+        update() { 
+            this.y += this.speed; 
+            if (this.y > height) { this.y = -100; this.x = Math.random() * width; } 
+        }
+        draw() { 
+            ctx.fillStyle = `rgba(255,255,255,${this.opacity})`; 
+            ctx.beginPath(); 
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI*2); 
+            ctx.fill(); 
+        }
+    }
+    
+    // Initialize standard clouds pool safely
+    for(let i=0; i<10; i++) {
+        clouds.push(new Cloud(true));
+    }
+
+    // --- PREMIUM PROJECTILE (MARBLE) CLASS ---
+    class LiveBullet {
+        constructor(startX, startY, targetX, targetY, isHitRoute) {
+            this.x = startX;
+            this.y = startY;
+            this.startX = startX;
+            this.targetX = targetX;
+            this.targetY = targetY;
+            this.isHitRoute = isHitRoute;
+            this.speed = 4;
+            this.acceleration = 1.45; // Smooth realistic acceleration rate
+            this.weaveSeed = Math.random() * 100;
+            this.weaveIntensity = Math.random() * 2.5 + 1.2; // Slight natural left/right flight sway
+            this.radius = 11;
+            this.history = []; // Captures coordinates for dynamic motion blur trails
+        }
+        update() {
+            this.history.push({x: this.x, y: this.y});
+            if(this.history.length > 5) this.history.shift();
+
+            this.speed *= this.acceleration;
+            if(this.speed > 42) this.speed = 42; // Mobile frame delta lock caps
+
+            this.y -= this.speed;
+            this.x += Math.sin(this.weaveSeed) * this.weaveIntensity;
+            this.weaveSeed += 0.25;
+
+            // Interpolate toward real-time dynamic target X accurately to ensure perfect visual logic alignment
+            let distanceLeft = this.y - this.targetY;
+            if (distanceLeft > 0) {
+                let progress = 1 - (distanceLeft / (height - 120 - this.targetY));
+                let currentTargetRealX = (currentTargetX / 100) * width;
+                this.x = this.startX + (currentTargetRealX - this.startX) * progress + (Math.sin(this.weaveSeed) * this.weaveIntensity);
+            }
+
+            return (this.y <= this.targetY + 15);
+        }
+        draw() {
+            // High-end cinematic particle stream trail design
+            for (let i = 0; i < this.history.length; i++) {
+                let opacity = (i / this.history.length) * 0.35;
+                ctx.fillStyle = `rgba(255, 60, 60, ${opacity})`;
+                ctx.beginPath();
+                ctx.arc(this.history[i].x, this.history[i].y, this.radius * (i / this.history.length), 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            // Draw primary 3D physical Red Shooter Marble
+            ctx.save();
+            let gradient = ctx.createRadialGradient(this.x - 3, this.y - 3, 1, this.x, this.y, this.radius);
+            gradient.addColorStop(0, '#ff9e9e');
+            gradient.addColorStop(0.4, '#ff3b3b');
+            gradient.addColorStop(1, '#660000');
+            ctx.fillStyle = gradient;
+            ctx.shadowColor = '#ff3b3b';
+            ctx.shadowBlur = 15;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+        }
+    }
+
+    // --- PREMIUM PARTICLE SYSTEM SYSTEM ---
+    class BurstParticle {
+        constructor(x, y, isGold) {
+            this.x = x;
+            this.y = y;
+            this.isGold = isGold;
+            this.radius = Math.random() * 4.5 + 2;
+            let angle = Math.random() * Math.PI * 2;
+            let speed = Math.random() * 9 + 4;
+            this.vx = Math.cos(angle) * speed;
+            this.vy = Math.sin(angle) * speed - 2; // Explosive upward blast velocity bias
+            this.gravity = 0.38; // Arcade physical force downward pull
+            this.alpha = 1;
+            this.decay = Math.random() * 0.025 + 0.015;
+            this.history = [];
+        }
+        update() {
+            this.history.push({x: this.x, y: this.y});
+            if(this.history.length > 4) this.history.shift();
+
+            this.vx *= 0.97; // Light atmospheric air drag execution
+            this.vy += this.gravity;
+            this.x += this.vx;
+            this.y += this.vy;
+            this.alpha -= this.decay;
+            return (this.alpha <= 0);
+        }
+        draw() {
+            ctx.save();
+            // Motion blur implementation via alpha trails matching line paths
+            if(this.history.length > 1) {
+                ctx.strokeStyle = this.isGold ? `rgba(255, 234, 0, ${this.alpha * 0.4})` : `rgba(0, 166, 255, ${this.alpha * 0.4})`;
+                ctx.lineWidth = this.radius;
+                ctx.lineCap = 'round';
+                ctx.beginPath();
+                ctx.moveTo(this.history[0].x, this.history[0].y);
+                ctx.lineTo(this.x, this.y);
+                ctx.stroke();
+            }
+
+            let grad = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.radius);
+            if(this.isGold) {
+                grad.addColorStop(0, `rgba(255, 241, 118, ${this.alpha})`);
+                grad.addColorStop(0.5, `rgba(255, 215, 0, ${this.alpha})`);
+                grad.addColorStop(1, `rgba(245, 127, 23, 0)`);
+                ctx.shadowColor = 'var(--gold-glow)';
+            } else {
+                grad.addColorStop(0, `rgba(91, 192, 255, ${this.alpha})`);
+                grad.addColorStop(0.5, `rgba(26, 109, 255, ${this.alpha})`);
+                grad.addColorStop(1, `rgba(0, 51, 170, 0)`);
+                ctx.shadowColor = 'var(--blue-glow)';
+            }
+            ctx.shadowBlur = 10;
+            ctx.fillStyle = grad;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.radius, 0, Math.PI*2);
+            ctx.fill();
+            ctx.restore();
+        }
+    }
+
+    // --- SHOCKWAVE RING ENGINE CLASS ---
+    class ShockwaveEffect {
+        constructor(x, y, isGold) {
+            this.x = x;
+            this.y = y;
+            this.isGold = isGold;
+            this.radius = 10;
+            this.maxRadius = Math.random() * 40 + 75;
+            this.alpha = 1;
+            this.expansionSpeed = 4.5;
+        }
+        update() {
+            this.radius += this.expansionSpeed;
+            this.alpha = 1 - (this.radius / this.maxRadius);
+            return (this.radius >= this.maxRadius);
+        }
+        draw() {
+            ctx.save();
+            ctx.strokeStyle = this.isGold ? `rgba(255, 215, 0, ${this.alpha})` : `rgba(0, 166, 255, ${this.alpha})`;
+            ctx.lineWidth = 4;
+            ctx.shadowColor = this.isGold ? 'var(--gold-glow)' : 'var(--blue-glow)';
+            ctx.shadowBlur = 12;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.restore();
+        }
+    }
+
+    // --- HIGH RESOLUTION HARMONIZED ANIMATION TIMELINE ---
+    function masterGameLoop() {
+        ctx.clearRect(0, 0, width, height);
+
+        // Process cinematic environmental background layout
+        clouds.forEach(c => { c.update(); c.draw(); });
+
+        // Screen Shake translation compute cycle applied cleanly to the DOM matrix pipeline
+        if(screenShakeTime > 0) {
+            let dx = (Math.random() - 0.5) * screenShakeIntensity;
+            let dy = (Math.random() - 0.5) * screenShakeIntensity;
+            gameContainer.style.transform = `translate3d(${dx}px, ${dy}px, 0px)`;
+            screenShakeTime--;
+            if(screenShakeTime === 0) gameContainer.style.transform = 'none';
+        }
+
+        // Process running shockwave ring nodes
+        for (let i = shockwaves.length - 1; i >= 0; i--) {
+            if (shockwaves[i].update()) {
+                shockwaves.splice(i, 1);
+            } else {
+                shockwaves[i].draw();
+            }
+        }
+
+        // Update & Render premium particles pool with auto memory disposal
+        for (let i = premiumParticles.length - 1; i >= 0; i--) {
+            if (premiumParticles[i].update()) {
+                premiumParticles.splice(i, 1);
+            } else {
+                premiumParticles[i].draw();
+            }
+        }
+
+        // Animate & track live flying bullets sequentially 
+        for (let i = bullets.length - 1; i >= 0; i--) {
+            if (bullets[i].update()) {
+                // Execute collision impacts at final trajectory coordinate endpoints
+                triggerPremiumImpactVisuals(bullets[i].x, bullets[i].y);
+                bullets.splice(i, 1);
+            } else {
+                bullets[i].draw();
+            }
+        }
+
+        requestAnimationFrame(masterGameLoop);
+    }
+    requestAnimationFrame(masterGameLoop);
+
+    // --- UPGRADED PREMIUM IMPACT EFFECT HANDLER ---
+    function triggerPremiumImpactVisuals(impactX, impactY) {
+        const isGold = targetBall.classList.contains('gold-time-ball');
+
+        // Trigger cinematic global screen matrix shake
+        screenShakeTime = 12; 
+        screenShakeIntensity = 9;
+
+        // Apply advanced Elastic Squash Animation and bright light reflections natively
+        targetBall.style.transition = 'none';
+        targetBall.style.transform = 'scale3d(1.35, 0.65, 1.2)';
+        targetBall.style.filter = isGold ? 'brightness(2.2) drop-shadow(0 0 30px var(--gold-glow))' : 'brightness(2.2) drop-shadow(0 0 30px var(--blue-glow))';
+
+        setTimeout(() => {
+            targetBall.style.transition = 'transform 0.55s cubic-bezier(0.175, 0.885, 0.32, 1.75), filter 0.4s ease';
+            targetBall.style.transform = 'scale3d(1, 1, 1)';
+            targetBall.style.filter = '';
+        }, 65);
+
+        // Spawn a high-performance Shockwave ring instance
+        shockwaves.push(new ShockwaveEffect(impactX, impactY, isGold));
+
+        // Generate intense high-density explosive arcade burst particles
+        let coreCount = isGold ? 35 : 22;
+        for (let i = 0; i < coreCount; i++) {
+            premiumParticles.push(new BurstParticle(impactX, impactY, isGold));
+        }
+    }
+
+    // --- SOCKET ENGINE CONNECTION ---
+    const SERVER_URL = "https://moskonx-tidye-shooter-game-server.hf.space";
+    const socket = io(SERVER_URL, {
+        reconnectionAttempts: 10,
+        timeout: 10000,
+    });
+
+    let currentStatus = "syncing";
+    let isFirstSync = true;
+
+    socket.on('connect', () => {
+        console.log(`Connected verified user: ${currentUserId} with socket id: ${socket.id}`);
+    });
+
+    socket.on('connect_error', () => {
+        timerEl.innerText = "ERR";
+        timerEl.style.color = "red";
+    });
+
+    socket.on('disconnect', () => {
+        btn.disabled = true;
+        btn.style.filter = "grayscale(80%)";
+    });
+
+    // --- REALTIME BALANCE SYNC (NO REFRESH) ---
+    socket.on('balanceUpdated', (data) => {
+        const balanceVal = document.getElementById('balanceVal');
+        if (balanceVal) {
+            const formattedBalance = Number(data.new_balance).toLocaleString('en-US', { 
+                minimumFractionDigits: 2, 
+                maximumFractionDigits: 2 
+            });
+            balanceVal.textContent = formattedBalance;
+            window.currentUserBalance = Number(data.new_balance);
+            console.log(`[REALTIME WALLET] Balance synced live: MWK ${formattedBalance}`);
+        }
+    });
+
+    // --- REALTIME TICK ENGINE MANAGEMENT ---
+    socket.on('gameTick', (state) => {
+        if (isFirstSync) {
+            loadingScreen.style.opacity = "0";
+            setTimeout(() => loadingScreen.style.display = "none", 400);
+            targetContainer.style.opacity = "1";
+            isFirstSync = false;
+        }
+
+        // --- STABLE REALTIME STATE TRANSITION LOGIC ---
+        currentStatus = state.round_status;
+        if (currentStatus === "active") {
+            GameAuthManager.sync(); 
+        }
+
+        const displaySeconds = Math.max(0, Math.ceil(state.timer_seconds));
+        timerEl.innerText = displaySeconds;
+
+        if(state.timer_seconds <= 5 && state.round_status === 'active') {
+            timerEl.classList.add('warning');
+        } else {
+            timerEl.classList.remove('warning');
+        }
+
+        // Sync baseline coordinates securely
+        currentTargetX = state.target_x;
+        targetContainer.style.left = state.target_x + '%';
+        if(poolAmountSpan) poolAmountSpan.innerText = state.pool_amount || '0';
+        
+        if (state.is_gold_time) {
+            targetBall.classList.add('gold-time-ball');
+        } else {
+            targetBall.classList.remove('gold-time-ball');
+        }
+
+        if(state.total_users) {
+            let userRank = state.user_rank || Math.floor(Math.random() * state.total_users) + 1; 
+            rankValSpan.innerText = `Rank: ${userRank}/${state.total_users}`;
+            
+            let winThreshold = Math.floor(state.total_users * 0.40);
+            if (userRank <= winThreshold && winThreshold > 0) {
+                rankValSpan.style.color = "#22c55e"; 
+            } else {
+                rankValSpan.style.color = "#FFD966";
+            }
+        }
+
+        // --- REALTIME MODAL POPUP & SPECTATOR CONTROLLER ---
+        if (state.round_status === "waiting") {
+            hasJoined = false; 
+            goText.innerText = "BREAK";
+            btn.disabled = true;
+            btn.style.filter = "grayscale(80%)";
+            targetContainer.style.opacity = "0.2";
+
+            sndBg.volume = 0.25; 
+            safePlay(sndBg);
+            
+            if (sndWaiting.paused) {
+                sndWaiting.currentTime = 0;
+                safePlay(sndWaiting);
+            }
+
+            modalTimerEl.innerText = displaySeconds; 
+            modal.classList.add('active'); 
+            spectatorMsgDiv.style.display = 'none';
+
+        } else if (state.round_status === "active") {
+            modal.classList.remove('active');
+            
+            goText.innerText = "GO !!";
+            targetContainer.style.opacity = "1";
+
+            sndBg.volume = 1.0;
+            safePlay(sndBg);
+
+            sndWaiting.pause();
+            sndWaiting.currentTime = 0;
+
+            if (hasJoined && shooterLimit > 0) {
+                btn.disabled = false;
+                btn.style.filter = "none";
+                spectatorMsgDiv.style.display = 'none';
+            } else {
+                btn.disabled = true;
+                btn.style.filter = "grayscale(80%)";
+                if(!hasJoined) spectatorMsgDiv.style.display = 'block';
+            }
+        }
+    });
+
+    socket.on('newRoundStarted', (data) => {
+        hasJoined = false; 
+        shooterLimit = 150;
+        userPoints = 0;
+        ballLimitSpan.innerText = shooterLimit;
+        pointsEl.innerText = userPoints;
+    });
+
+    socket.on('broadcastLiveHit', (hitData) => {
+        if(hitData.socketId === socket.id) {
+            sndHit.currentTime = 0;
+            safePlay(sndHit);
+        }
+    });
+
+    // Dummy retro support for backend fallbacks without canvas interactions
+    function triggerTargetShatterEffect() {
+        let currentTargetRealX = (currentTargetX / 100) * width;
+        triggerPremiumImpactVisuals(currentTargetRealX, 138);
+    }
+
+    // --- SHOOT ACTION & VISUAL EFFECTS ---
+    btn.addEventListener('click', () => {
+        if(currentStatus === 'active' && shooterLimit > 0) {
+            
+            sndShoot.currentTime = 0;
+            safePlay(sndShoot);
+
+            // Barrel nozzle kickback animation
+            nozzle.style.transform = 'scale3d(0.9, 0.8, 1) translateY(6px)';
+            setTimeout(() => { nozzle.style.transform = 'none'; }, 80);
+
+            // Compute physics origin coordinates safely
+            let startPositionX = width / 2;
+            let startPositionY = height - 120;
+            let finalTargetY = 138; 
+            let finalTargetX = (currentTargetX / 100) * width;
+
+            // Check dynamic target criteria bounding boxes
+            let isTargetHit = (currentTargetX >= 30 && currentTargetX <= 70);
+
+            // Instantiate accelerated premium vector bullet inside loop
+            bullets.push(new LiveBullet(startPositionX, startPositionY, finalTargetX, finalTargetY, isTargetHit));
+
+            if (isTargetHit) {
+                socket.emit('playerHitTarget', {
+                    username: currentUserId,
+                    awarded_points: 10
+                });
+                
+                userPoints += 10;
+                pointsEl.innerText = userPoints;
+            }
+
+            shooterLimit--;
+            ballLimitSpan.innerText = shooterLimit;
+
+            if(shooterLimit <= 0) {
+                btn.disabled = true;
+                btn.style.filter = "grayscale(80%)";
+            }
+        }
+    });
+
+    // --- ENTRY MODAL PAY GATEWAY TRIGGER ---
+    payBtn.addEventListener('click', async () => {
+        const token = localStorage.getItem('tidye_session_token');
+        if(!token) return;
+
+        try {
+            payBtn.disabled = true;
+            payBtn.innerText = "PROCESSING...";
+
+            const response = await fetch(`${window.SUPABASE_URL}/functions/v1/wallet-api`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ action: 'deduct', amount: 150, description: 'Shooter 265 Round Entry' })
+            });
+
+            const data = await response.json();
+
+            if (response.ok && data.success) {
+                hasJoined = true;
+                modal.classList.remove('active');
+                spectatorMsgDiv.style.display = 'none';
+                
+                if (currentStatus === "active") {
+                    btn.disabled = false;
+                    btn.style.filter = "none";
+                }
+                
+                socket.emit('playerJoinedRound', { username: currentUserId, phone: userPhone });
+                GameAuthManager.sync();
+            } else {
+                alert(data.error || "Zavuta kulipira. Chonde onjezani ndalama mwa wallet yanu.");
+            }
+        } catch(err) {
+            console.error("Payment registration failure: ", err);
+        } finally {
+            payBtn.disabled = false;
+            payBtn.innerText = "PAY & ENTER";
+        }
+    });
+</script>
+</body>
+</html>
