@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>My Wallet | Tidye265</title>
+    <meta name="theme-color" content="#FFD700">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lexend:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+    <style>
+        :root { --bg: #F8F9FA; --primary: #FFD700; --text: #1a1d21; --border: #e5e7eb; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background-color: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; padding-bottom: 80px; }
+
+        /* Skeleton Animation */
+        #loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #F8F9FA; z-index: 9999; padding: 20px; }
+        .skeleton { background: #e5e7eb; animation: pulse 1.5s infinite; border-radius: 12px; margin-bottom: 15px; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+
+        /* Wallet Header */
+        .wallet-hero { background: #fff; padding: 30px 20px; text-align: center; border-bottom: 1px solid var(--border); }
+        .balance-label { font-size: 12px; font-weight: 700; text-transform: uppercase; color: #6b7280; }
+        .balance-amount { font-family: 'Lexend'; font-size: 32px; font-weight: 800; margin: 5px 0; }
+        
+        /* Action Buttons */
+        .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 20px; }
+        .btn { padding: 14px; border: none; border-radius: 12px; font-weight: 700; font-family: 'Lexend'; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s; }
+        .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+        .btn-deposit { background: var(--primary); color: #000; }
+        .btn-withdraw { background: #1a1d21; color: #fff; }
+
+        /* Small Loading Spinner */
+        .spinner { width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3); border-top: 2px solid #fff; border-radius: 50%; animation: spin 1s linear infinite; display: none; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* Footer Placeholder */
+        #footer-placeholder { position: fixed; bottom: 0; width: 100%; }
+    </style>
+</head>
+<body>
+
+    <div id="loader">
+        <div class="skeleton" style="height: 100px;"></div>
+        <div class="skeleton" style="height: 50px;"></div>
+    </div>
+
+    <div class="wallet-hero">
+        <div class="balance-label">Current Balance</div>
+        <div class="balance-amount" id="walletBalance">MWK 0.00</div>
+    </div>
+
+    <div class="action-grid">
+        <button class="btn btn-deposit" id="depBtn" onclick="handleAction('deposit', this)">
+            <div class="spinner"></div><i class="fa-solid fa-plus"></i> Deposit
+        </button>
+        <button class="btn btn-withdraw" id="withBtn" onclick="handleAction('withdraw', this)">
+            <div class="spinner"></div><i class="fa-solid fa-arrow-down-long"></i> Withdraw
+        </button>
+    </div>
+
+    <div id="footer-placeholder"></div>
+
+    <script>
+        // AUTH: Kugwiritsa ntchito API Proxy
+        async function fetchWalletData() {
+            try {
+                const response = await fetch('/api/wallet-api', { credentials: 'include' });
+                if (response.status === 401) window.location.href = 'login.html';
+                const data = await response.json();
+                document.getElementById('walletBalance').textContent = `MWK ${Number(data.balance).toFixed(2)}`;
+            } catch (e) { console.error(e); }
+            finally { document.getElementById('loader').style.display = 'none'; }
+        }
+
+        async function handleAction(type, btn) {
+            btn.disabled = true;
+            btn.querySelector('.spinner').style.display = 'block';
+            
+            // Logic ya Deposit/Withdraw yanu idzachitika pano
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            
+            btn.disabled = false;
+            btn.querySelector('.spinner').style.display = 'none';
+        }
+
+        // Load Footer (ndendende ndi dashboard)
+        fetch('footer.html').then(res => res.text()).then(data => {
+            document.getElementById('footer-placeholder').innerHTML = data;
+        });
+
+        document.addEventListener('DOMContentLoaded', fetchWalletData);
+    </script>
+</body>
+</html>
