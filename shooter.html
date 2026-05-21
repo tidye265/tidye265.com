@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SHOOTER 265 | SUPER 3D EDITION</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* === DESIGN YANU YATHU-YATHU 100% (UNTOUCHED) === */
+        :root {
+            --sky-top: #050A1F;
+            --sky-bottom: #0B1B3D;
+            --red-main: #ff3b3b;
+            --red-dark: #b30000;
+            --red-deep: #7a0000;
+            --white-glass: rgba(255,255,255,0.7);
+            --blue-light: #5bc0ff;
+            --blue-main: #1a6dff;
+            --blue-dark: #0033aa;
+            --blue-glow: #00a6ff;
+            --gold-light: #fff176;
+            --gold-main: #ffd700;
+            --gold-dark: #f57f17;
+            --gold-glow: #ffea00;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body, html { height: 100vh; width: 100vw; overflow: hidden; background: linear-gradient(to bottom, var(--sky-top), var(--sky-bottom)); font-family: 'Arial Black', sans-serif; }
+        #loading-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000000; z-index: 999; display: flex; justify-content: center; align-items: center; color: #ffffff; font-size: 15px; letter-spacing: 2px; transition: opacity 0.4s ease, visibility 0.4s; }
+        .game-header { position: absolute; top: 0; left: 0; width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; z-index: 100; }
+        .header-left { display: flex; align-items: center; background: rgba(0,0,0,0.65); padding: 6px 14px; border-radius: 30px; color: #FFD966; border: 1px solid rgba(255,215,0,0.5); font-size: 13px; font-weight: bold; backdrop-filter: blur(4px); box-shadow: 0 5px 12px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.2); }
+        .header-left i { margin-right: 6px; color: #FFD700; }
+        .header-right { display: flex; align-items: center; gap: 10px; position: relative; }
+        .balance-display { background: rgba(0,0,0,0.65); padding: 6px 14px; border-radius: 30px; color: #FFD966; border: 1px solid rgba(255,215,0,0.5); font-size: 13px; font-weight: bold; backdrop-filter: blur(4px); box-shadow: 0 5px 12px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.2); }
+        .balance-display i { color: #FFD700; margin-right: 4px; }
+        .hamburger { display: flex; flex-direction: column; gap: 4px; cursor: pointer; background: rgba(0,0,0,0.6); padding: 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); }
+        .hamburger span { width: 20px; height: 3px; background: white; border-radius: 2px; box-shadow: 0 1px 2px rgba(0,0,0,0.3); }
+        .pool-display { position: absolute; top: 55px; left: 16px; background: rgba(0,0,0,0.55); backdrop-filter: blur(8px); padding: 6px 14px; border-radius: 40px; border: 1px solid rgba(255,215,0,0.3); font-size: 13px; font-weight: bold; color: #FFE6A3; text-shadow: 0 1px 2px black; z-index: 95; display: flex; gap: 12px; }
+        .pool-display i { color: #FFD966; margin-right: 4px; }
+        .dropdown-menu { position: absolute; top: 52px; right: 0; background: rgba(12,19,38,0.95); border: 1px solid #FFD700; border-radius: 12px; width: 160px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); display: none; flex-direction: column; overflow: hidden; z-index: 150; }
+        .dropdown-menu.show { display: flex; }
+        .dropdown-item { padding: 12px 16px; color: white; font-size: 12px; font-weight: bold; text-decoration: none; border-bottom: 1px solid rgba(255,255,255,0.05); cursor: pointer; transition: background 0.2s; text-align: left; }
+        .dropdown-item:last-child { border-bottom: none; }
+        .dropdown-item:hover, .dropdown-item:active { background: rgba(255,215,0,0.15); color: #FFD700; }
+        .timer-circle { position: absolute; top: 105px; right: 16px; width: 85px; height: 42px; border-radius: 20px; background: #0a1428; border: 3px solid #FFD700; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: bold; color: #ffffff; text-shadow: 0 0 4px #0099ff; box-shadow: 0 0 12px rgba(0,160,255,0.4); z-index: 100; transition: all 0.2s ease; }
+        .timer-circle.warning { background: #8b0000; border-color: #ff8800; color: #ffdd44; box-shadow: 0 0 18px red; animation: pulse-red 0.8s infinite; }
+        @keyframes pulse-red { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.06); opacity: 0.95; background: #b22222; } 100% { transform: scale(1); opacity: 1; } }
+        #bgCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
+        .vignette { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle, transparent 35%, rgba(0,0,0,0.5) 100%); z-index: 2; pointer-events: none; }
+        .ornament-container { position: absolute; top: 0; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; z-index: 5; animation: swing 4s ease-in-out infinite; transform-origin: top center; transition: left 0.1s linear; filter: drop-shadow(0 12px 20px rgba(0,0,0,0.4)); }
+        .string { width: 4px; height: 110px; background: repeating-linear-gradient(45deg,#c0c0c0,#f0f0f0 5px,#a0a0a0 8px); box-shadow: 0 0 3px rgba(255,255,255,0.5), inset 0 0 2px black; border-radius: 2px; }
+        .ring { width: 14px; height: 14px; border: 2px solid gold; border-radius: 50%; margin-top: -3px; background: rgba(255,215,0,0.2); box-shadow: 0 0 5px gold; }
+        .cap { width: 16px; height: 9px; background: linear-gradient(135deg,#c0c0c0,#f0f0f0,#a0a0a0); border-radius: 4px 4px 2px 2px; margin-top: -6px; box-shadow: 0 2px 5px black; }
+        .blue-3d-ball { width: 56px; height: 56px; border-radius: 50%; position: relative; background: radial-gradient(circle at 35% 35%, var(--blue-light) 0%, var(--blue-main) 50%, var(--blue-dark) 100%); box-shadow: 0 30px 40px rgba(0,0,0,0.4), inset -15px -15px 25px rgba(0,0,0,0.6), inset 12px 12px 30px rgba(255,255,255,0.5), 0 0 20px var(--blue-glow); transition: transform 0.05s linear, background 0.3s ease; }
+        .blue-3d-ball::before { content: ''; position: absolute; top: 12%; left: 18%; width: 38%; height: 28%; background: radial-gradient(ellipse, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0) 80%); border-radius: 50%; transform: rotate(-25deg); filter: blur(2px); }
+        .blue-3d-ball::after { content: ''; position: absolute; bottom: 15%; right: 15%; width: 20%; height: 15%; background: radial-gradient(circle, rgba(255,255,255,0.6), transparent); border-radius: 50%; filter: blur(3px); }
+        .blue-3d-ball.gold-time-ball { background: radial-gradient(circle at 35% 35%, var(--gold-light) 0%, var(--gold-main) 50%, var(--gold-dark) 100%) !important; box-shadow: 0 30px 40px rgba(0,0,0,0.4), inset -15px -15px 25px rgba(0,0,0,0.6), inset 12px 12px 30px rgba(255,255,255,0.6), 0 0 35px var(--gold-glow) !important; animation: comboPulse 0.5s ease-in-out infinite alternate; }
+        @keyframes comboPulse { 0% { transform: scale(1); filter: drop-shadow(0 0 5px var(--gold-glow)); } 100% { transform: scale(1.18); filter: drop-shadow(0 0 25px #ffaa00); } }
+        @keyframes swing { 0%,100% { transform: translateX(-50%) rotate(-10deg); } 50% { transform: translateX(-50%) rotate(10deg); } }
+        .shooter-wrapper { position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; width: 170px; z-index: 10; filter: drop-shadow(0 15px 20px rgba(0,0,0,0.5)); }
+        .nozzle { width: 44px; height: 22px; background: linear-gradient(145deg,#444,#888,#333); border-radius: 10px 10px 0 0; margin-bottom: -6px; box-shadow: inset 0 2px 3px rgba(255,255,255,0.3), 0 2px 4px black; }
+        .shooter-base { width: 140px; height: 40px; background: linear-gradient(145deg,#b0b0b0,#707070,#505050); border-radius: 60% 60% 15px 15px; box-shadow: 0 15px 25px rgba(0,0,0,0.5), inset 0 1px 2px rgba(255,255,255,0.5); }
+        .red-shooter-btn { width: 85px; height: 85px; border-radius: 50%; border: none; cursor: pointer; position: absolute; bottom: 20px; background: radial-gradient(circle at 40% 35%, #ff6666 0%, var(--red-main) 50%, var(--red-dark) 100%); box-shadow: 0 14px 0 var(--red-deep), 0 25px 35px rgba(0,0,0,0.7), inset 0 6px 12px var(--white-glass), inset 0 -12px 20px rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; transition: all 0.08s cubic-bezier(0.175,0.885,0.32,1.275); }
+        .go-text { color: white; font-size: 22px; text-transform: uppercase; text-shadow: 2px 3px 6px rgba(0,0,0,0.6); pointer-events: none; }
+        .red-shooter-btn:active { transform: translateY(10px); box-shadow: 0 4px 0 var(--red-deep), 0 8px 20px rgba(0,0,0,0.6); }
+        .marble { position: absolute; width: 22px; height: 22px; background: radial-gradient(circle at 30% 30%, #ff6b6b, #8b0000); border-radius: 50%; box-shadow: 0 3px 8px rgba(0,0,0,0.4); z-index: 8; }
+        .particle { position: absolute; width: 7px; height: 7px; background: radial-gradient(circle, #ff4444, #aa0000); border-radius: 2px; pointer-events: none; z-index: 9; }
+        .shockwave { position: absolute; width: 20px; height: 20px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.8); box-shadow: 0 0 15px rgba(255,215,0,0.8); pointer-events: none; z-index: 15; transform: scale(0); opacity: 1; animation: shockwaveExpand 0.4s ease-out forwards; }
+        @keyframes shockwaveExpand { 0% { transform: scale(0); opacity: 0.8; } 100% { transform: scale(4); opacity: 0; } }
+        .game-footer { position: absolute; bottom: 15px; left: 0; width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 0 12px; z-index: 100; gap: 8px; }
+        .footer-left { display: flex; align-items: center; background: rgba(0,5,30,0.75); backdrop-filter: blur(10px); padding: 8px 14px; border-radius: 40px; color: #ffffff; border: 1px solid rgba(255,215,0,0.3); box-shadow: 0 6px 15px rgba(0,0,0,0.5); font-size: 11px; font-weight: bold; flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .footer-right { display: flex; align-items: center; gap: 8px; background: rgba(0,5,30,0.75); backdrop-filter: blur(10px); padding: 8px 14px; border-radius: 40px; color: #ffffff; border: 1px solid rgba(255,215,0,0.3); box-shadow: 0 6px 15px rgba(0,0,0,0.5); font-size: 11px; font-weight: bold; }
+        .footer-left i, .footer-right i { font-size: 13px; color: #FFD700; margin-right: 4px; }
+        .modal { position: absolute; top: 155px; right: 16px; width: 210px; height: auto; background: transparent; z-index: 200; visibility: hidden; opacity: 0; transition: opacity 0.3s ease, visibility 0.3s; pointer-events: none; }
+        .modal.active { visibility: visible; opacity: 1; }
+        .modal-card { background: rgba(12,19,38,0.96); width: 100%; border-radius: 20px; padding: 14px; text-align: center; border: 2px solid #FFD700; box-shadow: 0 10px 25px rgba(0,0,0,0.6); color: white; pointer-events: auto; }
+        .modal-card h3 { font-size: 14px; margin-bottom: 4px; font-family: 'Arial Black', sans-serif; color: #ffffff; }
+        .modal-card p { font-size: 11px; opacity: 0.9; margin-bottom: 2px; }
+        .fee-amount { font-size: 20px; font-weight: bold; color: #FFD966; margin: 4px 0; }
+        .modal-timer { font-size: 18px; font-weight: bold; background: #1a1f33; display: inline-block; width: 65px; height: 36px; line-height: 36px; border-radius: 18px; margin: 4px auto; border: 2px solid gold; }
+        .pay-btn { background: #FFD700; border: none; padding: 10px 14px; border-radius: 30px; font-weight: bold; font-size: 13px; margin-top: 6px; width: 100%; cursor: pointer; transition: 0.05s linear; box-shadow: 0 3px 0 #b47c00; color: #1f1f1f; }
+        .pay-btn:active { transform: translateY(2px); box-shadow: 0 1px 0 #b47c00; }
+        .pay-btn.disabled { background: #5a5a5a; box-shadow: none; transform: none; cursor: not-allowed; }
+        .spectator-message { position: absolute; bottom: 130px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); padding: 8px 16px; border-radius: 40px; color: #ffaa33; font-size: 12px; font-weight: bold; border: 1px solid gold; z-index: 110; pointer-events: none; white-space: nowrap; }
+        .winner-toast { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); background: linear-gradient(135deg, #FFD700, #e6b800); color: #1f1f1f; padding: 12px 24px; border-radius: 50px; font-size: 16px; font-weight: bold; z-index: 250; white-space: nowrap; box-shadow: 0 10px 25px rgba(0,0,0,0.5); animation: fadeOut 3s ease forwards; pointer-events: none; }
+        @keyframes fadeOut { 0% { opacity: 1; transform: translate(-50%,-50%) scale(1); } 80% { opacity: 1; } 100% { opacity: 0; transform: translate(-50%,-50%) scale(0.9); visibility: hidden; } }
+        .combo-indicator { position: absolute; bottom: 180px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.7); backdrop-filter: blur(12px); padding: 6px 16px; border-radius: 40px; border: 1px solid #FFD700; font-size: 18px; font-weight: bold; color: #FFD700; white-space: nowrap; z-index: 120; pointer-events: none; opacity: 0; transition: opacity 0.1s; box-shadow: 0 0 12px rgba(0,0,0,0.4); font-family: 'Lexend', sans-serif; }
+        .combo-indicator.animate { animation: comboPop 0.3s ease-out; }
+        @keyframes comboPop { 0% { transform: translateX(-50%) scale(0.8); opacity: 0; } 50% { transform: translateX(-50%) scale(1.2); opacity: 1; } 100% { transform: translateX(-50%) scale(1); opacity: 1; } }
+        .congrats-modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: linear-gradient(135deg, #FFD700, #e6b800); color: #1f1f1f; padding: 20px 40px; border-radius: 60px; font-size: 24px; font-weight: bold; z-index: 300; text-align: center; white-space: nowrap; box-shadow: 0 15px 30px rgba(0,0,0,0.6); animation: congratsPop 0.5s ease-out; pointer-events: none; font-family: 'Lexend', sans-serif; }
+        @keyframes congratsPop { 0% { transform: translate(-50%, -50%) scale(0.2); opacity: 0; } 50% { transform: translate(-50%, -50%) scale(1.2); } 100% { transform: translate(-50%, -50%) scale(1); opacity: 1; } }
+    </style>
+    <script src="https://cdn.socket.io/4.7.4/socket.io.min.js"></script>
+</head>
+<body>
+
+<div id="loading-screen">Loading...</div>
+
+<header class="game-header">
+    <div class="header-left">
+        <i class="fas fa-trophy"></i> <span id="rankVal">Rank: --/--</span>
+    </div>
+    <div class="header-right">
+        <div class="balance-display">
+            <i class="fas fa-wallet"></i> MWK <span id="balanceVal">0.00</span>
+        </div>
+        <div class="hamburger" id="hamburgerMenu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <div class="dropdown-menu" id="dropdownMenu">
+            <div class="dropdown-item">My Round</div>
+            <div class="dropdown-item">Round History</div>
+            <div class="dropdown-item">Settings</div>
+            <div class="dropdown-item">Chat message</div>
+        </div>
+    </div>
+</header>
+
+<div class="pool-display">
+    <div><i class="fas fa-coins"></i> Pool MWK: <span id="poolAmount">0</span></div>
+</div>
+
+<div class="timer-circle" id="gameTimerCircle">35</div>
+
+<div id="game-container">
+    <canvas id="bgCanvas"></canvas>
+    <div class="vignette"></div>
+    
+    <div class="ornament-container" id="targetContainer" style="opacity: 0;">
+        <div class="string"></div>
+        <div class="ring"></div>
+        <div class="cap"></div>
+        <div class="blue-3d-ball" id="targetBall"></div>
+    </div>
+    
+    <div class="shooter-wrapper">
+        <div class="nozzle" id="nozzle"></div>
+        <div class="shooter-base"></div>
+        <button class="red-shooter-btn" id="redBtn" disabled style="filter: grayscale(80%);"><span class="go-text" id="goText">GO!</span></button>
+    </div>
+    
+    <div class="game-footer">
+        <div class="footer-left"><i class="fas fa-star"></i> POINTS: <span id="userPoints">0</span></div>
+        <div class="footer-right">
+            <span><i class="fas fa-crosshairs"></i> LIMIT: <span id="ballLimit">150</span></span>
+        </div>
+    </div>
+</div>
+
+<div id="spectatorMsg" class="spectator-message" style="display: none;">SPECTATOR MODE - Pay MK 150 to play next round</div>
+
+<div id="entryModal" class="modal">
+    <div class="modal-card">
+        <h3><i class="fas fa-hourglass-half"></i> NEXT ROUND</h3>
+        <p>Enter Fee</p>
+        <div class="fee-amount"><i class="fas fa-ticket-alt"></i> MK 150</div>
+        <div id="modalCountdown" class="modal-timer">10</div>
+        <button id="payBtn" class="pay-btn"><i class="fas fa-hand-holding-usd"></i> PAY & ENTER</button>
+    </div>
+</div>
+
+<div id="comboIndicator" class="combo-indicator">🔥 COMBO x1</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+<script>
+    "use strict";
+
+    // --- STATE MANAGEMENT ---
+    let socket;
+    let localPlayer = { isPaid: false, userId: null, username: "Player" };
+    let currentStatus = "waiting";
+
+    // --- AUTHENTICATION MANAGER ---
+    const AuthManager = (function() {
+        async function getSession() {
+            const token = localStorage.getItem('tidye_session_token');
+            if (!token) return null;
+            try {
+                const response = await fetch(`${window.SUPABASE_URL}/functions/v1/wallet-api`, {
+                    method: 'GET',
+                    headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }
+                });
+                if (response.status === 401) { localStorage.removeItem('tidye_session_token'); return null; }
+                const data = await response.json();
+                let username = "Player";
+                try {
+                    const profileRes = await fetch(`${window.SUPABASE_URL}/functions/v1/settings-api`, {
+                        method: 'GET', headers: { 'Authorization': `Bearer ${token}` }
+                    });
+                    if (profileRes.ok) { const profile = await profileRes.json(); username = profile.username || profile.phone_number || "Player"; }
+                } catch(e) {}
+                return { token, userId: data.user_id || localStorage.getItem('user_username') || username, username: username };
+            } catch(err) { console.error("Auth check error:", err); return null; }
+        }
+        async function ensureAuth() { const session = await getSession(); if (!session) { window.location.href = 'login.html'; return null; } return session; }
+        return { ensureAuth, getSession };
+    })();
+
+    // --- GAME AUTH MANAGER (balance) ---
+    const GameAuthManager = (function() {
+        const DOM = { walletBalance: document.getElementById('balanceVal') };
+        async function checkAuthAndLoadBalance() {
+            const token = localStorage.getItem('tidye_session_token');
+            if (!token) { return null; }
+            try {
+                const walletResponse = await fetch(`${window.SUPABASE_URL}/functions/v1/wallet-api`, {
+                    method: 'GET',
+                    headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }
+                });
+                const walletData = await walletResponse.json();
+                if (walletData && DOM.walletBalance) {
+                    const formattedBalance = Number(walletData.balance).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                    DOM.walletBalance.textContent = formattedBalance;
+                    window.currentUserBalance = Number(walletData.balance);
+                }
+            } catch(err) { console.error("Wallet loading error:", err); }
+        }
+        return { checkAuthAndLoadBalance };
+    })();
+
+    // --- INTERFACE CONTROL (GO BUTTON ENGINE) ---
+    function syncGoButtonState() {
+        const redBtn = document.getElementById('redBtn');
+        const spectatorMsg = document.getElementById('spectatorMsg');
+
+        if (localPlayer.isPaid && currentStatus === "active") {
+            redBtn.disabled = false;
+            redBtn.style.filter = "none";
+            spectatorMsg.style.style = "none";
+            spectatorMsg.style.display = "none";
+        } else {
+            redBtn.disabled = true;
+            redBtn.style.filter = "grayscale(80%)";
+            if (!localPlayer.isPaid && currentStatus === "active") {
+                spectatorMsg.style.display = "block";
+            } else {
+                spectatorMsg.style.display = "none";
+            }
+        }
+    }
+
+    // --- SOCKET CONNECTION MATRIX ---
+    async function initializeGameCore() {
+        const session = await AuthManager.ensureAuth();
+        if (!session) return;
+
+        localPlayer.userId = session.userId;
+        localPlayer.username = session.username;
+
+        await GameAuthManager.checkAuthAndLoadBalance();
+        document.getElementById('loading-screen').style.display = 'none';
+
+        // Lumikizani ndi Socket Server yanu (Sinthani URL iyi ngati ikufunika)
+        socket = io("http://localhost:7860"); 
+
+        socket.on('connect', () => {
+            console.log("Connected to Senior Physics Game Engine.");
+            socket.emit('playerVerified', { user_id: localPlayer.userId, username: localPlayer.username });
+        });
+
+        socket.on('entryStatus', (status) => {
+            if (status.success) {
+                localPlayer.isPaid = status.is_paid || false;
+                document.getElementById('userPoints').textContent = status.current_score;
+                document.getElementById('ballLimit').textContent = status.remaining_shots;
+                syncGoButtonState();
+            }
+        });
+
+        // Hekitala yomwe idzamvetsera Database triggers kuchokera ku Backend Realtime
+        socket.on('paymentVerified', (data) => {
+            if (data.is_paid) {
+                localPlayer.isPaid = true;
+                console.log("Database payment detected live! Unlocking UI.");
+                syncGoButtonState();
+                
+                // Refresh balance chifukwa malipiro achitika mu DB
+                GameAuthManager.checkAuthAndLoadBalance();
+            }
+        });
+
+        socket.on('gameTick', (tick) => {
+            currentStatus = tick.round_status;
+            
+            // Render target movement live
+            const targetContainer = document.getElementById('targetContainer');
+            if (currentStatus === "active") {
+                targetContainer.style.opacity = "1";
+                targetContainer.style.left = tick.target_x + "%";
+                document.getElementById('entryModal').classList.remove('active');
+            } else if (currentStatus === "waiting") {
+                targetContainer.style.opacity = "0";
+                document.getElementById('entryModal').classList.add('active');
+                if (tick.waiting_ends_at) {
+                    const diff = Math.max(0, Math.ceil((new Date(tick.waiting_ends_at) - new Date()) / 1000));
+                    document.getElementById('modalCountdown').textContent = diff;
+                }
+            }
+
+            // Sync countdown timu yayikulu
+            document.getElementById('gameTimerCircle').textContent = tick.timer_seconds;
+            if (tick.timer_seconds <= 5 && currentStatus === "active") {
+                document.getElementById('gameTimerCircle').classList.add('warning');
+            } else {
+                document.getElementById('gameTimerCircle').classList.remove('warning');
+            }
+
+            // Gold Time configuration
+            const targetBall = document.getElementById('targetBall');
+            if (tick.is_gold_time) {
+                targetBall.classList.add('gold-time-ball');
+            } else {
+                targetBall.classList.remove('gold-time-ball');
+            }
+
+            syncGoButtonState();
+        });
+
+        socket.on('newRoundStarted', (data) => {
+            localPlayer.isPaid = false; // Reset paid architecture for new rounds
+            document.getElementById('userPoints').textContent = "0";
+            document.getElementById('ballLimit').textContent = "150";
+            syncGoButtonState();
+        });
+
+        socket.on('roundEnded', (data) => {
+            currentStatus = "resolving";
+            syncGoButtonState();
+            
+            // Pangani toast ya winner ngati alipo
+            if (data.has_winner) {
+                const toast = document.createElement('div');
+                toast.className = 'winner-toast';
+                toast.innerHTML = `🏆 Winner: ${data.winner_username} won MWK ${data.pool_won}!`;
+                document.body.appendChild(toast);
+                setTimeout(() => toast.remove(), 3000);
+            }
+            GameAuthManager.checkAuthAndLoadBalance();
+        });
+
+        socket.on('broadcastLiveHit', (hit) => {
+            if (hit.userId === localPlayer.userId) {
+                document.getElementById('userPoints').textContent = parseInt(document.getElementById('userPoints').textContent) + hit.points;
+                document.getElementById('ballLimit').textContent = hit.remaining_limit;
+            }
+        });
+    }
+
+    // --- ACTION TRIGGERS ---
+    document.getElementById('redBtn').addEventListener('click', () => {
+        if (socket && currentStatus === "active" && localPlayer.isPaid) {
+            socket.emit('playerHitTarget');
+            
+            // Fire visual simulation trigger (Optional physics micro-animation)
+            const nozzle = document.getElementById('nozzle');
+            nozzle.style.transform = 'scaleY(0.8)';
+            setTimeout(() => nozzle.style.transform = 'none', 50);
+        }
+    });
+
+    // Pay button operation to communicate database intentions
+    document.getElementById('payBtn').addEventListener('click', async () => {
+        console.log("Triggering Edge Function payment routing...");
+        if (socket) {
+            socket.emit('declarePaymentIntention');
+        }
+        
+        // Khalidwe lanu la Supabase call litha kuyitanidwa pano kuti lipange insert mu table ya `game_participants`
+        // Mwachitsanzo: await supabase.from('game_participants').insert({ user_id: localPlayer.userId, round_id: ... });
+    });
+
+    // Menu logic control
+    document.getElementById('hamburgerMenu').addEventListener('click', () => {
+        document.getElementById('dropdownMenu').classList.toggle('show');
+    });
+
+    // Start everything flawlessly
+    window.addEventListener('DOMContentLoaded', initializeGameCore);
+</script>
+</body>
+</html>
