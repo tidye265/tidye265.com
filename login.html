@@ -295,7 +295,7 @@
     </div>
 
     <div class="title">
-        <h1>Welcome Back</h1>
+        <h1>Welcome Back 👋</h1>
         <p>Login to continue playing professional Malawi games and manage your wallet securely.</p>
     </div>
 
@@ -428,7 +428,7 @@
         }
 
         btn.classList.add('loading');
-        btn.innerText = "Authenticating...";
+        btn.innerText = "Loading..";
 
         try {
             Logger.info(`Attempting verification transmission sequence for ${rawPhone}`);
@@ -457,7 +457,7 @@
             // ✅ STORE SESSION TOKEN AND REDIRECT (updated part)
             if (dataResult.success && dataResult.sessionToken) {
                 localStorage.setItem('tidye_session_token', dataResult.sessionToken);
-                showAlert("Access granted! Entering secure matrix...", "success");
+                showAlert("Login success", "success");
                 Logger.info("Authentication validated, token stored, redirecting to dashboard.");
                 setTimeout(() => {
                     window.location.href = "dashboard.html";
