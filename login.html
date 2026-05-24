@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO & Google Search Console Optimization -->
+    <meta name="description" content="Secure login to Tidye265 - Malawi's premier platform for professional gaming, P2P games, and casino.">
+    <meta name="keywords" content="Tidye265 login, Malawi gaming login, secure access, P2P games, casino Malawi">
+    <meta name="author" content="Tidye265">
+    <meta name="theme-color" content="#121212">
+
+    <!-- Strict Security Headers (CSP) Matching Register Setup -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' https: data:; connect-src 'self' https://*.supabase.co; frame-src https://challenges.cloudflare.com;">
+
+    <title>Login - tiDye265</title>
+
+    <!-- Fonts & Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root{
+            --gold:#FFD700;
+            --dark:#111827;
+            --gray:#6b7280;
+            --soft:#f3f4f6;
+            --border:#e5e7eb;
+            --error:#991b1b;
+        }
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            -webkit-tap-highlight-color:transparent;
+        }
+
+        body{
+            background:#ffffff;
+            color:var(--dark);
+            font-family:'Inter',sans-serif;
+            overflow-x:hidden;
+            padding-bottom:90px;
+        }
+
+        /* HEADER - NOW STICKY */
+        .top-header{
+            height:72px;
+            padding:0 20px;
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            border-bottom:1px solid var(--border);
+            background:#fff;
+            position: -webkit-sticky;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo{
+            display:flex;
+            align-items:center;
+            gap:10px;
+            text-decoration:none;
+            color:var(--dark);
+        }
+
+        .logo img{
+            height:42px;
+            border-radius:8px;
+        }
+
+        .logo span{
+            font-family:'Lexend';
+            font-weight:700;
+            font-size:18px;
+        }
+
+        .signup-btn{
+            text-decoration:none;
+            border:1.5px solid var(--dark);
+            color:var(--dark);
+            padding:9px 18px;
+            border-radius:10px;
+            font-size:13px;
+            font-family:'Lexend';
+            font-weight:700;
+        }
+
+        /* MAIN */
+        .login-wrapper{
+            width:100%;
+            max-width:420px;
+            margin:0 auto;
+            padding:35px 20px 40px;
+        }
+
+        /* ICON */
+        .login-icon{
+            width:72px;
+            height:72px;
+            border-radius:22px;
+            background:var(--soft);
+            border:1.5px solid var(--border);
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            margin-bottom:28px;
+        }
+
+        .login-icon i{
+            font-size:30px;
+            color:var(--dark);
+        }
+
+        /* TITLE */
+        .title{
+            margin-bottom:32px;
+        }
+
+        .title h1{
+            font-family:'Lexend';
+            font-size:30px;
+            line-height:1.2;
+            margin-bottom:10px;
+        }
+
+        .title p{
+            color:var(--gray);
+            font-size:14px;
+            line-height:1.5;
+        }
+
+        /* FORM */
+        .login-form{
+            display:flex;
+            flex-direction:column;
+            gap:18px;
+        }
+
+        .input-box{
+            position:relative;
+        }
+
+        .input-box input{
+            width:100%;
+            height:56px;
+            border:none;
+            outline:none;
+            background:var(--soft);
+            border:1.5px solid transparent;
+            border-radius:14px;
+            padding:0 16px;
+            font-size:15px;
+            font-family:'Inter';
+            transition:0.25s ease;
+            color:var(--dark);
+        }
+
+        .input-box input:focus{
+            background:#fff;
+            border-color:var(--dark);
+            box-shadow:0 8px 25px rgba(0,0,0,0.05);
+        }
+
+        /* PHONE */
+        .phone-box img{
+            position:absolute;
+            left:16px;
+            top:50%;
+            transform:translateY(-50%);
+            width:26px;
+            height:18px;
+            object-fit:cover;
+            border-radius:2px;
+            z-index:2;
+        }
+
+        .phone-box input{
+            padding-left:58px;
+        }
+
+        /* PASSWORD */
+        .password-box i{
+            position:absolute;
+            right:18px;
+            top:50%;
+            transform:translateY(-50%);
+            color:#9ca3af;
+            cursor:pointer;
+            font-size:15px;
+        }
+
+        /* OPTIONS */
+        .form-options{
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            margin-top:-4px;
+        }
+
+        .remember{
+            display:flex;
+            align-items:center;
+            gap:8px;
+            font-size:13px;
+            color:var(--gray);
+        }
+
+        .remember input{
+            width:17px;
+            height:17px;
+            accent-color:#111827;
+        }
+
+        .forgot-link{
+            font-size:13px;
+            text-decoration:none;
+            color:var(--dark);
+            font-weight:600;
+        }
+
+        /* BUTTON */
+        .submit-btn{
+            width: 100%;
+            height:56px;
+            border:none;
+            border-radius:14px;
+            background:var(--gold);
+            color:#000;
+            font-family:'Lexend';
+            font-size:15px;
+            font-weight:300;
+            cursor:pointer;
+            transition:0.2s ease;
+        }
+
+        .submit-btn.loading{
+            background: #e5e7eb !important;
+            color: #9ca3af !important;
+            pointer-events: none;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .submit-btn:active{
+            transform:scale(0.98);
+        }
+
+        /* ALERT BOX */
+        .alert{
+            padding:15px;
+            border-radius:12px;
+            font-size:14px;
+            display:none;
+            margin-bottom: 20px;
+            word-break: break-all;
+        }
+        .alert.error{ background:#fef2f2; color:#991b1b; border:1px solid #fecaca; }
+        .alert.success{ background:#ecfdf5; color:#065f46; border:1px solid #a7f3d0; }
+
+        .turnstile-wrapper { display: flex; justify-content: center; margin: 5px 0; }
+
+        /* FOOT TEXT */
+        .bottom-text{
+            margin-top:28px;
+            text-align:center;
+            color:var(--gray);
+            font-size:14px;
+        }
+
+        .bottom-text a{
+            color:var(--dark);
+            font-weight:700;
+            text-decoration:none;
+        }
+
+        @media (max-width:480px){
+            .login-wrapper{ padding-top:35px; }
+            .title h1{ font-size:28px; }
+        }
+    </style>
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+</head>
+<body>
+
+<!-- HEADER (NOW STICKY) -->
+<header class="top-header">
+    <a href="index.html" class="logo">
+        <img src="logo.jpg" alt="Tidye265">
+        <span></span>
+    </a>
+    <a href="register.html" class="signup-btn">SIGN UP</a>
+</header>
+
+<!-- MAIN -->
+<main class="login-wrapper">
+
+    <div class="login-icon">
+        <i class="fa-solid fa-fingerprint"></i>
+    </div>
+
+    <div class="title">
+        <h1>Welcome Back</h1>
+        <p>Login to continue playing professional Malawi games and manage your wallet securely.</p>
+    </div>
+
+    <!-- Real-time Alert Feedback System -->
+    <div id="alertBox" class="alert"></div>
+
+    <form class="login-form" id="loginForm">
+        
+        <!-- Anti-bot HoneyPot (Strictly isolated from browser autofill algorithm) -->
+        <div style="display: none !important; visibility: hidden !important;" aria-hidden="true">
+            <input type="text" name="system_verification_field" id="botSecurity" tabindex="-1" autocomplete="off">
+        </div>
+
+        <!-- PHONE -->
+        <div class="input-box phone-box">
+            <img src="https://flagcdn.com/w40/mw.png" alt="Malawi">
+            <input type="tel" id="phone" name="username" autocomplete="username" placeholder="Phone Number" required>
+        </div>
+
+        <!-- PASSWORD / PIN -->
+        <div class="input-box password-box">
+            <input type="password" name="password" autocomplete="current-password" placeholder="Enter Secret PIN" id="passwordInput" maxlength="6" inputmode="numeric" required>
+            <i class="fa-solid fa-eye" id="togglePassword"></i>
+        </div>
+
+        <!-- OPTIONS -->
+        <div class="form-options">
+            <label class="remember">
+                <input type="checkbox" id="rememberMe">
+                <span>Remember me</span>
+            </label>
+            <a href="resert.html" class="forgot-link">Forgot PIN?</a>
+        </div>
+
+        <!-- Turnstile Security Shield -->
+        <div class="turnstile-wrapper">
+            <div class="cf-turnstile" data-sitekey="0x4AAAAAADQhPHJB5viRCO84"></div>
+        </div>
+
+        <!-- BUTTON -->
+        <button type="submit" class="submit-btn" id="submitBtn">LOGIN NOW</button>
+    </form>
+
+    <p class="bottom-text">
+        Don’t have an account? 
+        <a href="register.html">Create one</a>
+    </p>
+</main>
+
+<!-- HYBRID COMPONENT HOLDER -->
+<div id="footer-placeholder"></div>
+
+<script src="supabase.js"></script>
+<script>
+    // 1. ADVANCED LOGGING & ERROR MONITORING
+    const Logger = {
+        info: (msg, data = {}) => console.log(`[INFO] ${new Date().toISOString()} - ${msg}`, data),
+        warn: (msg, data = {}) => console.warn(`[WARN] ${new Date().toISOString()} - ${msg}`, data),
+        error: (msg, data = {}) => console.error(`[ERROR] ${new Date().toISOString()} - ${msg}`, data)
+    };
+
+    // 2. INTERFACE OBJECT ELEMENTS
+    const form = document.getElementById('loginForm');
+    const btn = document.getElementById('submitBtn');
+    const alertBox = document.getElementById('alertBox');
+    const passwordInput = document.getElementById('passwordInput');
+    const togglePassword = document.getElementById('togglePassword');
+
+    // Password view switcher
+    togglePassword.addEventListener('click', () => {
+        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordInput.setAttribute('type', type);
+        togglePassword.classList.toggle('fa-eye');
+        togglePassword.classList.toggle('fa-eye-slash');
+    });
+
+    // Local Storage Rate Limiting Architecture
+    function hitRateLimit() {
+        const now = Date.now();
+        let attempts = JSON.parse(localStorage.getItem('log_rate_limit') || '[]');
+        attempts = attempts.filter(time => now - time < 3 * 60 * 1000); // 3 mins trackWindow
+        if (attempts.length >= 5) return false;
+        attempts.push(now);
+        localStorage.setItem('log_rate_limit', JSON.stringify(attempts));
+        return true;
+    }
+
+    // 3. SECURE AUTH DISPATCH TRANSACTION
+    form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        // Honeypot Protection Strategy
+        if(document.getElementById('botSecurity').value !== "") {
+            Logger.warn("Bot activity blocked via honeypot criteria.");
+            return;
+        }
+
+        // Cloudflare Captcha Validation
+        const turnstileResponse = document.querySelector('[name="cf-turnstile-response"]')?.value;
+        if (!turnstileResponse) {
+            showAlert("Please complete the security verification.", "error");
+            return;
+        }
+
+        // Client Side Throttling Verification
+        if (!hitRateLimit()) {
+            showAlert("Too many operational requests. Locked for 3 minutes.", "error");
+            return;
+        }
+
+        // Environment Variables Check Setup
+        if (typeof SUPABASE_URL === 'undefined' || typeof SUPABASE_ANON_KEY === 'undefined') {
+            showAlert("Bug Detected: Supabase configuration keys are missing.", "error");
+            Logger.error("Supabase credentials not defined in supabase.js Environment framework.");
+            return;
+        }
+
+        let rawPhone = document.getElementById('phone').value.trim().replace(/\s+/g, '');
+        const pin = passwordInput.value.trim();
+
+        // Phone normalization to international compliance local string formatting
+        if (rawPhone.startsWith("+265")) rawPhone = "0" + rawPhone.slice(4);
+        else if (rawPhone.startsWith("265")) rawPhone = "0" + rawPhone.slice(3);
+        else if (rawPhone.length === 9 && /^[8934]/.test(rawPhone)) rawPhone = "0" + rawPhone;
+
+        const malawiRegex = /^0(88|99|98|89|97|31|41)\d{7}$/;
+        if (!malawiRegex.test(rawPhone)) {
+            showAlert("Enter a valid Malawi phone format (e.g. 088xxxxxxx)", "error");
+            return;
+        }
+
+        btn.classList.add('loading');
+        btn.innerText = "Loading..";
+
+        try {
+            Logger.info(`Attempting verification transmission sequence for ${rawPhone}`);
+
+            const response = await fetch(`${SUPABASE_URL}/functions/v1/login_265`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+                },
+                body: JSON.stringify({
+                    phone_number: rawPhone,
+                    pin: pin,
+                    turnstileToken: turnstileResponse
+                })
+            });
+
+            let dataResult = null;
+            try { dataResult = await response.json(); } catch(e) {}
+
+            if (!response.ok) {
+                const messageStr = dataResult?.error || `Server communication anomaly: ${response.status}`;
+                throw new Error(messageStr);
+            }
+
+            // ✅ STORE SESSION TOKEN AND REDIRECT (updated part)
+            if (dataResult.success && dataResult.sessionToken) {
+                localStorage.setItem('tidye_session_token', dataResult.sessionToken);
+                showAlert("Login success", "success");
+                Logger.info("Authentication validated, token stored, redirecting to dashboard.");
+                setTimeout(() => {
+                    window.location.href = "dashboard.html";
+                }, 1500);
+            } else {
+                // In case backend doesn't return sessionToken (legacy), still show success but without token
+                showAlert("Access granted! But session token missing. Please contact support.", "error");
+                Logger.error("Login response missing sessionToken", dataResult);
+                btn.classList.remove('loading');
+                btn.innerText = "LOGIN NOW";
+            }
+
+        } catch (error) {
+            Logger.error("Authentication Sequence Terminated", error);
+            
+            if(error.message === "INVALID_CREDENTIALS") {
+                showAlert("The phone number or secret PIN provided is incorrect.", "error");
+            } else {
+                showAlert(`Bug Detected: ${error.message}`, "error");
+            }
+
+            btn.classList.remove('loading');
+            btn.innerText = "LOGIN NOW";
+
+            if (typeof turnstile !== 'undefined') turnstile.reset();
+        }
+    });
+
+    function showAlert(msg, type) {
+        alertBox.style.display = "block";
+        alertBox.className = `alert ${type}`;
+        alertBox.innerText = msg;
+        setTimeout(() => { alertBox.style.display = "none"; }, 6000);
+    }
+
+    // 4. HYBRID ASYNC COMPONENT INJECTION
+    async function injectDynamicFooter() {
+        try {
+            const res = await fetch('footer.html');
+            if(res.ok) {
+                const htmlContent = await res.text();
+                const nodeRef = document.getElementById('footer-placeholder');
+                nodeRef.innerHTML = htmlContent;
+                
+                nodeRef.querySelectorAll('script').forEach(oldScript => {
+                    const nextScript = document.createElement('script');
+                    nextScript.textContent = oldScript.textContent;
+                    document.body.appendChild(nextScript).parentNode.removeChild(nextScript);
+                });
+            }
+        } catch(err) {
+            Logger.error("Hybrid framework could not mount footer interface element", err);
+        }
+    }
+    injectDynamicFooter();
+</script>
+</body>
+</html>
