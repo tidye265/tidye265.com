@@ -123,7 +123,7 @@
         }
 
         /* Submit Button Base */
-        .btn-submit { width: 100%; margin-top: 25px; background: var(--primary); color: #000; border: none; padding: 16px; border-radius: 12px; font-family: 'Lexend'; font-weight: 300; font-size: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s ease; box-shadow: 0 4px 6px -1px rgba(255, 215, 0, 0.4); }
+        .btn-submit { width: 100%; margin-top: 25px; background: var(--primary); color: #000; border: none; padding: 16px; border-radius: 12px; font-family: 'Lexend'; font-weight: 300; font-size: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s ease; box-shadow: 0 4px 6px -1px rgba(255, 215, 0, 0.4); }
         .btn-submit:active { transform: scale(0.98); }
         
         /* NEW: Grey Loading State style override when processing transactions */
@@ -226,6 +226,11 @@
         <button class="btn-submit" id="btnDeposit" onclick="processDeposit()">
             DEPOSIT<i class="fa-solid fa-arrow-right"></i>
         </button>
+        <div class="alertPS">
+                <span>PS: Please ensure that you have sufficient balance in your account to successfully complete the deposit.</span>
+
+        </div>
+        
 
         <div id="statusMessage" class="alert"></div>
     </div>
