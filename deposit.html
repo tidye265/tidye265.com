@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Deposit Funds | tiDye265</title>
+    
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://*.supabase.co https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' https: data: blob:; frame-src 'self' https://challenges.cloudflare.com; connect-src 'self' https://*.supabase.co https://challenges.cloudflare.com;">
+    <meta name="theme-color" content="#121212">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lexend:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
+    <style>
+        :root {
+            --bg: #F4F6F8; --primary: #FFD700; --card-bg: #FFFFFF;
+            --text-light: #1a1d21; --text-dim: #6b7280; --border: #e5e7eb;
+            --success: #10b981; --airtel: #ff0000; --tnm: #00a859;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { background-color: var(--bg); color: var(--text-light); font-family: 'Inter', sans-serif; padding-bottom: 30px; line-height: 1.5; }
+
+        /* Enhanced Skeleton Loader */
+        #loader {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #F4F6F8; z-index: 9999;
+            display: flex; flex-direction: column; padding: 0;
+            transition: opacity 0.3s ease;
+        }
+        .skeleton {
+            background: linear-gradient(90deg, #e5e7eb 25%, #f0f2f5 50%, #e5e7eb 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            border-radius: 8px;
+        }
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        .sk-header {
+            height: 60px; width: 100%; margin-bottom: 5px;
+            display: flex; align-items: center; padding: 0 15px; gap: 15px;
+        }
+        .sk-header .sk-circle { width: 30px; height: 30px; border-radius: 50%; }
+        .sk-header .sk-line { height: 14px; flex: 1; }
+
+        .sk-wallet {
+            height: 80px; width: calc(100% - 30px); margin: 15px 15px;
+            border-radius: 12px;
+        }
+
+        .sk-container {
+            background: #fff; border-radius: 16px; margin: 0 15px; padding: 20px 15px;
+        }
+        .sk-title { height: 14px; width: 40%; margin-bottom: 15px; }
+        .sk-selector { height: 70px; border-radius: 12px; margin-bottom: 15px; }
+        .sk-input { height: 56px; border-radius: 12px; margin-bottom: 15px; }
+        .sk-quick-btns { display: flex; gap: 10px; margin-bottom: 20px; }
+        .sk-quick { height: 40px; flex: 1; border-radius: 8px; }
+        .sk-submit { height: 56px; border-radius: 12px; }
+
+        /* Header */
+        .header { background: #fff; padding: 15px; display: flex; align-items: center; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; }
+        .header-action { color: var(--text-light); font-size: 18px; text-decoration: none; width: 30px; }
+        .page-title { font-family: 'Lexend'; font-weight: 700; font-size: 16px; flex-grow: 1; text-align: center; margin-right: 30px; }
+
+        /* Wallet Mini Card */
+        .wallet-card-mini { 
+            background: #eef1f6; 
+            color: var(--text-light); 
+            border: 1px solid #dcdfe4;
+            border-radius: 14px; 
+            padding: 16px 18px; 
+            width: calc(100% - 30px); 
+            margin: 20px 15px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+        }
+        .wallet-card-mini .lbl { 
+            font-size: 11px; 
+            text-transform: uppercase; 
+            color: var(--text-dim); 
+            font-weight: 700; 
+            letter-spacing: 0.5px; 
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .wallet-card-mini .lbl::before {
+            content: '';
+            width: 7px;
+            height: 7px;
+            background: var(--success);
+            border-radius: 50%;
+            display: inline-block;
+        }
+        .wallet-card-mini .amt { font-family: 'Lexend'; font-size: 22px; font-weight: 800; color: #111827; margin-top: 4px; }
+        .wallet-icon-bg {
+            background: #e1e6ed;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #d1d7e0;
+        }
+        .wallet-card-mini i { font-size: 18px; color: #4b5563; }
+
+        /* Deposit Section */
+        .deposit-container { background: #fff; border-radius: 16px; padding: 20px 15px; margin: 0 15px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        .section-title { font-size: 13px; font-weight: 700; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; }
+
+        /* Network Selector */
+        .network-selector { background: #fafafa; border: 1px solid var(--border); border-radius: 12px; padding: 12px 15px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; transition: all 0.2s; }
+        .network-info { display: flex; align-items: center; gap: 12px; width: 100%; overflow: hidden; }
+        .network-logo { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 1px solid var(--border); background: #fff; flex-shrink: 0; }
+        .network-text { flex-grow: 1; overflow: hidden; }
+        .network-text .nt-name { font-weight: 700; font-size: 14px; }
+        .network-text .nt-num { font-size: 12px; color: var(--text-dim); font-weight: 500; margin-top: 2px; }
+        .network-text .nt-id { display: none !important; }
+        
+        .chevron { color: #9ca3af; transition: transform 0.3s ease; font-size: 14px; flex-shrink: 0; }
+        .network-details { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+        .network-details-inner { padding: 12px 0 0; font-size: 12px; color: var(--text-dim); }
+        .network-selector.open .chevron { transform: rotate(180deg); }
+        .network-selector.open + .network-details { max-height: 100px; }
+
+        /* Amount Input */
+        .amount-group { margin-top: 20px; }
+        .amount-input-wrapper { position: relative; display: flex; align-items: center; }
+        .currency-symbol { position: absolute; left: 15px; font-family: 'Lexend'; font-weight: 700; color: var(--text-light); font-size: 16px; }
+        .amount-input { width: 100%; padding: 11px 15px 11px 65px; border: 2px solid var(--border); border-radius: 12px; font-family: 'Lexend'; font-weight: 700; font-size: 18px; color: var(--text-light); outline: none; transition: border-color 0.2s; background: #fff; }
+        .amount-input:focus { border-color: var(--primary); }
+        .amount-limits { display: flex; justify-content: space-between; font-size: 11px; font-weight: 600; color: var(--text-dim); margin-top: 6px; padding: 0 2px; letter-spacing: 0.3px; }
+
+        /* Quick Amounts */
+        .quick-amounts { display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
+        .quick-btn { flex: 1; min-width: 70px; padding: 10px 5px; background: #f3f4f6; border: 1px solid var(--border); border-radius: 8px; font-weight: 600; font-size: 13px; color: var(--text-light); cursor: pointer; text-align: center; transition: all 0.2s; }
+        .quick-btn:active { background: var(--primary); border-color: var(--primary); }
+
+        /* Invisible Widget Fixes */
+        .turnstile-container {
+            display: block;
+            margin: 0 auto;
+            width: 100%;
+            max-width: 300px;
+            overflow: visible;
+        }
+
+        /* Submit Button Base */
+        .btn-submit { width: 100%; margin-top: 25px; background: var(--primary); color: #000; border: none; padding: 16px; border-radius: 12px; font-family: 'Lexend'; font-weight: 300; font-size: 12px; letter-spacing: 0.5px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s ease; box-shadow: none; }
+        .btn-submit:active { transform: scale(0.98); }
+        .button-plain-note { margin-top: 12px; font-size: 11px; color: #4b5563; text-align: center; font-weight: 500; line-height: 1.4; padding: 0 5px; }
+        .btn-submit.loading-state { background: #e5e7eb !important; color: #9ca3af !important; box-shadow: none !important; cursor: not-allowed !important; pointer-events: none !important; transform: none !important; }
+        
+        /* Alerts */
+        .alert { margin-top: 15px; padding: 12px; border-radius: 8px; font-size: 12.5px; font-weight: 500; display: none; word-break: break-all; }
+        .alert.error { background: #fef2f2; color: #ef4444; border: 1px solid #fecaca; }
+        .alert.info { background: #eff6ff; color: #3b82f6; border: 1px solid #bfdbfe; }
+
+        #footer-placeholder { margin-top: 30px; }
+    </style>
+</head>
+<body>
+
+    <div id="loader">
+        <div class="sk-header">
+            <div class="skeleton sk-circle"></div>
+            <div class="skeleton sk-line"></div>
+        </div>
+        <div class="skeleton sk-wallet"></div>
+        <div class="sk-container">
+            <div class="skeleton sk-title"></div>
+            <div class="skeleton sk-selector"></div>
+            <div class="skeleton sk-title"></div>
+            <div class="skeleton sk-input"></div>
+            <div class="sk-quick-btns">
+                <div class="skeleton sk-quick"></div>
+                <div class="skeleton sk-quick"></div>
+                <div class="skeleton sk-quick"></div>
+            </div>
+            <div class="skeleton sk-submit"></div>
+        </div>
+    </div>
+
+    <header class="header">
+        <a href="wallet.html" class="header-action"><i class="fa-solid fa-arrow-left"></i></a>
+        <div class="page-title">Deposit Funds</div>
+    </header>
+
+    <div class="wallet-card-mini">
+        <div>
+            <div class="lbl">Current Balance</div>
+            <div class="amt" id="walletBalance">MWK 0.00</div>
+        </div>
+        <div class="wallet-icon-bg">
+            <i class="fa-solid fa-wallet"></i>
+        </div>
+    </div>
+
+    <div class="deposit-container">
+        <div class="section-title">Payment Method</div>
+        
+        <div class="network-selector" id="networkSelector" onclick="toggleNetworkDetails()">
+            <div class="network-info">
+                <img src="" alt="Network" class="network-logo" id="networkLogo" style="display:none;">
+                <div class="network-text">
+                    <div class="nt-name" id="networkName">Detecting Network...</div>
+                    <div class="nt-num" id="userPhoneNumber">Please wait...</div>
+                    <div class="nt-id" id="userIdDisplay">ID: Fetching...</div> 
+                </div>
+            </div>
+            <i class="fa-solid fa-chevron-down chevron"></i>
+        </div>
+        <div class="network-details">
+            <div class="network-details-inner">
+                <i class="fa-solid fa-triangle-exclamation" style="font-size: 10px; margin-right: 4px;"></i> 
+                Warning: Please ensure that you have sufficient balance in your account to successfully complete the deposit.
+            </div>
+        </div>
+
+        <div class="amount-group">
+            <div class="section-title">Deposit Amount</div>
+            <div class="amount-input-wrapper">
+                <span class="currency-symbol">MWK</span>
+                <input type="number" id="depositAmount" class="amount-input" placeholder="0" inputmode="numeric">
+            </div>
+            
+            <div class="amount-limits">
+                <span>Min: MWK 200</span>
+                <span>Max: MWK 750,000</span>
+            </div>
+
+            <div class="quick-amounts">
+                <button class="quick-btn" onclick="setAmount(500)">MWK 500</button>
+                <button class="quick-btn" onclick="setAmount(2000)">MWK 2,000</button>
+                <button class="quick-btn" onclick="setAmount(5000)">MWK 5,000</button>
+            </div>
+        </div>
+
+        <div class="turnstile-container">
+            <div id="turnstileWidget"></div>
+        </div>
+
+        <button class="btn-submit" id="btnDeposit" onclick="processDeposit()">
+            DEPOSIT<i class="fa-solid fa-arrow-right"></i>
+        </button>
+        
+        <div class="button-plain-note">
+            PS: Please ensure that you have sufficient balance in your account to successfully complete the deposit.
+        </div>
+    
+        <div id="statusMessage" class="alert"></div>
+    </div>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="supabase.js"></script>
+    <script>
+        "use strict";
+
+        // Global Variables & State Control
+        let turnstileWidgetId = null;
+        let turnstileToken = null;
+        let tokenCreatedAt = 0;
+        let turnstileLastError = null; 
+        let globalUserPhone = null;
+        let globalDetectedNetwork = null;
+        let globalUserId = null;
+        let globalUserEmail = null;
+
+        // Smart Optimization: Token Validation Helper
+        function isTokenStillValid() {
+            return (turnstileToken && (Date.now() - tokenCreatedAt < 60000));
+        }
+
+        // Silent Rotation Action
+        function refreshTurnstile() {
+            if (typeof turnstile !== 'undefined' && turnstileWidgetId !== null) {
+                turnstileToken = null;
+                tokenCreatedAt = 0;
+                turnstile.reset(turnstileWidgetId);
+                turnstile.execute(turnstileWidgetId); // Run background verification immediately
+            }
+        }
+
+        // Hot Token Keeper Loop (Checks every 10 seconds)
+        setInterval(() => {
+            if (tokenCreatedAt > 0 && (Date.now() - tokenCreatedAt > 50000)) {
+                console.log("Background security update triggered...");
+                refreshTurnstile();
+            }
+        }, 10000);
+
+        // Immediate Turnstile Initialization on load
+        window.addEventListener('load', () => {
+            if (typeof turnstile !== 'undefined') {
+                turnstileWidgetId = turnstile.render('#turnstileWidget', {
+                    sitekey: '0x4AAAAAADQhPHJB5viRCO84',
+                    size: 'invisible',
+                    callback: function(token) {
+                        turnstileToken = token;
+                        tokenCreatedAt = Date.now();
+                        turnstileLastError = null;
+                        console.log("Security verification ready in background");
+                    },
+                    'error-callback': function(errorCode) {
+                        console.error("Internal Verification Event:", errorCode);
+                        turnstileLastError = errorCode;
+                    },
+                    'expired-callback': function() {
+                        refreshTurnstile();
+                    },
+                    'timeout-callback': function() {
+                        refreshTurnstile();
+                    }
+                });
+
+                // START VERIFICATION NOW (Osadikila button click!)
+                turnstile.execute(turnstileWidgetId);
+            }
+        });
+
+        function getCleanSessionToken() {
+            let rawToken = localStorage.getItem('tidye_session_token');
+            if (!rawToken || rawToken === 'null' || rawToken === 'undefined') return null;
+
+            try {
+                let parsed = JSON.parse(rawToken);
+                if (parsed && parsed.access_token) return parsed.access_token;
+                if (typeof parsed === 'string') return parsed;
+            } catch (e) {}
+            return rawToken.replace(/^["']|["']$/g, '').trim();
+        }
+
+        function toggleNetworkDetails() {
+            document.getElementById('networkSelector').classList.toggle('open');
+        }
+
+        function setAmount(val) {
+            document.getElementById('depositAmount').value = val;
+        }
+
+        // Smart Waiter Flow (With 5s PIN fall-back typography notification)
+        async function waitForTurnstileToken() {
+            return new Promise((resolve) => {
+                if (isTokenStillValid()) {
+                    resolve({ token: turnstileToken, error: null });
+                    return;
+                }
+
+                let attempts = 0;
+                const interval = setInterval(() => {
+                    if (isTokenStillValid()) {
+                        clearInterval(interval);
+                        resolve({ token: turnstileToken, error: null });
+                        return;
+                    }
+
+                    attempts++;
+
+                    // Custom Smart Logic: If 5 seconds pass (25 attempts * 200ms = 5000ms)
+                    if (attempts === 25) {
+                        showStatus("Waiting prompt to Enter your PIN", "info");
+                    }
+
+                    // Complete Safe Loop Threshold
+                    if (attempts >= 100) { 
+                        clearInterval(interval);
+                        resolve({ token: null, error: "timeout_masked" });
+                    }
+                }, 200);
+            });
+        }
+
+        function showStatus(message, type) {
+            const statusDiv = document.getElementById('statusMessage');
+            statusDiv.textContent = message;
+            statusDiv.className = `alert ${type}`;
+            statusDiv.style.display = 'block';
+            
+            if (type !== 'error' && message !== "Waiting prompt to Enter your PIN") {
+                setTimeout(() => { statusDiv.style.display = 'none'; }, 8000);
+            }
+        }
+
+        const DepositManager = (function() {
+            const DOM = {
+                loader: document.getElementById('loader'),
+                walletBalance: document.getElementById('walletBalance'),
+                networkName: document.getElementById('networkName'),
+                userPhoneNumber: document.getElementById('userPhoneNumber'),
+                userIdDisplay: document.getElementById('userIdDisplay'),
+                networkLogo: document.getElementById('networkLogo'),
+                depositAmount: document.getElementById('depositAmount'),
+                btnDeposit: document.getElementById('btnDeposit')
+            };
+
+            async function initialize() {
+                const token = getCleanSessionToken();
+                if (!token) { window.location.replace('login.html'); return; }
+
+                try {
+                    const profilePromise = fetch(`${window.SUPABASE_URL}/functions/v1/settings-api`, {
+                        method: 'GET',
+                        headers: { 'Authorization': `Bearer ${token}` }
+                    }).then(res => res.status === 401 ? window.location.replace('login.html') : res.json());
+
+                    const walletPromise = fetch(`${window.SUPABASE_URL}/functions/v1/wallet-api`, {
+                        method: 'GET',
+                        headers: { 'Authorization': `Bearer ${token}` }
+                    }).then(res => res.ok ? res.json() : { balance: 0.00 });
+
+                    const [profileData, walletData] = await Promise.all([profilePromise, walletPromise]);
+
+                    if (walletData) {
+                        const formattedBalance = Number(walletData.balance).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                        DOM.walletBalance.textContent = `MWK ${formattedBalance}`;
+                    }
+
+                    if (profileData) {
+                        globalUserId = profileData.id || null;
+                        globalUserEmail = profileData.email || null;
+                        
+                        if (globalUserId) {
+                            DOM.userIdDisplay.textContent = `ID: ${globalUserId}`;
+                        } else {
+                            DOM.userIdDisplay.textContent = `ID: Not Found`;
+                        }
+                        
+                        if (profileData.phone_number) {
+                            setupNetworkUI(profileData.phone_number);
+                        } else {
+                            DOM.networkName.textContent = "No Number Found";
+                            DOM.userPhoneNumber.textContent = "Please add a number in profile";
+                            DOM.btnDeposit.disabled = true;
+                        }
+                    }
+
+                } catch (err) {
+                    console.error("Initialization issue:", err);
+                    showStatus("Something went wrong. Chonde yesani kachiwiri.", "error");
+                } finally {
+                    if (DOM.loader) {
+                        DOM.loader.style.opacity = '0';
+                        setTimeout(() => {
+                            if (DOM.loader) DOM.loader.style.display = 'none';
+                        }, 300);
+                    }
+                }
+            }
+
+            function setupNetworkUI(phone) {
+                let cleanNum = phone.replace(/\D/g, ''); 
+                if (cleanNum.startsWith('265')) cleanNum = cleanNum.substring(3);
+                if (cleanNum.startsWith('0')) cleanNum = cleanNum.substring(1);
+
+                DOM.userPhoneNumber.textContent = phone;
+                DOM.networkLogo.style.display = 'block';
+                globalUserPhone = phone;
+
+                if (cleanNum.startsWith('99') || cleanNum.startsWith('98')) {
+                    globalDetectedNetwork = 'AIRTEL';
+                    DOM.networkName.textContent = 'Airtel Money';
+                    DOM.networkName.style.color = 'var(--airtel)';
+                    DOM.networkLogo.src = 'airtel.jpg';
+                } 
+                else if (cleanNum.startsWith('88') || cleanNum.startsWith('31')) {
+                    globalDetectedNetwork = 'TNM';
+                    DOM.networkName.textContent = 'TNM Mpamba';
+                    DOM.networkName.style.color = 'var(--tnm)';
+                    DOM.networkLogo.src = 'tnm.jpg';
+                } 
+                else {
+                    globalDetectedNetwork = 'UNKNOWN';
+                    DOM.networkName.textContent = 'Unknown Network';
+                    DOM.networkLogo.style.display = 'none';
+                    DOM.btnDeposit.disabled = true;
+                    showStatus("Something went wrong. Chonde yesani kachiwiri.", "error");
+                }
+            }
+
+            return { init: initialize };
+        })();
+
+        // Process Deposit Action
+        async function processDeposit() {
+            const amountInput = document.getElementById('depositAmount').value;
+            const amount = parseFloat(amountInput);
+
+            if (isNaN(amount) || amount < 200 || amount > 750000) {
+                showStatus("Please enter a valid amount (Min: MWK 200, Max: MWK 750,000).", "error");
+                return;
+            }
+
+            if (!globalUserPhone || !globalDetectedNetwork || globalDetectedNetwork === 'UNKNOWN' || !globalUserId) {
+                showStatus("Something went wrong. Chonde yesani kachiwiri.", "error");
+                return;
+            }
+
+            const btn = document.getElementById('btnDeposit');
+            const originalText = btn.innerHTML;
+            
+            btn.classList.add('loading-state');
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Loading...';
+            document.getElementById('statusMessage').style.display = 'none';
+
+            // Runs the optimized token validation check
+            let verificationResult = await waitForTurnstileToken();
+            let currentToken = verificationResult.token;
+
+            // If background verification failed or timed out, fallback gracefully without rendering code error
+            if (!currentToken) {
+                showStatus("Something went wrong. Chonde yesani kachiwiri.", "error");
+                btn.classList.remove('loading-state');
+                btn.innerHTML = originalText;
+                refreshTurnstile();
+                return;
+            }
+
+            try {
+                const token = getCleanSessionToken();
+                
+                const response = await fetch(`${window.SUPABASE_URL}/functions/v1/payment-topup-api`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        amount: amount,
+                        phone: globalUserPhone,
+                        network: globalDetectedNetwork,
+                        id: globalUserId, 
+                        email: globalUserEmail,
+                        turnstileToken: currentToken
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.success) {
+                    showStatus("Please Enter your PIN to complete the deposit", "info");
+                    document.getElementById('depositAmount').value = '';
+                } else {
+                    // Safe error mask fallback for custom validation or system responses
+                    let visualError = "Something went wrong. Chonde yesani kachiwiri.";
+                    if (data.error && typeof data.error === 'string' && !data.error.includes("SYSTEM_ERROR")) {
+                        visualError = data.error; 
+                    }
+                    showStatus(visualError, "error");
+                }
+
+            } catch (error) {
+                console.error("Internal loop logs hidden:", error);
+                showStatus("Something went wrong. Chonde yesani kachiwiri.", "error");
+            } finally {
+                refreshTurnstile(); // Immediately reset and fetch a fresh token for the next transaction block
+                btn.classList.remove('loading-state');
+                btn.innerHTML = originalText;
+            }
+        }
+
+        async function injectDynamicFooter() {
+            try {
+                const res = await fetch('footer.html');
+                if (res.ok) {
+                    const htmlContent = await res.text();
+                    const footerPlaceholder = document.getElementById('footer-placeholder');
+                    if (footerPlaceholder) {
+                        footerPlaceholder.innerHTML = htmlContent;
+                        const scripts = footerPlaceholder.querySelectorAll('script');
+                        scripts.forEach(oldScript => {
+                            const newScript = document.createElement('script');
+                            newScript.textContent = oldScript.textContent;
+                            document.body.appendChild(newScript).parentNode.removeChild(newScript);
+                        });
+                    }
+                }
+            } catch (err) {}
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            DepositManager.init();
+            injectDynamicFooter();
+        });
+    </script>
+</body>
+</html>
