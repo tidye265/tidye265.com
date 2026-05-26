@@ -9,7 +9,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   </url>
 
   <url>
-    <loc>https://www.tidye265.com/login.html</loc>
+    <loc>https://www.tidye265.com/faq.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -21,19 +21,19 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   </url>
 
   <url>
-    <loc>https://www.tidye265.com/dashboard.html</loc>
+    <loc>https://www.tidye265.com/login.html</loc>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
 
   <url>
-    <loc>https://www.tidye265.com/game.html</loc>
+    <loc>https://www.tidye265.com/terms.html</loc>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
 
   <url>
-    <loc>https://www.tidye265.com/wallet.html</loc>
+    <loc>https://www.tidye265.com/deposit.html</loc>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
