@@ -262,7 +262,7 @@
         // Dynamic footer injection (same as deposit.html and faq.html)
         async function injectDynamicFooter() {
             try {
-                const res = await fetch('footer.html');
+                const res = await fetch('footer2.html');
                 if (res.ok) {
                     const htmlContent = await res.text();
                     const footerPlaceholder = document.getElementById('footer-placeholder');
