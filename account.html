@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Account | tiDye265</title>
+    
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://*.supabase.co https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; img-src 'self' https: data: blob:; connect-src 'self' https://*.supabase.co;">
+    <meta name="theme-color" content="#121212">
+
+    <!-- Fonts -->
+    <link href="https://cdn.jsdelivr.net/npm/@fontsource/inter@5.0.18/400.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@fontsource/inter@5.0.18/500.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@fontsource/inter@5.0.18/600.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@fontsource/inter@5.0.18/700.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@fontsource/lexend@5.0.18/400.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@fontsource/lexend@5.0.18/600.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@fontsource/lexend@5.0.18/700.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@fontsource/lexend@5.0.18/800.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+    <style>
+        :root {
+            --bg: #F4F6F8; --primary: #FFD700; --card-bg: #FFFFFF;
+            --text-light: #1a1d21; --text-dim: #6b7280; --border: #e5e7eb;
+            --success: #10b981; --dark: #1e2329;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { background-color: var(--bg); color: var(--text-light); font-family: 'Inter', sans-serif; padding-bottom: 30px; line-height: 1.5; }
+
+        /* Skeleton Loader (matching deposit page) */
+        #loader {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #F4F6F8; z-index: 9999;
+            display: flex; flex-direction: column; padding: 0;
+            transition: opacity 0.3s ease;
+        }
+        .skeleton {
+            background: linear-gradient(90deg, #e5e7eb 25%, #f0f2f5 50%, #e5e7eb 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            border-radius: 8px;
+        }
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        .sk-header { height: 60px; width: 100%; margin-bottom: 5px; display: flex; align-items: center; padding: 0 15px; gap: 15px; }
+        .sk-header .sk-circle { width: 30px; height: 30px; border-radius: 50%; }
+        .sk-header .sk-line { height: 14px; flex: 1; }
+        .sk-wallet { height: 100px; width: calc(100% - 30px); margin: 15px 15px; border-radius: 16px; }
+        .sk-section { background: #fff; border-radius: 16px; margin: 15px 15px; padding: 20px 15px; }
+        .sk-row { height: 50px; border-radius: 10px; margin-bottom: 10px; }
+
+        /* Header */
+        .header {
+            background: #fff; padding: 15px; display: flex; align-items: center; justify-content: space-between;
+            border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100;
+        }
+        .header-left { display: flex; align-items: center; gap: 12px; }
+        .header-logo { width: 32px; height: 32px; border-radius: 8px; object-fit: cover; }
+        .header-action { color: var(--text-light); font-size: 18px; text-decoration: none; }
+        .page-title { font-family: 'Lexend'; font-weight: 700; font-size: 16px; flex-grow: 1; text-align: center; }
+        .header-right { width: 62px; }
+
+        /* Balance Card (same as deposit) */
+        .wallet-card-mini { 
+            background: linear-gradient(135deg, #1e2329 0%, #111418 100%);
+            color: #ffffff; 
+            border-radius: 16px; 
+            padding: 22px 20px; 
+            width: calc(100% - 30px); 
+            margin: 15px 15px 20px 15px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+            position: relative;
+            overflow: hidden;
+        }
+        .wallet-card-mini::after {
+            content: ''; position: absolute; top: -50%; right: -10%; width: 150px; height: 150px;
+            background: radial-gradient(circle, rgba(255,215,0,0.12) 0%, rgba(255,215,0,0) 70%);
+            border-radius: 50%; pointer-events: none;
+        }
+        .wallet-card-mini .lbl { 
+            font-size: 11px; text-transform: uppercase; color: #9ca3af; font-weight: 600; 
+            letter-spacing: 0.8px; display: flex; align-items: center; gap: 6px; margin-bottom: 4px;
+        }
+        .wallet-card-mini .lbl::before {
+            content: ''; width: 8px; height: 8px; background: var(--success); border-radius: 50%;
+            display: inline-block; box-shadow: 0 0 8px rgba(16, 185, 129, 0.5);
+        }
+        .wallet-card-mini .amt { 
+            font-family: 'Lexend', sans-serif; font-size: 19px; font-weight: 750; color: #ffffff; letter-spacing: -0.5px;
+        }
+        .wallet-icon-bg {
+            background: rgba(255, 255, 255, 0.08); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+            width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center;
+            border: 1px solid rgba(255, 255, 255, 0.1); z-index: 1;
+        }
+        .wallet-card-mini i { font-size: 20px; color: var(--primary); }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex; gap: 12px; padding: 0 15px; margin-bottom: 20px;
+        }
+        .action-btn {
+            flex: 1; padding: 14px 10px; background: #fff; border: 2px solid var(--border);
+            border-radius: 14px; text-align: center; text-decoration: none;
+            font-family: 'Lexend'; font-weight: 600; font-size: 14px; color: var(--text-light);
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            transition: all 0.2s;
+        }
+        .action-btn:active { transform: scale(0.97); background: var(--primary); border-color: var(--primary); }
+
+        /* Section Cards */
+        .section-card {
+            background: #fff; border-radius: 16px; margin: 0 15px 15px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05); overflow: hidden;
+        }
+        .section-header {
+            padding: 16px 20px; display: flex; align-items: center; justify-content: space-between;
+            cursor: pointer; user-select: none; transition: background 0.2s;
+        }
+        .section-header:hover { background: #fafafa; }
+        .section-header-left { display: flex; align-items: center; gap: 12px; font-weight: 700; font-size: 15px; }
+        .section-header-left i { font-size: 18px; color: var(--text-dim); }
+        .section-header i.chevron { color: var(--text-dim); transition: transform 0.3s; }
+        .section-body {
+            max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out;
+        }
+        .section-body-inner {
+            padding: 0 20px 15px; display: flex; flex-direction: column; gap: 8px;
+        }
+        .section-item {
+            display: flex; align-items: center; gap: 12px; padding: 12px 15px;
+            background: #f9fafb; border-radius: 10px; text-decoration: none;
+            color: var(--text-light); font-size: 14px; font-weight: 500;
+            transition: background 0.2s;
+        }
+        .section-item:active { background: #f0f0f0; }
+        .section-item i:first-child { font-size: 16px; width: 24px; text-align: center; color: var(--text-dim); }
+        .section-item span { flex: 1; }
+
+        #footer-placeholder { margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+    <!-- Skeleton Loader -->
+    <div id="loader">
+        <div class="sk-header">
+            <div class="skeleton sk-circle"></div>
+            <div class="skeleton sk-line"></div>
+        </div>
+        <div class="skeleton sk-wallet"></div>
+        <div class="sk-section">
+            <div class="skeleton sk-row"></div>
+            <div class="skeleton sk-row"></div>
+        </div>
+        <div class="sk-section">
+            <div class="skeleton sk-row"></div>
+            <div class="skeleton sk-row"></div>
+        </div>
+        <div class="sk-section">
+            <div class="skeleton sk-row"></div>
+            <div class="skeleton sk-row"></div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-left">
+            <img src="logo.jpg" alt="Logo" class="header-logo">
+            <a href="dashboard.html" class="header-action"><i class="bi bi-arrow-left"></i></a>
+        </div>
+        <div class="page-title">Account</div>
+        <div class="header-right"></div>
+    </header>
+
+    <!-- Balance Card -->
+    <div class="wallet-card-mini" id="walletCardUI">
+        <div>
+            <div class="lbl">Available Balance</div>
+            <div class="amt" id="walletBalance">MWK 0.00</div>
+        </div>
+        <div class="wallet-icon-bg">
+            <i class="bi bi-wallet2"></i>
+        </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+        <a href="deposit.html" class="action-btn"><i class="bi bi-plus-circle"></i> Deposit</a>
+        <a href="withdraw.html" class="action-btn"><i class="bi bi-dash-circle"></i> Withdraw</a>
+    </div>
+
+    <!-- Settings Section -->
+    <div class="section-card">
+        <div class="section-header" onclick="toggleSection(this)">
+            <div class="section-header-left">
+                <i class="bi bi-sliders"></i> Settings
+            </div>
+            <i class="bi bi-chevron-down chevron"></i>
+        </div>
+        <div class="section-body">
+            <div class="section-body-inner">
+                <a href="resetpin.html" class="section-item">
+                    <i class="bi bi-key"></i>
+                    <span>Forgot PIN</span>
+                    <i class="bi bi-chevron-right"></i>
+                </a>
+                <a href="statement.html" class="section-item">
+                    <i class="bi bi-file-text"></i>
+                    <span>Statement</span>
+                    <i class="bi bi-chevron-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Transactions Section -->
+    <div class="section-card">
+        <div class="section-header" onclick="toggleSection(this)">
+            <div class="section-header-left">
+                <i class="bi bi-arrow-left-right"></i> Transactions
+            </div>
+            <i class="bi bi-chevron-down chevron"></i>
+        </div>
+        <div class="section-body">
+            <div class="section-body-inner">
+                <a href="transactions.html?type=deposit" class="section-item">
+                    <i class="bi bi-arrow-down-circle"></i>
+                    <span>Deposits</span>
+                    <i class="bi bi-chevron-right"></i>
+                </a>
+                <a href="transactions.html?type=withdraw" class="section-item">
+                    <i class="bi bi-arrow-up-circle"></i>
+                    <span>Withdrawals</span>
+                    <i class="bi bi-chevron-right"></i>
+                </a>
+                <a href="transactions.html?type=game" class="section-item">
+                    <i class="bi bi-controller"></i>
+                    <span>Games</span>
+                    <i class="bi bi-chevron-right"></i>
+                </a>
+                <a href="transactions.html" class="section-item">
+                    <i class="bi bi-list-ul"></i>
+                    <span>All Transactions</span>
+                    <i class="bi bi-chevron-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Support Section (expandable) -->
+    <div class="section-card">
+        <div class="section-header" onclick="toggleSection(this)">
+            <div class="section-header-left">
+                <i class="bi bi-headset"></i> Support
+            </div>
+            <i class="bi bi-chevron-down chevron"></i>
+        </div>
+        <div class="section-body">
+            <div class="section-body-inner">
+                <a href="faq.html" class="section-item">
+                    <i class="bi bi-question-circle"></i>
+                    <span>FAQ</span>
+                    <i class="bi bi-chevron-right"></i>
+                </a>
+                <a href="support.html" class="section-item">
+                    <i class="bi bi-chat-dots"></i>
+                    <span>Support</span>
+                    <i class="bi bi-chevron-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="supabase.js"></script>
+    <script>
+        "use strict";
+
+        // Session token retrieval (same as deposit)
+        function getCleanSessionToken() {
+            let rawToken = localStorage.getItem('tidye_session_token');
+            if (!rawToken || rawToken === 'null' || rawToken === 'undefined') return null;
+            try {
+                let parsed = JSON.parse(rawToken);
+                if (parsed && parsed.access_token) return parsed.access_token;
+                if (typeof parsed === 'string') return parsed;
+            } catch (e) {}
+            return rawToken.replace(/^["']|["']$/g, '').trim();
+        }
+
+        // Accordion toggle
+        function toggleSection(header) {
+            const body = header.nextElementSibling;
+            const chevron = header.querySelector('.chevron');
+            const isOpen = body.style.maxHeight && body.style.maxHeight !== '0px';
+            
+            if (isOpen) {
+                body.style.maxHeight = '0';
+                chevron.style.transform = 'rotate(0deg)';
+            } else {
+                body.style.maxHeight = body.scrollHeight + 'px';
+                chevron.style.transform = 'rotate(180deg)';
+            }
+        }
+
+        // Fetch balance and user info
+        async function loadAccountData() {
+            const token = getCleanSessionToken();
+            if (!token) {
+                window.location.replace('login.html');
+                return;
+            }
+
+            try {
+                const walletRes = await fetch(`${SUPABASE_URL}/functions/v1/wallet-api`, {
+                    method: 'GET',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (walletRes.ok) {
+                    const walletData = await walletRes.json();
+                    const balance = Number(walletData.balance);
+                    document.getElementById('walletBalance').textContent =
+                        `MWK ${balance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+                }
+            } catch (err) {
+                console.error("Account data fetch error:", err);
+            } finally {
+                // Hide loader
+                const loader = document.getElementById('loader');
+                if (loader) {
+                    loader.style.opacity = '0';
+                    setTimeout(() => loader.remove(), 300);
+                }
+            }
+        }
+
+        // Dynamic footer injection
+        async function injectDynamicFooter() {
+            try {
+                const res = await fetch('footer.html');
+                if (res.ok) {
+                    const htmlContent = await res.text();
+                    const placeholder = document.getElementById('footer-placeholder');
+                    if (placeholder) {
+                        placeholder.innerHTML = htmlContent;
+                        const scripts = placeholder.querySelectorAll('script');
+                        scripts.forEach(oldScript => {
+                            const newScript = document.createElement('script');
+                            newScript.textContent = oldScript.textContent;
+                            document.body.appendChild(newScript).parentNode.removeChild(newScript);
+                        });
+                    }
+                }
+            } catch (err) {}
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadAccountData();
+            injectDynamicFooter();
+        });
+    </script>
+</body>
+</html>
