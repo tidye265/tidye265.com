@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Account - tidye265</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
+    <style nonce="tidye265SecureNonce">
+        /* Global Page Structure */
+        html, body {
+            margin: 0;
+            padding: 0;
+            background-color: #F8F9FA;
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            padding-bottom: 90px; /* Space for bottom nav */
+        }
+
+        .app-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Profile Header Section */
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            margin-top: 10px;
+        }
+        .profile-avatar {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #FFD700, #F5A623);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Lexend', sans-serif;
+            font-weight: 700;
+            font-size: 24px;
+            color: #1C1D21;
+            box-shadow: 0 4px 10px rgba(255, 215, 0, 0.3);
+        }
+        .profile-info h2 {
+            margin: 0;
+            font-family: 'Lexend', sans-serif;
+            font-size: 18px;
+            color: #1C1D21;
+        }
+        .profile-info p {
+            margin: 4px 0 0 0;
+            font-size: 13px;
+            color: #6c757d;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .profile-info i { color: #10b981; font-size: 14px; }
+
+        /* Modern Balance Card */
+        .balance-card {
+            background: #2E2F35;
+            border-radius: 16px;
+            padding: 25px 20px;
+            color: #ffffff;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 25px;
+            border: 1px solid #404247;
+        }
+        .balance-card::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 150px;
+            height: 150px;
+            background: rgba(255, 215, 0, 0.05);
+            border-radius: 50%;
+        }
+        .balance-label {
+            font-size: 13px;
+            color: #b9bbc0;
+            margin-bottom: 8px;
+            font-family: 'Lexend', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .balance-amount {
+            font-size: 32px;
+            font-family: 'Lexend', sans-serif;
+            font-weight: 800;
+            color: #FFD700;
+            margin: 0 0 20px 0;
+            letter-spacing: -0.5px;
+        }
+        
+        /* Action Buttons (Deposit / Withdraw) */
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+        }
+        .action-btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 10px;
+            border: none;
+            font-family: 'Lexend', sans-serif;
+            font-weight: 600;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: transform 0.2s, opacity 0.2s;
+        }
+        .action-btn:active { transform: scale(0.96); }
+        .btn-deposit {
+            background: #FFD700;
+            color: #1C1D21;
+        }
+        .btn-withdraw {
+            background: rgba(255,255,255,0.1);
+            color: #ffffff;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        /* Menu Settings List */
+        .menu-group {
+            background: #ffffff;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            overflow: hidden;
+            border: 1px solid #e5e7eb;
+        }
+        .menu-title {
+            font-family: 'Lexend', sans-serif;
+            font-size: 12px;
+            color: #6c757d;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 0 0 10px 10px;
+            font-weight: 700;
+        }
+        .menu-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 20px;
+            text-decoration: none;
+            color: #1C1D21;
+            font-size: 15px;
+            font-weight: 500;
+            border-bottom: 1px solid #f3f4f6;
+            transition: background 0.2s;
+        }
+        .menu-item:last-child { border-bottom: none; }
+        .menu-item:hover, .menu-item:active { background: #f9fafb; }
+        
+        .menu-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .menu-left i {
+            font-size: 20px;
+            color: #4b5563;
+            width: 24px;
+            text-align: center;
+        }
+        .menu-right i {
+            font-size: 14px;
+            color: #9ca3af;
+        }
+
+        /* Security Status & Turnstile */
+        .security-section {
+            margin-top: 30px;
+            text-align: center;
+        }
+        .security-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #e6f4ea;
+            color: #10b981;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        .turnstile-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        /* PERFECTLY BALANCED BOTTOM NAV BAR (100% Retained) */  
+        .bottom-nav {   
+            position: fixed; 
+            bottom: 0; 
+            left: 0; 
+            width: 100%; 
+            background: #2E2F32;  
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;  
+            z-index: 5000; 
+            height: calc(50px + env(safe-area-inset-bottom, 0px));  
+            padding-bottom: env(safe-area-inset-bottom, 0px);
+            border-top: 1px solid #404247; 
+            padding-left: 5px;
+            padding-right: 5px;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.3);
+            -webkit-user-select: none;
+            user-select: none;
+        }  
+        .nav-item, .trade-btn-container {   
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center;
+            color: #b9bbc0;  
+            text-decoration: none; 
+            font-size: 12px; 
+            font-family: 'Lexend', sans-serif; 
+            transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1); 
+            cursor: pointer;  
+            border: none; 
+            background: none; 
+            flex: 1; 
+            height: 100%; 
+            min-width: 0;
+            -webkit-tap-highlight-color: transparent; 
+        }  
+        .nav-item i, .trade-btn-container i { 
+            font-size: 22px; 
+            font-weight: 900; 
+            -webkit-text-stroke: 0.8px currentColor; 
+            margin-bottom: 4px; 
+            display: block; 
+            transition: transform 0.15s ease, color 0.15s ease, -webkit-text-stroke 0.15s ease; 
+            color: #b9bbc0; 
+        }  
+        .nav-item span, .trade-btn-container span { 
+            display: block; 
+            white-space: nowrap; 
+            overflow: hidden; 
+            text-overflow: ellipsis; 
+            transition: color 0.15s ease; 
+            font-weight: 500; 
+        }
+        .nav-item.active, .nav-item.active i, .nav-item.active span,
+        .trade-btn-container.active, .trade-btn-container.active i, .trade-btn-container.active span { 
+            color: #FFD700 !important; 
+            font-weight: 800; 
+        }  
+        .nav-item.active i, .trade-btn-container.active i { 
+            transform: translateY(-2px); 
+            -webkit-text-stroke: 0.8px #FFD700 !important; 
+        }
+        .nav-item:active, .trade-btn-container:active { transform: scale(1.20); }  
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        
+        <div class="profile-header">
+            <div class="profile-avatar">MK</div>
+            <div class="profile-info">
+                <h2>Moses Kondowe</h2>
+                <p><i class="bi bi-patch-check-fill"></i> MOSKONX DEV Account</p>
+            </div>
+        </div>
+
+        <div class="balance-card">
+            <div class="balance-label">Total Available Balance</div>
+            <div class="balance-amount">MWK 0.00</div>
+            <div class="action-buttons">
+                <button class="action-btn btn-deposit" onclick="window.location.href='deposit.html'">
+                    <i class="bi bi-plus-circle-fill"></i> Deposit
+                </button>
+                <button class="action-btn btn-withdraw" onclick="window.location.href='withdraw.html'">
+                    <i class="bi bi-arrow-down-left-circle"></i> Withdraw
+                </button>
+            </div>
+        </div>
+
+        <div class="menu-title">Settings</div>
+        <div class="menu-group">
+            <a href="forgot-pin.html" class="menu-item">
+                <div class="menu-left"><i class="bi bi-shield-lock"></i> Forgot PIN</div>
+                <div class="menu-right"><i class="bi bi-chevron-right"></i></div>
+            </a>
+        </div>
+
+        <div class="menu-title">Statement</div>
+        <div class="menu-group">
+            <a href="statement-deposit.html" class="menu-item">
+                <div class="menu-left"><i class="bi bi-box-arrow-in-down"></i> Deposit</div>
+                <div class="menu-right"><i class="bi bi-chevron-right"></i></div>
+            </a>
+            <a href="statement-withdraw.html" class="menu-item">
+                <div class="menu-left"><i class="bi bi-box-arrow-up"></i> Withdraw</div>
+                <div class="menu-right"><i class="bi bi-chevron-right"></i></div>
+            </a>
+            <a href="statement-games.html" class="menu-item">
+                <div class="menu-left"><i class="bi bi-controller"></i> Games</div>
+                <div class="menu-right"><i class="bi bi-chevron-right"></i></div>
+            </a>
+        </div>
+
+        <div class="menu-title">Transactions</div>
+        <div class="menu-group">
+            <a href="transactions.html" class="menu-item">
+                <div class="menu-left"><i class="bi bi-receipt"></i> All transactions</div>
+                <div class="menu-right"><i class="bi bi-chevron-right"></i></div>
+            </a>
+        </div>
+
+        <div class="menu-title">Support</div>
+        <div class="menu-group">
+            <a href="faq.html" class="menu-item">
+                <div class="menu-left"><i class="bi bi-question-circle"></i> FAQ</div>
+                <div class="menu-right"><i class="bi bi-chevron-right"></i></div>
+            </a>
+            <a href="support.html" class="menu-item">
+                <div class="menu-left"><i class="bi bi-headset"></i> Support</div>
+                <div class="menu-right"><i class="bi bi-chevron-right"></i></div>
+            </a>
+        </div>
+
+        <div class="security-section">
+            <div class="security-badge">
+                <i class="bi bi-shield-fill-check"></i> Account Secured
+            </div>
+            <div class="turnstile-container">
+                <div class="cf-turnstile" data-sitekey="1x00000000000000000000AA" data-theme="light"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <nav class="bottom-nav" aria-label="Main Navigation" id="mainBottomNav">  
+        <a href="dashboard.html" class="nav-item" data-page="dashboard" aria-label="Home">  
+            <i class="bi bi-house-door"></i>  
+            <span>Home</span>  
+        </a>  
+        <a href="game.html" class="nav-item" data-page="game" aria-label="Games">  
+            <i class="bi bi-controller"></i>  
+            <span>Games</span>  
+        </a>  
+        <a href="myslip.html" class="trade-btn-container" data-page="myslip" aria-label="My Slip">  
+            <i class="bi bi-receipt-cutoff"></i>  
+            <span>Myslip</span>  
+        </a>  
+        <a href="register.html" class="nav-item" data-page="akungi" aria-label="Akungi">  
+            <i class="bi bi-person-plus"></i>  
+            <span>Register</span>  
+        </a>  
+        <a href="account.html" class="nav-item active" data-page="account" aria-label="Account">  
+            <i class="bi bi-person-circle"></i>  
+            <span>Account</span>  
+        </a>  
+    </nav>  
+      
+    <script nonce="tidye265SecureNonce">  
+        // UI INTERACTIONS ENGINE 
+        document.addEventListener("DOMContentLoaded", () => {
+            const navElements = document.querySelectorAll("#mainBottomNav .nav-item, #mainBottomNav .trade-btn-container");
+            const currentFileName = window.location.pathname.split("/").pop() || "account.html";
+            
+            // Auto Active State Logic
+            let matchFound = false;
+            navElements.forEach(element => {
+                const dataPage = element.getAttribute("data-page");
+                if (dataPage && currentFileName.includes(dataPage)) {
+                    element.classList.add("active");
+                    matchFound = true;
+                } else {
+                    element.classList.remove("active");
+                }
+            });
+    
+            if (!matchFound && (currentFileName === "" || currentFileName === "index.html")) {
+                const homeTarget = document.querySelector('[data-page="dashboard"]');
+                if (homeTarget) homeTarget.classList.add("active");
+            }
+    
+            // Instant Click Engine
+            const applyInstantActiveState = function(e) {
+                navElements.forEach(el => el.classList.remove("active"));
+                this.classList.add("active");
+            };
+    
+            navElements.forEach(element => {
+                element.addEventListener("mousedown", applyInstantActiveState);
+                element.addEventListener("touchstart", applyInstantActiveState, { passive: true });
+            });
+        });
+    </script>
+</body>
+</html>
