@@ -121,7 +121,7 @@
 </header>
 
 <div class="info-white-container">
-    <p><i class="bi bi-info-circle-fill" style="color: #FFD700; margin-right: 5px;"></i> Withdraw funds instantly from your tiDye265 wallet to your mobile money account. Enter amount and submit.</p>
+    <p><i class="bi bi-cash-coin" style="color: #FFD700; margin-right: 5px;"></i> Withdraw funds instantly from your tiDye265 wallet to your mobile money account. Enter amount and submit.</p>
 </div>
 
 <div class="withdraw-container">
@@ -152,10 +152,10 @@
             <span class="currency-symbol">MWK</span>
             <input type="number" id="withdrawAmount" class="amount-input" placeholder="0" inputmode="numeric" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
         </div>
-        <div class="amount-limits"><span>Min: MWK 200</span><span>Max: MWK 500,000</span><span id="balanceLimitWarning" style="color:#ef4444; display:none;"></span></div>
+        <div class="amount-limits"><span>Min: MWK 200</span><span>Max: MWK 750,000</span><span id="balanceLimitWarning" style="color:#ef4444; display:none;"></span></div>
         <div class="quick-amounts">
+            <button class="quick-btn" onclick="setAmount(200)">MWK 200</button>
             <button class="quick-btn" onclick="setAmount(1000)">MWK 1,000</button>
-            <button class="quick-btn" onclick="setAmount(5000)">MWK 5,000</button>
             <button class="quick-btn" onclick="setAmount(10000)">MWK 10,000</button>
         </div>
     </div>
@@ -271,7 +271,7 @@
         // Force whole number (floor)
         amount = Math.floor(amount);
         
-        const minWithdraw = 200, maxWithdraw = 500000;
+        const minWithdraw = 200, maxWithdraw = 750000;
         if (amount < minWithdraw || amount > maxWithdraw) { showStatus(`Withdrawal amount must be between MWK ${minWithdraw} and MWK ${maxWithdraw} (whole number only).`, "error"); return; }
         if (amount > globalCurrentBalance) { showStatus(`Insufficient balance. Your current balance is MWK ${globalCurrentBalance.toFixed(2)}.`, "error"); return; }
         if (!globalUserPhone || !globalDetectedNetwork || globalDetectedNetwork === 'UNKNOWN' || !globalUserId) { showStatus("Phone or network not recognized. Update profile.", "error"); return; }
