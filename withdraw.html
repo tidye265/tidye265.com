@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Withdraw Funds | tiDye265</title>
+    
+    <!-- Enhanced CSP without unsafe-inline (using nonce placeholder for future) but kept as is for compatibility -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://*.supabase.co https://cdn.jsdelivr.net https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; img-src 'self' https: data: blob:; frame-src 'self' https://challenges.cloudflare.com; connect-src 'self' https://*.supabase.co https://challenges.cloudflare.com;">
+    <meta name="theme-color" content="#121212">
+
+    <link href="https://cdn.jsdelivr.net/npm/@fontsource/inter@5.0.18/400.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@fontsource/inter@5.0.18/500.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@fontsource/inter@5.0.18/600.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@fontsource/inter@5.0.18/700.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@fontsource/lexend@5.0.18/400.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@fontsource/lexend@5.0.18/600.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@fontsource/lexend@5.0.18/700.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@fontsource/lexend@5.0.18/800.css" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
+    <style>
+        /* Same design as deposit.html - preserved 100% */
+        :root { --bg: #F4F6F8; --primary: #FFD700; --card-bg: #FFFFFF; --text-light: #1a1d21; --text-dim: #6b7280; --border: #e5e7eb; --success: #10b981; --airtel: #ff0000; --tnm: #00a859; }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { background-color: var(--bg); color: var(--text-light); font-family: 'Inter', sans-serif; padding-bottom: 30px; line-height: 1.5; }
+        #loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #F4F6F8; z-index: 9999; display: flex; flex-direction: column; padding: 0; transition: opacity 0.3s ease; }
+        .skeleton { background: linear-gradient(90deg, #e5e7eb 25%, #f0f2f5 50%, #e5e7eb 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: 8px; }
+        @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+        .sk-header { height: 60px; width: 100%; margin-bottom: 5px; display: flex; align-items: center; padding: 0 15px; gap: 15px; }
+        .sk-header .sk-circle { width: 30px; height: 30px; border-radius: 50%; }
+        .sk-header .sk-line { height: 14px; flex: 1; }
+        .sk-container { background: #fff; border-radius: 16px; margin: 0 15px; padding: 20px 15px; }
+        .sk-title { height: 14px; width: 40%; margin-bottom: 15px; }
+        .sk-selector { height: 70px; border-radius: 12px; margin-bottom: 15px; }
+        .sk-input { height: 56px; border-radius: 12px; margin-bottom: 15px; }
+        .sk-quick-btns { display: flex; gap: 10px; margin-bottom: 20px; }
+        .sk-quick { height: 40px; flex: 1; border-radius: 8px; }
+        .sk-submit { height: 56px; border-radius: 12px; }
+        .header { background: #fff; padding: 14px 15px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; width: 100%; box-sizing: border-box; }
+        .header-left { display: flex; align-items: center; gap: 12px; }
+        .header-logo { width: 32px; height: 32px; border-radius: 8px; object-fit: cover; }
+        .header-action { color: var(--text-light); font-size: 18px; text-decoration: none; display: flex; align-items: center; }
+        .page-title { font-family: 'Lexend'; font-weight: 700; font-size: 16px; flex-grow: 1; text-align: center; }
+        .header-balance { background: #EFF2F6; border-radius: 40px; padding: 6px 12px; display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; color: #1a1d21; white-space: nowrap; transition: all 0.2s; }
+        .header-balance i { font-size: 14px; color: #5b677b; }
+        .header-balance .balance-amount-header { font-family: 'Lexend', sans-serif; font-weight: 700; letter-spacing: -0.2px; }
+        .header-right { display: flex; align-items: center; gap: 8px; }
+        .info-white-container { background: #FFFFFF; border-radius: 20px; padding: 18px 20px; margin: 0 15px 20px 15px; box-shadow: 0 1px 3px rgba(0,0,0,0.03); border: 1px solid var(--border); }
+        .info-white-container p { font-size: 14px; font-weight: 450; color: #2c3e4f; line-height: 1.45; margin: 0; }
+        .withdraw-container { background: #fff; border-radius: 20px; padding: 20px 18px; margin: 0 15px; box-shadow: 0 2px 6px rgba(0,0,0,0.02); border: 1px solid var(--border); }
+        .section-title { font-size: 13px; font-weight: 700; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; }
+        .info-icon { background: #f0f2f5; border-radius: 30px; padding: 4px 8px; font-size: 11px; font-weight: 400; cursor: pointer; transition: all 0.2s; }
+        .info-icon i { font-size: 12px; margin-right: 4px; }
+        .network-selector { background: #fafafa; border: 1px solid var(--border); border-radius: 14px; padding: 12px 15px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; }
+        .network-info { display: flex; align-items: center; gap: 12px; width: 100%; overflow: hidden; }
+        .network-logo { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; border: 1px solid var(--border); background: #fff; flex-shrink: 0; }
+        .network-text { flex-grow: 1; overflow: hidden; }
+        .network-text .nt-name { font-weight: 700; font-size: 14px; }
+        .network-text .nt-num { font-size: 12px; color: var(--text-dim); font-weight: 500; margin-top: 2px; }
+        .network-text .nt-id { display: none !important; }
+        .chevron { color: #9ca3af; transition: transform 0.3s ease; font-size: 14px; flex-shrink: 0; }
+        .network-details { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+        .network-selector.open .chevron { transform: rotate(180deg); }
+        .network-selector.open + .network-details { max-height: 100px; }
+        .amount-group { margin-top: 20px; }
+        .amount-input-wrapper { position: relative; display: flex; align-items: center; }
+        .currency-symbol { position: absolute; left: 15px; font-family: 'Lexend'; font-weight: 700; color: var(--text-light); font-size: 16px; }
+        .amount-input { width: 100%; padding: 11px 15px 11px 65px; border: 2px solid var(--border); border-radius: 14px; font-family: 'Lexend'; font-weight: 700; font-size: 18px; color: var(--text-light); outline: none; background: #fff; }
+        .amount-input:focus { border-color: var(--primary); }
+        .amount-limits { display: flex; justify-content: space-between; font-size: 11px; font-weight: 600; color: var(--text-dim); margin-top: 6px; }
+        .quick-amounts { display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
+        .quick-btn { flex: 1; min-width: 70px; padding: 10px 5px; background: #f3f4f6; border: 1px solid var(--border); border-radius: 10px; font-weight: 600; font-size: 13px; color: var(--text-light); cursor: pointer; text-align: center; }
+        .quick-btn:active { background: var(--primary); border-color: var(--primary); }
+        .turnstile-container { display: block; margin: 15px auto 0; width: 100%; max-width: 300px; overflow: visible; }
+        .btn-submit { width: 100%; margin-top: 18px; background: var(--primary); color: #000; border: none; padding: 16px; border-radius: 14px; font-family: 'Lexend'; font-weight: 400; font-size: 14px; letter-spacing: 0.5px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s ease; }
+        .btn-submit:active { transform: scale(0.98); }
+        .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; background: #e5e7eb; color: #9ca3af; pointer-events: none; }
+        .button-plain-note { margin-top: 12px; font-size: 11px; color: #4b5563; text-align: center; font-weight: 500; }
+        .btn-submit.loading-state { background: #e5e7eb !important; color: #9ca3af !important; cursor: not-allowed !important; pointer-events: none !important; transform: none !important; }
+        .alert { margin-top: 15px; padding: 12px; border-radius: 12px; font-size: 12.5px; font-weight: 500; display: none; }
+        .alert.error { background: #fef2f2; color: #ef4444; border: 1px solid #fecaca; }
+        .alert.info { background: #eff6ff; color: #3b82f6; border: 1px solid #bfdbfe; }
+        .fullscreen-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(6px); z-index: 10000; display: flex; align-items: center; justify-content: center; visibility: hidden; opacity: 0; transition: visibility 0.2s, opacity 0.2s; }
+        .fullscreen-modal.active { visibility: visible; opacity: 1; }
+        .modal-card { background: #fff; width: 86%; max-width: 380px; border-radius: 32px; padding: 24px 22px; position: relative; box-shadow: 0 30px 40px rgba(0,0,0,0.2); animation: modalFadeIn 0.25s ease-out; }
+        @keyframes modalFadeIn { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        .modal-card .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; font-family: 'Lexend', sans-serif; font-weight: 700; font-size: 18px; }
+        .modal-card .modal-close { background: #f1f3f5; border: none; width: 32px; height: 32px; border-radius: 40px; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; }
+        .modal-card h4 { font-size: 16px; margin: 14px 0 6px 0; font-weight: 700; }
+        .modal-card p, .modal-card li { font-size: 13.5px; color: #2c3e50; line-height: 1.45; }
+        .modal-card ul { margin-left: 18px; margin-top: 4px; }
+        .modal-card .important-note { background: #F8FAFE; padding: 12px; border-radius: 14px; margin-top: 12px; }
+        #footer-placeholder { margin-top: 20px; }
+        .spin-icon { animation: spin 1.5s linear infinite; display: inline-block; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .glow-success { box-shadow: 0 0 0 2px rgba(16,185,129,0.4); transition: 0.2s; }
+        .success-banner { background: rgba(16,185,129,0.12); color: #10b981; border: 1px solid rgba(16,185,129,0.4); border-radius: 14px; padding: 12px 18px; margin: 12px 15px; font-size: 13px; font-weight: 600; display: none; align-items: center; gap: 8px; animation: slideDownFade 0.3s ease; }
+        @keyframes slideDownFade { 0% { opacity:0; transform: translateY(-6px); } 100% { opacity:1; transform:translateY(0); } }
+    </style>
+</head>
+<body>
+
+<div id="loader">
+    <div class="sk-header"><div class="skeleton sk-circle"></div><div class="skeleton sk-line"></div></div>
+    <div class="sk-container"><div class="skeleton sk-title"></div><div class="skeleton sk-selector"></div><div class="skeleton sk-title"></div><div class="skeleton sk-input"></div><div class="sk-quick-btns"><div class="skeleton sk-quick"></div><div class="skeleton sk-quick"></div><div class="skeleton sk-quick"></div></div><div class="skeleton sk-submit"></div></div>
+</div>
+
+<header class="header">
+    <div class="header-left">
+        <a href="dashboard.html" class="header-action"><i class="bi bi-arrow-left"></i></a>
+    </div>
+    <div class="header-right">
+        <div class="header-balance" id="headerBalanceWidget">
+            <i class="bi bi-wallet2"></i>
+            <span class="balance-amount-header" id="walletBalanceHeader">MWK 0.00</span>
+        </div>
+    </div>
+</header>
+
+<div class="info-white-container">
+    <p><i class="bi bi-info-circle-fill" style="color: #FFD700; margin-right: 5px;"></i> Withdraw funds instantly from your tiDye265 wallet to your mobile money account. Enter amount and submit.</p>
+</div>
+
+<div class="withdraw-container">
+    <div class="section-title">
+        Withdrawal Method
+        <span class="info-icon" id="howItWorksBtn"><i class="bi bi-question-circle"></i> How it works</span>
+    </div>
+    <div class="network-selector" id="networkSelector" onclick="toggleNetworkDetails()">
+        <div class="network-info">
+            <img src="" alt="Network" class="network-logo" id="networkLogo" style="display:none;">
+            <div class="network-text">
+                <div class="nt-name" id="networkName">Detecting Network...</div>
+                <div class="nt-num" id="userPhoneNumber">Please wait...</div>
+                <div class="nt-id" id="userIdDisplay">ID: Fetching...</div>
+            </div>
+        </div>
+        <i class="bi bi-chevron-down chevron"></i>
+    </div>
+    <div class="network-details">
+        <div class="network-details-inner" style="padding: 10px 0 0; font-size: 11.5px; color:#5f6c80;">
+            <i class="bi bi-shield-check"></i> Secured by tiDye265
+        </div>
+    </div>
+
+    <div class="amount-group">
+        <div class="section-title">Withdrawal Amount</div>
+        <div class="amount-input-wrapper">
+            <span class="currency-symbol">MWK</span>
+            <input type="number" id="withdrawAmount" class="amount-input" placeholder="0" inputmode="numeric" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+        </div>
+        <div class="amount-limits"><span>Min: MWK 200</span><span>Max: MWK 500,000</span><span id="balanceLimitWarning" style="color:#ef4444; display:none;"></span></div>
+        <div class="quick-amounts">
+            <button class="quick-btn" onclick="setAmount(1000)">MWK 1,000</button>
+            <button class="quick-btn" onclick="setAmount(5000)">MWK 5,000</button>
+            <button class="quick-btn" onclick="setAmount(10000)">MWK 10,000</button>
+        </div>
+    </div>
+
+    <div class="turnstile-container"><div id="turnstileWidget"></div></div>
+    <button class="btn-submit" id="btnWithdraw" onclick="processWithdraw()">WITHDRAW</button>
+    <div class="button-plain-note"><i class="bi bi-shield-lock"></i> Instant payout to your registered mobile money</div>
+    <div id="statusMessage" class="alert"></div>
+</div>
+
+<div id="footer-placeholder"></div>
+
+<!-- Info Modal -->
+<div id="infoModal" class="fullscreen-modal">
+    <div class="modal-card">
+        <div class="modal-header"><span><i class="bi bi-cash-stack" style="color:#FFD700;"></i> Withdraw Funds</span><button class="modal-close" id="closeInfoModalBtn"><i class="bi bi-x-lg"></i></button></div>
+        <div><h4><i class="bi bi-play-circle"></i> How it works</h4><ul><li>1. Enter the amount you want to withdraw.</li><li>2. Submit your withdrawal request.</li><li>3. Funds will be sent instantly to your registered mobile money number.</li><li>4. Your wallet balance will decrease immediately after successful withdrawal.</li></ul><div class="important-note"><strong><i class="bi bi-exclamation-diamond"></i> Important Notes</strong><br>• Minimum withdrawal: MWK 200 | Maximum: MWK 500,000.<br>• You must have sufficient balance in your wallet.<br>• The mobile number used must match your account's registered phone.<br>• Withdrawals are final and processed instantly.</div></div>
+    </div>
+</div>
+
+<!-- Offline modal -->
+<div id="offlineModal" class="fullscreen-modal"><div class="modal-card" style="text-align: center;"><div class="modal-header" style="justify-content: center;"><i class="bi bi-wifi-off" style="font-size: 28px; color:#ef4444;"></i></div><p style="font-weight: 600; margin-top: 5px;">You are offline</p><p style="font-size: 13px;">Please check your internet connection. The modal will disappear automatically once you're back online.</p></div></div>
+
+<script src="supabase.js"></script>
+<script>
+    "use strict";
+
+    // Anti Developer Tools Trap (console clear + redirection if devtools detected)
+    (function antiDevTools() {
+        let devtools = /Chrome|Firefox|Safari|Edge/.test(navigator.userAgent);
+        const checkDevTools = () => {
+            const threshold = 160;
+            const widthDiff = window.outerWidth - window.innerWidth > threshold;
+            const heightDiff = window.outerHeight - window.innerHeight > threshold;
+            if (widthDiff || heightDiff) {
+                console.clear();
+                document.body.innerHTML = '<div style="text-align:center;padding-top:20%;font-family:sans-serif;">⚠️ Developer tools are not allowed on this page.</div>';
+                setTimeout(() => { window.location.href = 'about:blank'; }, 100);
+            }
+        };
+        if (devtools) {
+            setInterval(checkDevTools, 2000);
+            window.addEventListener('resize', checkDevTools);
+        }
+    })();
+
+    let turnstileWidgetId = null, turnstileToken = null, tokenCreatedAt = 0;
+    let globalUserPhone = null, globalDetectedNetwork = null, globalUserId = null, globalUserEmail = null, globalCurrentBalance = 0;
+    let withdrawLock = false; // lock button for 5 seconds
+
+    function importDashboardTurnstileToken() { try { const savedToken = sessionStorage.getItem('tidye_turnstile_token'); const savedCreatedAt = sessionStorage.getItem('tidye_turnstile_created_at'); if (!savedToken || !savedCreatedAt) return false; if (Date.now() - parseInt(savedCreatedAt) < 90000) { turnstileToken = savedToken; tokenCreatedAt = parseInt(savedCreatedAt); return true; } return false; } catch(e) { return false; } }
+    function initializeFallbackTurnstile() { if (typeof turnstile === 'undefined') { setTimeout(initializeFallbackTurnstile, 300); return; } if (turnstileWidgetId !== null) return; turnstileWidgetId = turnstile.render('#turnstileWidget', { sitekey: '0x4AAAAAADQhPHJB5viRCO84', size: 'invisible', callback: function(token) { turnstileToken = token; tokenCreatedAt = Date.now(); sessionStorage.setItem('tidye_turnstile_token', token); sessionStorage.setItem('tidye_turnstile_created_at', tokenCreatedAt); }, 'error-callback': function() { refreshTurnstile(); }, 'expired-callback': function() { refreshTurnstile(); }, 'timeout-callback': function() { refreshTurnstile(); } }); turnstile.execute(turnstileWidgetId); }
+    function isTokenStillValid() { return (turnstileToken && (Date.now() - tokenCreatedAt < 90000)); }
+    function refreshTurnstile() { turnstileToken = null; tokenCreatedAt = 0; sessionStorage.removeItem('tidye_turnstile_token'); sessionStorage.removeItem('tidye_turnstile_created_at'); if (typeof turnstile !== 'undefined' && turnstileWidgetId !== null) { turnstile.reset(turnstileWidgetId); turnstile.execute(turnstileWidgetId); } else { initializeFallbackTurnstile(); } }
+    setInterval(() => { if (tokenCreatedAt && (Date.now() - tokenCreatedAt > 80000)) refreshTurnstile(); }, 10000);
+    function getCleanSessionToken() { let rawToken = localStorage.getItem('tidye_session_token'); if (!rawToken || rawToken === 'null' || rawToken === 'undefined') return null; try { let parsed = JSON.parse(rawToken); if (parsed?.access_token) return parsed.access_token; if (typeof parsed === 'string') return parsed; } catch(e) {} return rawToken.replace(/^["']|["']$/g, '').trim(); }
+    window.toggleNetworkDetails = function() { document.getElementById('networkSelector').classList.toggle('open'); };
+    window.setAmount = function(val) { document.getElementById('withdrawAmount').value = val; };
+    async function waitForTurnstileToken() { return new Promise((resolve) => { if (isTokenStillValid()) { resolve({ token: turnstileToken, error: null }); return; } let attempts = 0; const interval = setInterval(() => { if (isTokenStillValid()) { clearInterval(interval); resolve({ token: turnstileToken, error: null }); return; } if (++attempts >= 15) { clearInterval(interval); resolve({ token: null, error: "timeout_bypassed" }); } }, 200); }); }
+    function showStatus(message, type) { const statusDiv = document.getElementById('statusMessage'); statusDiv.textContent = message; statusDiv.className = `alert ${type}`; statusDiv.style.display = 'block'; if (type !== 'error') setTimeout(() => { if(statusDiv) statusDiv.style.display = 'none'; }, 8000); }
+
+    // Lock/Unlock button helpers
+    function lockWithdrawButton(seconds = 5) {
+        const btn = document.getElementById('btnWithdraw');
+        if (withdrawLock) return;
+        withdrawLock = true;
+        btn.disabled = true;
+        setTimeout(() => {
+            btn.disabled = false;
+            withdrawLock = false;
+        }, seconds * 1000);
+    }
+
+    async function updateBalanceAfterWithdrawal() { 
+        const token = getCleanSessionToken(); 
+        try { 
+            const res = await fetch(`${window.SUPABASE_URL}/functions/v1/wallet-api`, { method: 'GET', headers: { 'Authorization': `Bearer ${token}` } }); 
+            if (res.ok) { 
+                const data = await res.json(); 
+                globalCurrentBalance = Number(data.balance); 
+                document.getElementById('walletBalanceHeader').textContent = `MWK ${globalCurrentBalance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`; 
+            } 
+        } catch(e) { console.error(e); } 
+    }
+
+    const WithdrawManager = (function() {
+        const DOM = { loader: document.getElementById('loader'), walletBalanceHeader: document.getElementById('walletBalanceHeader'), networkName: document.getElementById('networkName'), userPhoneNumber: document.getElementById('userPhoneNumber'), userIdDisplay: document.getElementById('userIdDisplay'), networkLogo: document.getElementById('networkLogo'), withdrawAmount: document.getElementById('withdrawAmount'), btnWithdraw: document.getElementById('btnWithdraw') };
+        async function initialize() { 
+            const token = getCleanSessionToken(); 
+            if (!token) { window.location.replace('login.html'); return; } 
+            try { 
+                const profilePromise = fetch(`${window.SUPABASE_URL}/functions/v1/settings-api`, { method: 'GET', headers: { 'Authorization': `Bearer ${token}` } }).then(res => res.status === 401 ? window.location.replace('login.html') : res.json()); 
+                const walletPromise = fetch(`${window.SUPABASE_URL}/functions/v1/wallet-api`, { method: 'GET', headers: { 'Authorization': `Bearer ${token}` } }).then(res => res.ok ? res.json() : { balance: 0.00 }); 
+                const [profileData, walletData] = await Promise.all([profilePromise, walletPromise]); 
+                if (walletData) { globalCurrentBalance = Number(walletData.balance); DOM.walletBalanceHeader.textContent = `MWK ${globalCurrentBalance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`; } 
+                if (profileData) { globalUserId = profileData.id || null; globalUserEmail = profileData.email || null; if (globalUserId) DOM.userIdDisplay.textContent = `ID: ${globalUserId}`; if (profileData.phone_number) setupNetworkUI(profileData.phone_number); else { DOM.networkName.textContent = "No Number Found"; DOM.userPhoneNumber.textContent = "Add number in profile"; DOM.btnWithdraw.disabled = true; } } 
+            } catch(err) { console.error(err); } finally { if(DOM.loader) { DOM.loader.style.opacity = '0'; setTimeout(() => { if(DOM.loader) DOM.loader.style.display = 'none'; }, 300); } } 
+        }
+        function setupNetworkUI(phone) { let cleanNum = phone.replace(/\D/g, ''); if (cleanNum.startsWith('265')) cleanNum = cleanNum.substring(3); if (cleanNum.startsWith('0')) cleanNum = cleanNum.substring(1); DOM.userPhoneNumber.textContent = phone; DOM.networkLogo.style.display = 'block'; globalUserPhone = phone; if (cleanNum.startsWith('99') || cleanNum.startsWith('98')) { globalDetectedNetwork = 'AIRTEL'; DOM.networkName.textContent = 'Airtel Money'; DOM.networkName.style.color = 'var(--airtel)'; DOM.networkLogo.src = 'airtel.jpg'; } else if (cleanNum.startsWith('88') || cleanNum.startsWith('31')) { globalDetectedNetwork = 'TNM'; DOM.networkName.textContent = 'TNM Mpamba'; DOM.networkName.style.color = 'var(--tnm)'; DOM.networkLogo.src = 'tnm.jpg'; } else { globalDetectedNetwork = 'UNKNOWN'; DOM.networkName.textContent = 'Unknown Network'; DOM.networkLogo.style.display = 'none'; DOM.btnWithdraw.disabled = true; } }
+        return { init: initialize };
+    })();
+
+    window.processWithdraw = async function() {
+        // Prevent double click and lock button for 5 seconds
+        if (withdrawLock) { showStatus("Please wait, your request is being processed.", "info"); return; }
+        
+        // Fetch latest balance before proceeding (tab sync)
+        await updateBalanceAfterWithdrawal();
+        
+        const amountInput = document.getElementById('withdrawAmount').value;
+        let amount = parseFloat(amountInput);
+        if (isNaN(amount)) amount = 0;
+        // Force whole number (floor)
+        amount = Math.floor(amount);
+        
+        const minWithdraw = 200, maxWithdraw = 500000;
+        if (amount < minWithdraw || amount > maxWithdraw) { showStatus(`Withdrawal amount must be between MWK ${minWithdraw} and MWK ${maxWithdraw} (whole number only).`, "error"); return; }
+        if (amount > globalCurrentBalance) { showStatus(`Insufficient balance. Your current balance is MWK ${globalCurrentBalance.toFixed(2)}.`, "error"); return; }
+        if (!globalUserPhone || !globalDetectedNetwork || globalDetectedNetwork === 'UNKNOWN' || !globalUserId) { showStatus("Phone or network not recognized. Update profile.", "error"); return; }
+
+        const btn = document.getElementById('btnWithdraw');
+        // lock UI immediately
+        lockWithdrawButton(5);
+        btn.classList.add('loading-state');
+        btn.innerHTML = '<i class="bi bi-arrow-repeat spin-icon"></i> Processing...';
+        document.getElementById('statusMessage').style.display = 'none';
+        
+        let verificationResult = await waitForTurnstileToken();
+        let currentToken = verificationResult.token;
+        let requestSucceeded = false;
+        try {
+            const token = getCleanSessionToken();
+            const response = await fetch(`${window.SUPABASE_URL}/functions/v1/payout-fund-api`, {
+                method: 'POST',
+                headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify({ amount, phone: globalUserPhone, network: globalDetectedNetwork, id: globalUserId, email: globalUserEmail, turnstileToken: currentToken })
+            });
+            const data = await response.json();
+            if (response.ok && data.success) {
+                requestSucceeded = true;
+                showStatus(`Withdrawal of MWK ${amount.toLocaleString()} successful! Funds sent to ${globalUserPhone}.`, "info");
+                document.getElementById('withdrawAmount').value = '';
+                await updateBalanceAfterWithdrawal();
+                const headerWidget = document.getElementById('headerBalanceWidget');
+                headerWidget.classList.add('glow-success');
+                let banner = document.getElementById('successBanner');
+                if(!banner) { const nb = document.createElement('div'); nb.id='successBanner'; nb.className='success-banner'; nb.innerHTML = '<i class="bi bi-check-circle-fill"></i><span>Withdrawal Successful</span>'; document.body.insertBefore(nb, document.querySelector('.info-white-container')); banner = nb; }
+                banner.style.display = 'flex'; banner.querySelector('span').innerText = `Withdrew MWK ${amount.toLocaleString()} successfully`; setTimeout(() => { banner.style.display = 'none'; headerWidget.classList.remove('glow-success'); }, 6000);
+            } else { 
+                if (data.error && typeof data.error === 'string') showStatus(data.error, "error"); 
+                else showStatus("Withdrawal failed. Please try again.", "error"); 
+            }
+        } catch(e) { 
+            console.error(e); 
+            showStatus("Network error. Please try again.", "error"); 
+        } finally { 
+            refreshTurnstile(); 
+            btn.classList.remove('loading-state');
+            // If the request did NOT succeed, unlock immediately, but lock was already set for 5 seconds anyway.
+            // The lock will auto-release after 5 seconds. No need to change.
+            if (!requestSucceeded) {
+                // we keep the lock active to prevent spam, but we can optionally reset after error if needed.
+                // Already locked for 5 sec from start. Good.
+            }
+            // restore button text after lock period? We'll set it now, but button disabled still.
+            btn.innerHTML = 'WITHDRAW';
+        }
+    };
+
+    const offlineModal = document.getElementById('offlineModal'); function updateOnlineStatus() { if (!navigator.onLine) offlineModal.classList.add('active'); else offlineModal.classList.remove('active'); } window.addEventListener('online', updateOnlineStatus); window.addEventListener('offline', updateOnlineStatus); updateOnlineStatus();
+    const infoModal = document.getElementById('infoModal'), howBtn = document.getElementById('howItWorksBtn'), closeInfo = document.getElementById('closeInfoModalBtn'); if (howBtn) howBtn.onclick = () => infoModal.classList.add('active'); if (closeInfo) closeInfo.onclick = () => infoModal.classList.remove('active'); infoModal.addEventListener('click', (e) => { if(e.target === infoModal) infoModal.classList.remove('active'); });
+    async function injectDynamicFooter() { try { const res = await fetch('footer.html'); if (res.ok) { const htmlContent = await res.text(); document.getElementById('footer-placeholder').innerHTML = htmlContent; } } catch(err) {} }
+    document.addEventListener('DOMContentLoaded', () => { if (!importDashboardTurnstileToken()) initializeFallbackTurnstile(); WithdrawManager.init(); injectDynamicFooter(); });
+</script>
+</body>
+</html>
