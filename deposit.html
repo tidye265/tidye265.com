@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Deposit Funds | tiDye265</title>
+    
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://*.supabase.co https://cdn.jsdelivr.net https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; img-src 'self' https: data: blob:; frame-src 'self' https://challenges.cloudflare.com; connect-src 'self' https://*.supabase.co https://challenges.cloudflare.com;">
+    <meta name="theme-color" content="#121212">
+
+    <!-- UPGRADED: Using jsDelivr for Inter & Lexend fonts for better reliability -->
+    <link href="https://cdn.jsdelivr.net/npm/@fontsource/inter@5.0.18/400.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@fontsource/inter@5.0.18/500.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@fontsource/inter@5.0.18/600.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@fontsource/inter@5.0.18/700.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@fontsource/lexend@5.0.18/400.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@fontsource/lexend@5.0.18/600.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@fontsource/lexend@5.0.18/700.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@fontsource/lexend@5.0.18/800.css" rel="stylesheet">
+    
+    <!-- UPGRADED: Using jsDelivr for Bootstrap Icons (replaces Google Fonts icons) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
+    <style>
+        :root {
+            --bg: #F4F6F8; --primary: #FFD700; --card-bg: #FFFFFF;
+            --text-light: #1a1d21; --text-dim: #6b7280; --border: #e5e7eb;
+            --success: #10b981; --airtel: #ff0000; --tnm: #00a859;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { background-color: var(--bg); color: var(--text-light); font-family: 'Inter', sans-serif; padding-bottom: 30px; line-height: 1.5; }
+
+        /* Enhanced Skeleton Loader */
+        #loader {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #F4F6F8; z-index: 9999;
+            display: flex; flex-direction: column; padding: 0;
+            transition: opacity 0.3s ease;
+        }
+        .skeleton {
+            background: linear-gradient(90deg, #e5e7eb 25%, #f0f2f5 50%, #e5e7eb 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            border-radius: 8px;
+        }
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        .sk-header {
+            height: 60px; width: 100%; margin-bottom: 5px;
+            display: flex; align-items: center; padding: 0 15px; gap: 15px;
+        }
+        .sk-header .sk-circle { width: 30px; height: 30px; border-radius: 50%; }
+        .sk-header .sk-line { height: 14px; flex: 1; }
+
+        .sk-wallet {
+            height: 100px; width: calc(100% - 30px); margin: 15px 15px;
+            border-radius: 16px;
+        }
+
+        .sk-container {
+            background: #fff; border-radius: 16px; margin: 0 15px; padding: 20px 15px;
+        }
+        .sk-title { height: 14px; width: 40%; margin-bottom: 15px; }
+        .sk-selector { height: 70px; border-radius: 12px; margin-bottom: 15px; }
+        .sk-input { height: 56px; border-radius: 12px; margin-bottom: 15px; }
+        .sk-quick-btns { display: flex; gap: 10px; margin-bottom: 20px; }
+        .sk-quick { height: 40px; flex: 1; border-radius: 8px; }
+        .sk-submit { height: 56px; border-radius: 12px; }
+
+        /* Header */
+        .header { background: #fff; padding: 12px 15px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; }
+        .header-left { display: flex; align-items: center; gap: 12px; }
+        .header-logo { width: 32px; height: 32px; border-radius: 8px; object-fit: cover; }
+        .header-action { color: var(--text-light); font-size: 18px; text-decoration: none; }
+        .page-title { font-family: 'Lexend'; font-weight: 700; font-size: 16px; flex-grow: 1; text-align: center; }
+        
+        /* NEW: Grey balance container inside header */
+        .balance-pill {
+            background: #f1f3f5;
+            border-radius: 40px;
+            padding: 6px 14px;
+            font-family: 'Lexend', monospace;
+            font-weight: 700;
+            font-size: 13px;
+            color: #1f2937;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            letter-spacing: -0.2px;
+            border: 1px solid #e4e7eb;
+            transition: all 0.2s;
+        }
+        .balance-pill i {
+            font-size: 14px;
+            color: var(--primary);
+        }
+        .balance-pill span {
+            font-weight: 800;
+        }
+
+        /* SUCCESS BANNER ANIMATION */
+        .success-banner {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 12px;
+            padding: 12px 15px;
+            margin: 15px 15px 5px 15px;
+            font-size: 13.5px;
+            font-weight: 600;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            animation: slideDownFade 0.4s ease-out forwards;
+        }
+        @keyframes slideDownFade {
+            0% { opacity: 0; transform: translateY(-10px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Deposit Section */
+        .deposit-container { background: #fff; border-radius: 16px; padding: 20px 15px; margin: 0 15px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        .section-title { font-size: 13px; font-weight: 700; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; }
+        .info-icon {
+            background: none; border: none; font-size: 18px; color: #9ca3af; cursor: pointer;
+            transition: color 0.2s; padding: 4px;
+        }
+        .info-icon:hover { color: var(--primary); }
+
+        /* Network Selector */
+        .network-selector { background: #fafafa; border: 1px solid var(--border); border-radius: 12px; padding: 12px 15px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; transition: all 0.2s; }
+        .network-info { display: flex; align-items: center; gap: 12px; width: 100%; overflow: hidden; }
+        .network-logo { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 1px solid var(--border); background: #fff; flex-shrink: 0; }
+        .network-text { flex-grow: 1; overflow: hidden; }
+        .network-text .nt-name { font-weight: 700; font-size: 14px; }
+        .network-text .nt-num { font-size: 12px; color: var(--text-dim); font-weight: 500; margin-top: 2px; }
+        .network-text .nt-id { display: none !important; }
+        
+        .chevron { color: #9ca3af; transition: transform 0.3s ease; font-size: 14px; flex-shrink: 0; }
+        .network-details { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+        .network-selector.open .chevron { transform: rotate(180deg); }
+        .network-selector.open + .network-details { max-height: 50px; }
+
+        /* Amount Input */
+        .amount-group { margin-top: 20px; }
+        .amount-input-wrapper { position: relative; display: flex; align-items: center; }
+        .currency-symbol { position: absolute; left: 15px; font-family: 'Lexend'; font-weight: 700; color: var(--text-light); font-size: 16px; }
+        .amount-input { width: 100%; padding: 11px 15px 11px 65px; border: 2px solid var(--border); border-radius: 12px; font-family: 'Lexend'; font-weight: 700; font-size: 18px; color: var(--text-light); outline: none; transition: border-color 0.2s; background: #fff; }
+        .amount-input:focus { border-color: var(--primary); }
+        .amount-limits { display: flex; justify-content: space-between; font-size: 11px; font-weight: 600; color: var(--text-dim); margin-top: 6px; padding: 0 2px; letter-spacing: 0.3px; }
+
+        /* Quick Amounts */
+        .quick-amounts { display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
+        .quick-btn { flex: 1; min-width: 70px; padding: 10px 5px; background: #f3f4f6; border: 1px solid var(--border); border-radius: 8px; font-weight: 600; font-size: 13px; color: var(--text-light); cursor: pointer; text-align: center; transition: all 0.2s; }
+        .quick-btn:active { background: var(--primary); border-color: var(--primary); }
+
+        /* Turnstile */
+        .turnstile-container { display: block; margin: 0 auto; width: 100%; max-width: 300px; overflow: visible; }
+
+        /* Submit Button Base */
+        .btn-submit { width: 100%; margin-top: 25px; background: var(--primary); color: #000; border: none; padding: 16px; border-radius: 12px; font-family: 'Lexend'; font-weight: 600; font-size: 14px; letter-spacing: 0.5px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s ease; box-shadow: none; }
+        .btn-submit:active { transform: scale(0.98); }
+        .btn-submit.loading-state { background: #e5e7eb !important; color: #9ca3af !important; box-shadow: none !important; cursor: not-allowed !important; pointer-events: none !important; transform: none !important; }
+        
+        /* SMART INFO CONTAINER (Quick Deposit) */
+        .quick-deposit-card {
+            background: #FEFCE8;
+            border-left: 5px solid var(--primary);
+            border-radius: 16px;
+            padding: 16px 18px;
+            margin: 20px 15px 0 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+        }
+        .quick-deposit-card h4 {
+            font-family: 'Lexend';
+            font-weight: 700;
+            font-size: 15px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .quick-deposit-card p {
+            font-size: 12.5px;
+            color: #4b5563;
+            line-height: 1.45;
+            margin: 0;
+        }
+
+        /* MODAL STYLES (Full Screen Popups) */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(8px);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.25s ease;
+        }
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-container {
+            background: white;
+            width: 90%;
+            max-width: 460px;
+            max-height: 85vh;
+            border-radius: 32px;
+            overflow-y: auto;
+            padding: 24px 22px;
+            box-shadow: 0 30px 40px rgba(0,0,0,0.3);
+            position: relative;
+            animation: modalPop 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+        }
+        @keyframes modalPop {
+            from { transform: scale(0.95); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        .modal-container .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            border-bottom: 1px solid #f0f2f4;
+            padding-bottom: 12px;
+        }
+        .modal-container .modal-header h3 {
+            font-family: 'Lexend';
+            font-weight: 800;
+            font-size: 20px;
+        }
+        .modal-close {
+            background: #f3f4f6;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 40px;
+            font-size: 20px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .step-list {
+            margin: 16px 0;
+            padding-left: 20px;
+        }
+        .step-list li {
+            margin-bottom: 12px;
+            font-size: 14px;
+        }
+        .note-box {
+            background: #F9FAFB;
+            padding: 16px;
+            border-radius: 20px;
+            margin: 18px 0 0;
+        }
+        .offline-modal .modal-container {
+            text-align: center;
+            background: #1e1e2f;
+            color: white;
+        }
+        .offline-modal .modal-container i {
+            font-size: 48px;
+            color: #f97316;
+            margin-bottom: 16px;
+        }
+        .spinning-icon {
+            animation: spin 1.2s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .btn-ghost {
+            background: transparent;
+            border: none;
+            margin-top: 10px;
+        }
+        .alert { margin-top: 15px; padding: 12px; border-radius: 8px; font-size: 12.5px; font-weight: 500; display: none; word-break: break-all; }
+        .alert.error { background: #fef2f2; color: #ef4444; border: 1px solid #fecaca; }
+        .alert.info { background: #eff6ff; color: #3b82f6; border: 1px solid #bfdbfe; }
+        #footer-placeholder { margin-top: 30px; }
+    </style>
+</head>
+<body>
+
+    <div id="loader">
+        <div class="sk-header"><div class="skeleton sk-circle"></div><div class="skeleton sk-line"></div></div>
+        <div class="skeleton sk-wallet"></div>
+        <div class="sk-container"><div class="skeleton sk-title"></div><div class="skeleton sk-selector"></div><div class="skeleton sk-title"></div><div class="skeleton sk-input"></div><div class="sk-quick-btns"><div class="skeleton sk-quick"></div><div class="skeleton sk-quick"></div><div class="skeleton sk-quick"></div></div><div class="skeleton sk-submit"></div></div>
+    </div>
+
+    <header class="header">
+        <div class="header-left">
+            <img src="logo.jpg" alt="Logo" class="header-logo">
+            <a href="wallet.html" class="header-action"><i class="bi bi-arrow-left"></i></a>
+        </div>
+        <div class="page-title">Deposit Funds</div>
+        <div class="balance-pill" id="headerBalancePill">
+            <i class="bi bi-wallet2"></i>
+            <span id="headerBalanceAmount">MWK 0.00</span>
+        </div>
+    </header>
+
+    <div id="successBanner" class="success-banner">
+        <i class="bi bi-check-circle-fill"></i>
+        <span id="successBannerText">Deposit Successfully</span>
+    </div>
+
+    <div class="deposit-container">
+        <div class="section-title">
+            Payment Method
+            <button class="info-icon" id="openInfoModalBtn"><i class="bi bi-info-circle-fill"></i></button>
+        </div>
+        
+        <div class="network-selector" id="networkSelector" onclick="toggleNetworkDetails()">
+            <div class="network-info">
+                <img src="" alt="Network" class="network-logo" id="networkLogo" style="display:none;">
+                <div class="network-text">
+                    <div class="nt-name" id="networkName">Detecting Network...</div>
+                    <div class="nt-num" id="userPhoneNumber">Please wait...</div>
+                    <div class="nt-id" id="userIdDisplay">ID: Fetching...</div> 
+                </div>
+            </div>
+            <i class="bi bi-chevron-down chevron"></i>
+        </div>
+        <div class="network-details">
+            <div class="network-details-inner" style="font-size: 12px; color: #4b5563;"></div>
+        </div>
+
+        <div class="amount-group">
+            <div class="section-title">Deposit Amount</div>
+            <div class="amount-input-wrapper">
+                <span class="currency-symbol">MWK</span>
+                <input type="number" id="depositAmount" class="amount-input" placeholder="0" inputmode="numeric">
+            </div>
+            <div class="amount-limits">
+                <span>Min: MWK 200</span>
+                <span>Max: MWK 750,000</span>
+            </div>
+            <div class="quick-amounts">
+                <button class="quick-btn" onclick="setAmount(500)">MWK 500</button>
+                <button class="quick-btn" onclick="setAmount(2000)">MWK 2,000</button>
+                <button class="quick-btn" onclick="setAmount(5000)">MWK 5,000</button>
+            </div>
+        </div>
+
+        <div class="turnstile-container"><div id="turnstileWidget"></div></div>
+
+        <button class="btn-submit" id="btnDeposit" onclick="processDeposit()">
+            DEPOSIT<i class="bi bi-arrow-right"></i>
+        </button>
+    
+        <div id="statusMessage" class="alert"></div>
+    </div>
+
+    <!-- NEW: Quick Deposit Smart Container (replaces PS) -->
+    <div class="quick-deposit-card">
+        <h4><i class="bi bi-lightning-charge-fill" style="color: #f5b042;"></i> Quick Deposit</h4>
+        <p>Top up your tiDye265 account instantly with Mobile Money. Enter the amount you wish to deposit and submit your request. A payment prompt will be sent to your phone for confirmation. Once approved, your account balance will be credited automatically.</p>
+        <p style="margin-top: 8px; font-size: 11px; color: #6c757d;"><i class="bi bi-exclamation-triangle"></i> Note: Please ensure pop-up blockers are disabled and keep your phone available to complete the transaction.</p>
+    </div>
+
+    <div id="footer-placeholder"></div>
+
+    <!-- INFO MODAL (Full Screen Popup) -->
+    <div id="infoModal" class="modal-overlay">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3><i class="bi bi-cash-stack" style="color: #FFD700;"></i> Deposit Funds</h3>
+                <button class="modal-close" id="closeInfoModalBtn"><i class="bi bi-x-lg"></i></button>
+            </div>
+            <p style="font-weight: 500; margin-bottom: 14px;">Easily fund your tiDye265 account using Mobile Money. Enter the amount you wish to deposit below and proceed to payment.</p>
+            <div><strong>How it works</strong></div>
+            <ul class="step-list">
+                <li><i class="bi bi-1-circle-fill" style="color:#FFD700;"></i> Enter your deposit amount.</li>
+                <li><i class="bi bi-2-circle-fill" style="color:#FFD700;"></i> Submit your deposit request.</li>
+                <li><i class="bi bi-3-circle-fill" style="color:#FFD700;"></i> Confirm the payment prompt on your mobile phone.</li>
+                <li><i class="bi bi-4-circle-fill" style="color:#FFD700;"></i> Your account balance will be updated automatically once the payment is successful.</li>
+            </ul>
+            <div class="note-box">
+                <strong><i class="bi bi-patch-exclamation-fill"></i> Important Notes</strong>
+                <ul style="margin-top: 8px; margin-left: 20px; font-size: 12.5px;">
+                    <li>Ensure your Mobile Money account has sufficient funds.</li>
+                    <li>Keep your phone nearby to receive the payment prompt.</li>
+                    <li>Disable any pop-up blockers that may interfere with the payment process.</li>
+                    <li>Deposits are processed securely and may take a few moments to reflect in your account.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- OFFLINE MODAL (Auto-closes when online) -->
+    <div id="offlineModal" class="modal-overlay offline-modal">
+        <div class="modal-container">
+            <i class="bi bi-wifi-off"></i>
+            <h3 style="margin: 10px 0;">No Internet Connection</h3>
+            <p style="margin-bottom: 12px;">You are currently offline. Please check your network connection.</p>
+            <div><i class="bi bi-arrow-repeat spin-icon"></i> Waiting for connection...</div>
+        </div>
+    </div>
+
+    <script src="supabase.js"></script>
+    <script>
+        "use strict";
+
+        // --- Global references for new UI ---
+        let turnstileWidgetId = null;
+        let turnstileToken = null;
+        let tokenCreatedAt = 0;
+        let globalUserPhone = null;
+        let globalDetectedNetwork = null;
+        let globalUserId = null;
+        let globalUserEmail = null;
+        let globalInitialBalance = 0;
+
+        // smart token import engine
+        function importDashboardTurnstileToken() {
+            try {
+                const savedToken = sessionStorage.getItem('tidye_turnstile_token');
+                const savedCreatedAt = sessionStorage.getItem('tidye_turnstile_created_at');
+                if (!savedToken || !savedCreatedAt) return false;
+                if (Date.now() - parseInt(savedCreatedAt) < 90000) {
+                    turnstileToken = savedToken;
+                    tokenCreatedAt = parseInt(savedCreatedAt);
+                    return true;
+                }
+                return false;
+            } catch(err) { return false; }
+        }
+
+        function initializeFallbackTurnstile() {
+            if (typeof turnstile === 'undefined') { setTimeout(initializeFallbackTurnstile, 300); return; }
+            if (turnstileWidgetId !== null) return;
+            turnstileWidgetId = turnstile.render('#turnstileWidget', {
+                sitekey: '0x4AAAAAADQhPHJB5viRCO84',
+                size: 'invisible',
+                callback: function(token) {
+                    turnstileToken = token;
+                    tokenCreatedAt = Date.now();
+                    sessionStorage.setItem('tidye_turnstile_token', token);
+                    sessionStorage.setItem('tidye_turnstile_created_at', tokenCreatedAt);
+                },
+                'error-callback': function() { refreshTurnstile(); },
+                'expired-callback': function() { refreshTurnstile(); },
+                'timeout-callback': function() { refreshTurnstile(); }
+            });
+            turnstile.execute(turnstileWidgetId);
+        }
+
+        function isTokenStillValid() { return (turnstileToken && (Date.now() - tokenCreatedAt < 90000)); }
+        function refreshTurnstile() {
+            turnstileToken = null; tokenCreatedAt = 0;
+            sessionStorage.removeItem('tidye_turnstile_token');
+            if (typeof turnstile !== 'undefined' && turnstileWidgetId !== null) {
+                turnstile.reset(turnstileWidgetId);
+                turnstile.execute(turnstileWidgetId);
+            } else { initializeFallbackTurnstile(); }
+        }
+        setInterval(() => { if (tokenCreatedAt && (Date.now() - tokenCreatedAt > 80000)) refreshTurnstile(); }, 10000);
+
+        function getCleanSessionToken() {
+            let rawToken = localStorage.getItem('tidye_session_token');
+            if (!rawToken || rawToken === 'null' || rawToken === 'undefined') return null;
+            try { let parsed = JSON.parse(rawToken); if (parsed?.access_token) return parsed.access_token; if (typeof parsed === 'string') return parsed; } catch(e) {}
+            return rawToken.replace(/^["']|["']$/g, '').trim();
+        }
+
+        function toggleNetworkDetails() { document.getElementById('networkSelector').classList.toggle('open'); }
+        function setAmount(val) { document.getElementById('depositAmount').value = val; }
+
+        async function waitForTurnstileToken() {
+            return new Promise((resolve) => {
+                if (isTokenStillValid()) { resolve({ token: turnstileToken, error: null }); return; }
+                let attempts = 0;
+                const interval = setInterval(() => {
+                    if (isTokenStillValid()) { clearInterval(interval); resolve({ token: turnstileToken, error: null }); return; }
+                    attempts++;
+                    if (attempts >= 15) { clearInterval(interval); resolve({ token: null, error: "timeout_bypassed" }); }
+                }, 200);
+            });
+        }
+
+        function showStatus(message, type) {
+            const statusDiv = document.getElementById('statusMessage');
+            statusDiv.textContent = message;
+            statusDiv.className = `alert ${type}`;
+            statusDiv.style.display = 'block';
+            if (type !== 'error' && !message.includes("Waiting")) setTimeout(() => { statusDiv.style.display = 'none'; }, 8000);
+        }
+
+        // UPDATE HEADER BALANCE (grey pill)
+        function updateHeaderBalance(balanceNum) {
+            const headerSpan = document.getElementById('headerBalanceAmount');
+            if (headerSpan) headerSpan.textContent = `MWK ${balanceNum.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        }
+
+        // Polling for deposit confirmation (updates new header balance)
+        async function pollForDepositSuccess(expectedAmount) {
+            const token = getCleanSessionToken();
+            let attempts = 0, maxAttempts = 30;
+            const interval = setInterval(async () => {
+                attempts++;
+                try {
+                    const res = await fetch(`${window.SUPABASE_URL}/functions/v1/wallet-api`, { headers: { 'Authorization': `Bearer ${token}` } });
+                    if (res.ok) {
+                        const data = await res.json();
+                        const currentBalance = Number(data.balance);
+                        if (currentBalance > globalInitialBalance) {
+                            clearInterval(interval);
+                            globalInitialBalance = currentBalance;
+                            updateHeaderBalance(currentBalance);
+                            const banner = document.getElementById('successBanner');
+                            document.getElementById('successBannerText').textContent = `Deposit MWK ${expectedAmount.toLocaleString()} Successfully`;
+                            banner.style.display = 'flex';
+                            setTimeout(() => { banner.style.display = 'none'; }, 10000);
+                            const btn = document.getElementById('btnDeposit');
+                            btn.classList.remove('loading-state');
+                            btn.innerHTML = 'DEPOSIT<i class="bi bi-arrow-right"></i>';
+                            document.getElementById('statusMessage').style.display = 'none';
+                        }
+                    }
+                } catch(e) { console.warn(e); }
+                if (attempts >= maxAttempts) {
+                    clearInterval(interval);
+                    const btn = document.getElementById('btnDeposit');
+                    btn.classList.remove('loading-state');
+                    btn.innerHTML = 'DEPOSIT<i class="bi bi-arrow-right"></i>';
+                    showStatus("Verification taking longer. Balance will update when Paychangu confirms.", "info");
+                }
+            }, 4000);
+        }
+
+        // Process Deposit (main action)
+        async function processDeposit() {
+            const amountInput = document.getElementById('depositAmount').value;
+            const amount = parseFloat(amountInput);
+            if (isNaN(amount) || amount < 200 || amount > 750000) {
+                showStatus("Please enter a valid amount (Min: MWK 200, Max: MWK 750,000).", "error");
+                return;
+            }
+            if (!globalUserPhone || !globalDetectedNetwork || globalDetectedNetwork === 'UNKNOWN' || !globalUserId) {
+                showStatus("Network or user info missing. Please refresh.", "error");
+                return;
+            }
+            const btn = document.getElementById('btnDeposit');
+            btn.classList.add('loading-state');
+            btn.innerHTML = '<i class="bi bi-arrow-repeat spin-icon"></i> Initializing...';
+            document.getElementById('statusMessage').style.display = 'none';
+            let verificationResult = await waitForTurnstileToken();
+            let currentToken = verificationResult.token;
+            let pollingStarted = false;
+            try {
+                const token = getCleanSessionToken();
+                const response = await fetch(`${window.SUPABASE_URL}/functions/v1/payment-topup-api`, {
+                    method: 'POST', headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ amount, phone: globalUserPhone, network: globalDetectedNetwork, id: globalUserId, email: globalUserEmail, turnstileToken: currentToken })
+                });
+                const data = await response.json();
+                if (response.ok && data.success) {
+                    showStatus("Please check your phone and Enter PIN to complete the deposit...", "info");
+                    btn.innerHTML = '<i class="bi bi-hourglass-split spin-icon"></i> Awaiting Confirmation...';
+                    document.getElementById('depositAmount').value = '';
+                    pollingStarted = true;
+                    pollForDepositSuccess(amount);
+                } else { if (data.error && typeof data.error === 'string') showStatus(data.error, "error"); else showStatus("Deposit failed. Try again.", "error"); }
+            } catch (error) { console.error(error); showStatus("Connection error. Try again.", "error"); } finally { refreshTurnstile(); if (!pollingStarted) { btn.classList.remove('loading-state'); btn.innerHTML = 'DEPOSIT<i class="bi bi-arrow-right"></i>'; } }
+        }
+
+        // offline/online modal
+        function initOfflineListener() {
+            const offlineModal = document.getElementById('offlineModal');
+            function updateOfflineUI() {
+                if (!navigator.onLine) offlineModal.classList.add('active');
+                else offlineModal.classList.remove('active');
+            }
+            window.addEventListener('online', updateOfflineUI);
+            window.addEventListener('offline', updateOfflineUI);
+            updateOfflineUI();
+        }
+
+        // Profile & wallet init (header grey pill)
+        const DepositManager = (function() {
+            const DOM = { loader: document.getElementById('loader'), networkName: document.getElementById('networkName'), userPhoneNumber: document.getElementById('userPhoneNumber'), userIdDisplay: document.getElementById('userIdDisplay'), networkLogo: document.getElementById('networkLogo'), depositAmount: document.getElementById('depositAmount'), btnDeposit: document.getElementById('btnDeposit') };
+            async function initialize() {
+                const token = getCleanSessionToken();
+                if (!token) { window.location.replace('login.html'); return; }
+                try {
+                    const profilePromise = fetch(`${window.SUPABASE_URL}/functions/v1/settings-api`, { headers: { 'Authorization': `Bearer ${token}` } }).then(res => res.status === 401 ? window.location.replace('login.html') : res.json());
+                    const walletPromise = fetch(`${window.SUPABASE_URL}/functions/v1/wallet-api`, { headers: { 'Authorization': `Bearer ${token}` } }).then(res => res.ok ? res.json() : { balance: 0 });
+                    const [profileData, walletData] = await Promise.all([profilePromise, walletPromise]);
+                    if (walletData) { globalInitialBalance = Number(walletData.balance); updateHeaderBalance(globalInitialBalance); }
+                    if (profileData) {
+                        globalUserId = profileData.id || null; globalUserEmail = profileData.email || null;
+                        if (globalUserId) DOM.userIdDisplay.textContent = `ID: ${globalUserId}`;
+                        if (profileData.phone_number) setupNetworkUI(profileData.phone_number);
+                        else { DOM.networkName.textContent = "No Number Found"; DOM.userPhoneNumber.textContent = "Please add a number in profile"; DOM.btnDeposit.disabled = true; }
+                    }
+                } catch (err) { console.error(err); } finally { if (DOM.loader) { DOM.loader.style.opacity = '0'; setTimeout(() => { if (DOM.loader) DOM.loader.style.display = 'none'; }, 300); } }
+            }
+            function setupNetworkUI(phone) {
+                let cleanNum = phone.replace(/\D/g, ''); if (cleanNum.startsWith('265')) cleanNum = cleanNum.substring(3); if (cleanNum.startsWith('0')) cleanNum = cleanNum.substring(1);
+                DOM.userPhoneNumber.textContent = phone; DOM.networkLogo.style.display = 'block'; globalUserPhone = phone;
+                if (cleanNum.startsWith('99') || cleanNum.startsWith('98')) { globalDetectedNetwork = 'AIRTEL'; DOM.networkName.textContent = 'Airtel Money'; DOM.networkName.style.color = 'var(--airtel)'; DOM.networkLogo.src = 'airtel.jpg'; }
+                else if (cleanNum.startsWith('88') || cleanNum.startsWith('31')) { globalDetectedNetwork = 'TNM'; DOM.networkName.textContent = 'TNM Mpamba'; DOM.networkName.style.color = 'var(--tnm)'; DOM.networkLogo.src = 'tnm.jpg'; }
+                else { globalDetectedNetwork = 'UNKNOWN'; DOM.networkName.textContent = 'Unknown Network'; DOM.networkLogo.style.display = 'none'; DOM.btnDeposit.disabled = true; }
+            }
+            return { init: initialize };
+        })();
+
+        // Info modal controllers
+        function bindModals() {
+            const infoModal = document.getElementById('infoModal');
+            const openBtn = document.getElementById('openInfoModalBtn');
+            const closeBtn = document.getElementById('closeInfoModalBtn');
+            openBtn.onclick = () => infoModal.classList.add('active');
+            closeBtn.onclick = () => infoModal.classList.remove('active');
+            infoModal.onclick = (e) => { if (e.target === infoModal) infoModal.classList.remove('active'); };
+        }
+
+        async function injectDynamicFooter() {
+            try { const res = await fetch('footer.html'); if (res.ok) { const html = await res.text(); document.getElementById('footer-placeholder').innerHTML = html; } } catch(e) {}
+        }
+
+        // Additional spin icon styles
+        const style = document.createElement('style');
+        style.textContent = `.spin-icon { animation: spin 1.3s linear infinite; display: inline-block; } @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }`;
+        document.head.appendChild(style);
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            if (!importDashboardTurnstileToken()) initializeFallbackTurnstile();
+            DepositManager.init();
+            injectDynamicFooter();
+            bindModals();
+            initOfflineListener();
+        });
+    </script>
+</body>
+</html>
