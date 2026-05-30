@@ -535,7 +535,7 @@
                     stopPolling();
                     let errorMsg = data.error_message || "Deposit failed. Insufficient balance?";
                     if (errorMsg.toLowerCase().includes("insufficient") || errorMsg.toLowerCase().includes("balance")) {
-                        errorMsg = "You have insufficient balance to make this deposit. Please ensure you have enough funds in your mobile money account.";
+                        errorMsg = "PS! You have insufficient balance ";
                     }
                     showStatus(errorMsg, "error");
                     resetDepositUI();
