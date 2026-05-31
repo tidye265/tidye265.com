@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>My Slip | tiDye265</title>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://*.supabase.co; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net; img-src 'self' data: https:; connect-src 'self' https://*.supabase.co;">
+    <link href="https://cdn.jsdelivr.net/npm/@fontsource/inter@5.0.18/400.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@fontsource/inter@5.0.18/500.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@fontsource/inter@5.0.18/600.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@fontsource/lexend@5.0.18/400.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <style>
+        body {
+            background: #F4F6F8;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 16px;
+            padding-bottom: 80px;
+        }
+        .header {
+            background: #fff;
+            padding: 14px 15px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid #e5e7eb;
+            margin-bottom: 20px;
+            border-radius: 16px;
+        }
+        .back-btn {
+            font-size: 20px;
+            text-decoration: none;
+            color: #1a1d21;
+        }
+        .slip-card {
+            background: white;
+            border-radius: 20px;
+            padding: 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+        .bet-item {
+            background: #f9fafb;
+            border-radius: 14px;
+            padding: 12px;
+            margin-bottom: 12px;
+            border-left: 4px solid #FFD700;
+        }
+        .team-name { font-weight: 700; font-size: 15px; }
+        .odd { font-size: 13px; color: #6b7280; margin-top: 4px; }
+        .remove-btn { color: #ef4444; font-size: 12px; cursor: pointer; }
+        .empty-slip {
+            text-align: center;
+            padding: 40px;
+            color: #6b7280;
+        }
+        .place-bet-btn {
+            position: fixed;
+            bottom: 20px;
+            left: 16px;
+            right: 16px;
+            background: #FFD700;
+            color: #1a1d21;
+            border: none;
+            padding: 14px;
+            border-radius: 40px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            z-index: 1000;
+        }
+        .total-amount {
+            margin-top: 12px;
+            text-align: right;
+            font-weight: bold;
+            border-top: 1px solid #e5e7eb;
+            padding-top: 12px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <a href="dashboard.html" class="back-btn"><i class="bi bi-arrow-left"></i></a>
+    <span style="font-weight: 700; margin-left: 12px;">My Bet Slip</span>
+</div>
+
+<div id="slipContent"></div>
+
+<button id="placeBetBtn" class="place-bet-btn">Place Bet</button>
+
+<script>
+    function renderSlip() {
+        const selectedBets = JSON.parse(localStorage.getItem("selectedBets") || "[]");
+        const container = document.getElementById("slipContent");
+        if (!selectedBets.length) {
+            container.innerHTML = `<div class="slip-card empty-slip"><i class="bi bi-receipt" style="font-size: 40px;"></i><p>No bets selected</p><p style="font-size: 13px;">Go to Games and select your teams</p></div>`;
+            document.getElementById("placeBetBtn").style.display = "none";
+            return;
+        }
+        let html = `<div class="slip-card">`;
+        selectedBets.forEach((bet, idx) => {
+            html += `
+                <div class="bet-item">
+                    <div style="display:flex; justify-content:space-between;">
+                        <div class="team-name">${bet.team || "Team " + (idx+1)}</div>
+                        <div class="remove-btn" onclick="removeBet(${idx})"><i class="bi bi-trash3"></i></div>
+                    </div>
+                    <div class="odd">Odds: ${bet.odds || "1.00"}</div>
+                </div>
+            `;
+        });
+        const totalOdds = selectedBets.reduce((sum, b) => sum * (parseFloat(b.odds) || 1), 1).toFixed(2);
+        html += `<div class="total-amount">Total Odds: ${totalOdds}</div>`;
+        html += `</div>`;
+        container.innerHTML = html;
+        document.getElementById("placeBetBtn").style.display = "block";
+    }
+
+    window.removeBet = function(index) {
+        let bets = JSON.parse(localStorage.getItem("selectedBets") || "[]");
+        bets.splice(index, 1);
+        localStorage.setItem("selectedBets", JSON.stringify(bets));
+        renderSlip();
+        if (typeof updateBetSlipModal !== "undefined") updateBetSlipModal(); // update modal in footer
+    };
+
+    document.getElementById("placeBetBtn").onclick = function() {
+        const bets = JSON.parse(localStorage.getItem("selectedBets") || "[]");
+        if (!bets.length) {
+            alert("No bets to place. Please select some games.");
+            return;
+        }
+        alert(`Bet placed! Total odds: ${bets.reduce((s,b)=>s*(parseFloat(b.odds)||1),1).toFixed(2)}`);
+        localStorage.removeItem("selectedBets");
+        renderSlip();
+        if (typeof updateBetSlipModal !== "undefined") updateBetSlipModal();
+    };
+
+    renderSlip();
+
+    // Sync with footer modal when localStorage changes
+    window.addEventListener("storage", () => {
+        renderSlip();
+        if (typeof updateBetSlipModal !== "undefined") updateBetSlipModal();
+    });
+</script>
+</body>
+</html>
