@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Mines | tiDye265</title>
+    <style>
+        /* Your original CSS - kept exactly as provided */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        :root {
+            --bg-body: #0d1721;
+            --bg-sidebar: #15222f;
+            --bg-input: #081017;
+            --bg-tile: #263849;
+            --bg-tile-hover: #375067;
+            --bg-tile-active: #081017;
+            --color-text: #9ab0c6;
+            --color-white: #e3edf7;
+            --color-accent: #509304;
+            --color-accent-hover: #5da800;
+            --color-danger: #e74c3c;
+            --color-modal-overlay: rgba(8, 16, 23, 0.85);
+        }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--color-text);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            overscroll-behavior: none;
+        }
+
+        .game-container {
+            display: flex;
+            flex-direction: column-reverse;
+            width: 100%;
+            height: 100%;
+            max-width: 800px;
+            max-height: 900px;
+            background-color: var(--bg-sidebar);
+            border-radius: 0;
+            position: relative;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.02);
+        }
+
+        .game-area {
+            flex: 1;
+            background-color: var(--bg-body);
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .game-area::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(38, 56, 73, 0.4) 0%, rgba(13, 23, 33, 0) 70%);
+            pointer-events: none;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+            width: 100%;
+            max-width: 400px;
+            aspect-ratio: 1 / 1;
+            position: relative;
+            z-index: 2;
+        }
+
+        .grid.auto-playing {
+            pointer-events: none;
+        }
+
+        .tile {
+            background: linear-gradient(145deg, var(--bg-tile), #1e2c3a);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 4px 0 #0b1116, 0 6px 10px rgba(0,0,0,0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tile::after {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%; width: 50%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+            transition: 0.5s;
+        }
+
+        .tile:hover:not(:disabled)::after {
+            left: 100%;
+        }
+
+        .tile:hover:not(:disabled) {
+            background: linear-gradient(145deg, var(--bg-tile-hover), var(--bg-tile));
+            transform: translateY(-2px);
+            box-shadow: 0 6px 0 #0b1116, 0 8px 15px rgba(0,0,0,0.3);
+        }
+
+        .tile:active:not(:disabled), .tile.revealed {
+            transform: scale(0.92) translateY(2px);
+            box-shadow: 0 0 0 #0b1116, inset 0 3px 5px rgba(0,0,0,0.4);
+            background: var(--bg-tile-active);
+        }
+
+        .tile:disabled { cursor: default; }
+
+        .tile img {
+            width: 65%;
+            height: 65%;
+            object-fit: contain;
+            opacity: 0;
+            transform: scale(0.1) rotate(-45deg);
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .tile.revealed img.star-img {
+            opacity: 1;
+            transform: scale(1) rotate(0);
+            filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.6));
+        }
+
+        .tile.revealed img.bomb-img {
+            opacity: 1;
+            transform: scale(1.1) rotate(0);
+            filter: drop-shadow(0 0 12px rgba(231, 76, 60, 0.8));
+        }
+
+        .tile.fade-out img {
+            opacity: 0.3;
+            filter: none;
+        }
+
+        .controls {
+            padding: 20px 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            width: 100%;
+            position: relative;
+            z-index: 3;
+            background: var(--bg-sidebar);
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .pill-btn {
+            background: var(--bg-tile);
+            border: none;
+            color: var(--color-white);
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+            flex: 1;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 3px 0 #0b1116;
+        }
+        .pill-btn:hover { background: var(--bg-tile-hover); transform: translateY(-1px); box-shadow: 0 4px 0 #0b1116; }
+        .pill-btn:active { transform: scale(0.95); box-shadow: 0 0 0 #0b1116; }
+
+        .auto-game-toggle {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--bg-tile);
+            padding: 6px 12px;
+            border-radius: 25px;
+            color: var(--color-white);
+            box-shadow: 0 3px 0 #0b1116;
+            font-weight: bold;
+            font-size: 13px;
+        }
+
+        .switch { position: relative; display: inline-block; width: 34px; height: 18px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--bg-input); transition: .4s; border-radius: 34px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.3); }
+        .slider:before { position: absolute; content: ""; height: 14px; width: 14px; left: 2px; bottom: 2px; background-color: white; transition: .4s; border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+        input:checked + .slider { background-color: var(--color-accent); }
+        input:checked + .slider:before { transform: translateX(16px); background-color: var(--color-white); }
+
+        .bet-action-row {
+            display: flex;
+            gap: 10px;
+            align-items: stretch;
+            margin-top: 5px;
+        }
+
+        .large-icon-btn {
+            width: 60px;
+            border-radius: 50%;
+            background: var(--bg-tile);
+            border: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 4px 0 #0b1116;
+            transition: 0.2s;
+            color: white;
+        }
+        .large-icon-btn:hover { background: var(--bg-tile-hover); transform: translateY(-1px); box-shadow: 0 5px 0 #0b1116; }
+        .large-icon-btn:active { transform: scale(0.92); box-shadow: 0 0 0 #0b1116; }
+
+        .action-btn {
+            background: var(--color-accent);
+            color: #ffffff;
+            border: 2px solid #000000;
+            border-radius: 35px;
+            padding: 12px;
+            font-size: 16px;
+            font-weight: 800;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: transform 0.1s ease, background 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 2px;
+            flex: 1;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        .action-btn:hover:not(:disabled) { background: var(--color-accent-hover); }
+        .action-btn:active:not(:disabled) { transform: scale(0.96); box-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+        .action-btn:disabled { background: var(--bg-tile); color: #6b7d8f; border-color: #0b1116; cursor: not-allowed; transform: none; box-shadow: none; }
+        .action-btn.cashout-state { background: #e67e22; border-color: #000000; }
+        .action-btn.cashout-state:hover:not(:disabled) { background: #d35400; }
+        .action-btn.auto-state { background: #c0392b; border-color: #000000; }
+        .action-btn.auto-state:hover:not(:disabled) { background: #a93226; }
+
+        .stake-row {
+            display: flex;
+            background: var(--bg-input);
+            border-radius: 35px;
+            border: 2px solid var(--bg-tile);
+            align-items: stretch;
+            transition: border-color 0.3s;
+            margin-top: 5px;
+            height: 50px;
+        }
+        .stake-row:focus-within { border-color: var(--bg-tile-hover); }
+
+        .stake-input-box {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2px 10px;
+        }
+        .stake-label { color: var(--color-text); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+        .stake-input-box input {
+            background: transparent;
+            border: none;
+            color: var(--color-white);
+            font-size: 18px;
+            font-weight: 900;
+            text-align: center;
+            outline: none;
+            width: 100%;
+            -moz-appearance: textfield;
+            margin-top: 1px;
+        }
+        .stake-input-box input::-webkit-outer-spin-button, .stake-input-box input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+        .stake-controls {
+            display: flex;
+            gap: 6px;
+            padding: 4px 10px;
+            background: #174873;
+            border-radius: 0 35px 35px 0;
+            align-items: center;
+        }
+        .circle-btn {
+            width: 32px; height: 32px;
+            border-radius: 50%;
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.2);
+            cursor: pointer;
+            display: flex; justify-content: center; align-items: center;
+            transition: 0.2s;
+            color: white;
+        }
+        .circle-btn:hover { background: rgba(255,255,255,0.1); }
+        .circle-btn:active { transform: scale(0.85); }
+
+        .bottom-info-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 5px;
+            margin-bottom: 28px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            white-space: nowrap;
+            scrollbar-width: none;
+            padding-bottom: 4px;
+        }
+        .bottom-info-row::-webkit-scrollbar { display: none; }
+
+        .mines-dropdown-container {
+            display: inline-flex;
+            align-items: center;
+            background: var(--bg-input);
+            border: 2px solid var(--bg-tile);
+            border-radius: 25px;
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: 0.2s;
+            flex-shrink: 0;
+        }
+        .mines-dropdown-container:active { transform: scale(0.96); }
+        .mines-dropdown-container span.label { color: var(--color-text); font-weight: 600; font-size: 12px; margin-right: 8px; }
+        .mines-dropdown-container span.value { color: var(--color-white); font-weight: 900; font-size: 14px; margin-right: 4px; }
+
+        .balance-display {
+            flex: 1;
+            text-align: right;
+            color: var(--color-white);
+            font-weight: 900;
+            font-size: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            line-height: 1.1;
+            flex-shrink: 0;
+        }
+        .balance-display span.label { font-size: 10px; color: var(--color-text); text-transform: uppercase; font-weight: 600;}
+        .balance-display span.currency { font-weight: 500; color: var(--color-text); font-size: 11px; margin-left: 2px; }
+
+        .menu-icon {
+            background: var(--bg-tile);
+            border: none;
+            width: 38px; height: 38px;
+            box-shadow: 0 3px 0 #0b1116;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            color: white;
+            transition: 0.2s;
+            flex-shrink: 0;
+        }
+        .menu-icon:active { transform: scale(0.9); box-shadow: 0 0 0 #0b1116; }
+
+        .modal-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: var(--color-modal-overlay);
+            z-index: 10;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            backdrop-filter: blur(3px);
+        }
+        .modal-overlay.active { opacity: 1; pointer-events: all; }
+
+        .slide-modal {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            background: var(--bg-sidebar);
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+            padding: 25px 20px;
+            z-index: 11;
+            transform: translateY(100%);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1);
+            box-shadow: 0 -10px 40px rgba(0,0,0,0.5);
+            max-height: 80%;
+            overflow-y: auto;
+        }
+        .slide-modal.active { transform: translateY(0); }
+
+        .slide-modal-left {
+            position: absolute;
+            top: 20px;
+            left: 0;
+            bottom: auto;
+            width: 280px;
+            max-height: 70%;
+            background: var(--bg-sidebar);
+            border-top-right-radius: 20px;
+            border-bottom-right-radius: 20px;
+            padding: 25px 20px;
+            z-index: 11;
+            transform: translateX(-100%);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1);
+            box-shadow: 10px 0 40px rgba(0,0,0,0.5);
+            overflow-y: auto;
+        }
+        .slide-modal-left.active { transform: translateX(0); }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            color: var(--color-white);
+            font-weight: bold;
+            font-size: 16px;
+        }
+        .close-modal-btn {
+            background: var(--bg-tile);
+            border: none;
+            color: white;
+            width: 30px; height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex; justify-content: center; align-items: center;
+        }
+
+        .mines-grid-selector {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 8px;
+        }
+        .mine-select-btn {
+            background: var(--bg-input);
+            border: 2px solid var(--bg-tile);
+            color: var(--color-white);
+            border-radius: 8px;
+            padding: 10px 0;
+            font-weight: 900;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .mine-select-btn.selected { background: var(--color-accent); border-color: var(--color-accent-hover); }
+        .mine-select-btn:active { transform: scale(0.9); }
+
+        .setting-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--bg-input);
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            color: var(--color-white);
+            font-weight: 600;
+        }
+        
+        .seed-info {
+            font-size: 11px;
+            word-break: break-all;
+            background: var(--bg-input);
+            padding: 8px;
+            border-radius: 8px;
+            margin-top: 8px;
+        }
+
+        @media (min-width: 768px) {
+            .game-container { flex-direction: row; border-radius: 12px; max-height: 600px; height: 100%; }
+            .controls { width: 340px; border-right: 2px solid rgba(255,255,255,0.02); }
+            .game-area { padding: 40px; }
+            .slide-modal { position: absolute; left: 0; bottom: 0; width: 340px; border-radius: 0; border-top-right-radius: 20px; }
+            .slide-modal-left { width: 340px; }
+            .bottom-info-row { overflow-x: visible; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="game-container">
+        
+        <div class="controls">
+            
+            <div class="top-bar">
+                <button class="pill-btn" id="randomBtn">RANDOM</button>
+                <div class="auto-game-toggle">
+                    <label class="switch">
+                        <input type="checkbox" id="auto-switch">
+                        <span class="slider round"></span>
+                    </label>
+                    <span>Auto Game</span>
+                </div>
+            </div>
+
+            <div class="bet-action-row">
+                <button class="large-icon-btn" id="restart-btn">
+                    <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/><path d="M20 4l-4 4M4 20l4-4"/></svg>
+                </button>
+                <button id="action-btn" class="action-btn">
+                    <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; width:100%;">
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <svg id="btn-icon" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" width="20" height="20">
+                                <path d="M7 4 L19 12 L7 20 Z"></path>
+                            </svg>
+                            <span id="btn-main-text" style="letter-spacing: 0.5px;">BET</span>
+                        </div>
+                        <span id="btn-sub-text" style="display: none; font-size: 11px; margin-top:2px;"></span>
+                    </div>
+                </button>
+            </div>
+
+            <div class="stake-row">
+                <div class="stake-input-box">
+                    <span class="stake-label">Bet Amount</span> 
+                    <input type="number" id="bet-input" value="100.00" min="10.00" step="10.00">
+                </div>
+                <div class="stake-controls">
+                    <button class="circle-btn" id="bet-minus">-</button>
+                    <button class="circle-btn" id="bet-half">½</button>
+                    <button class="circle-btn" id="bet-plus">+</button>
+                </div>
+            </div>
+
+            <div class="bottom-info-row">
+                <div class="mines-dropdown-container" id="minesDropdown">
+                    <span class="label">MINES</span>
+                    <span class="value" id="selected-mines-display">3</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="var(--color-text)" stroke-width="2" width="14" height="14"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </div>
+
+                <div class="balance-display">
+                    <span class="label">Balance</span>
+                    <div><span id="balance-amount">0.00</span><span class="currency">MWK</span></div>
+                </div>
+
+                <button class="menu-icon" id="settingsBtn">
+                    <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="20" height="20"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                </button>
+            </div>
+        </div>
+
+        <div class="game-area">
+            <div class="grid" id="grid"></div>
+        </div>
+
+        <div class="modal-overlay" id="overlay"></div>
+        
+        <div class="slide-modal" id="mines-modal">
+            <div class="modal-header">
+                <span>Select Mines</span>
+                <button class="close-modal-btn" id="closeMinesModal">✕</button>
+            </div>
+            <div class="mines-grid-selector" id="mines-grid-selector"></div>
+        </div>
+
+        <div class="slide-modal-left" id="settings-modal">
+            <div class="modal-header">
+                <span>Settings & Provably Fair</span>
+                <button class="close-modal-btn" id="closeSettingsModal">✕</button>
+            </div>
+            <div class="setting-row">
+                <span>Sound FX</span>
+                <label class="switch">
+                    <input type="checkbox" id="sound-switch" checked>
+                    <span class="slider round"></span>
+                </label>
+            </div>
+            <div class="setting-row">
+                <span>Client Seed</span>
+                <button id="newSeedBtn" style="background:var(--color-accent); border:none; padding:5px 10px; border-radius:8px; color:white;">Generate New</button>
+            </div>
+            <div class="seed-info" id="clientSeedDisplay">Client Seed: loading...</div>
+            <div class="seed-info" id="serverSeedHashDisplay">Server Seed Hash: -</div>
+            <div class="seed-info" id="verifyInfo" style="font-size:10px;"></div>
+        </div>
+
+    </div>
+
+    <audio id="sfx-click" preload="auto"></audio>
+    <audio id="sfx-star" preload="auto"></audio>
+    <audio id="sfx-bomb" preload="auto"></audio>
+    <audio id="sfx-win" preload="auto"></audio>
+
+    <script>
+        // ==================== CONFIGURATION ====================
+        // CHANGE THIS TO YOUR CLOUDFLARE WORKER URL
+        const API_BASE_URL = 'https://your-worker.workers.dev/api';
+        
+        // ==================== GLOBAL STATE ====================
+        let deviceId = localStorage.getItem('deviceId');
+        if (!deviceId) {
+            deviceId = crypto.randomUUID();
+            localStorage.setItem('deviceId', deviceId);
+        }
+        
+        let clientSeed = localStorage.getItem('clientSeed') || crypto.randomUUID().slice(0, 16);
+        let currentGameId = null;
+        let isGameActive = false;
+        let isAutoPlaying = false;
+        let currentMultiplier = 1.00;
+        let currentBet = 0;
+        let currentMines = 3;
+        let revealedCount = 0;
+        let balance = 0;
+        let soundEnabled = true;
+        let autoLoopTimer = null;
+        
+        // DOM Elements
+        const grid = document.getElementById('grid');
+        const betInput = document.getElementById('bet-input');
+        const actionBtn = document.getElementById('action-btn');
+        const btnMainText = document.getElementById('btn-main-text');
+        const btnSubText = document.getElementById('btn-sub-text');
+        const btnIcon = document.getElementById('btn-icon');
+        const balanceEl = document.getElementById('balance-amount');
+        const autoSwitch = document.getElementById('auto-switch');
+        const selectedMinesDisplay = document.getElementById('selected-mines-display');
+        const randomBtn = document.getElementById('randomBtn');
+        const restartBtn = document.getElementById('restart-btn');
+        const minesDropdown = document.getElementById('minesDropdown');
+        const settingsBtn = document.getElementById('settingsBtn');
+        const overlay = document.getElementById('overlay');
+        const minesModal = document.getElementById('mines-modal');
+        const settingsModal = document.getElementById('settings-modal');
+        const soundSwitch = document.getElementById('sound-switch');
+        const clientSeedDisplay = document.getElementById('clientSeedDisplay');
+        const serverSeedHashDisplay = document.getElementById('serverSeedHashDisplay');
+        const newSeedBtn = document.getElementById('newSeedBtn');
+        const verifyInfo = document.getElementById('verifyInfo');
+        
+        // Audio elements (create from base64 or use null)
+        const sounds = {
+            click: document.getElementById('sfx-click'),
+            star: document.getElementById('sfx-star'),
+            bomb: document.getElementById('sfx-bomb'),
+            win: document.getElementById('sfx-win')
+        };
+        
+        // Set audio sources using base64 silent or we can omit - for now use simple beep simulation
+        // We'll use Web Audio API for simple sounds if needed, but keep compatibility
+        function initSounds() {
+            // Create simple oscillator for sound if no files
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            let audioCtx = null;
+            
+            function playBeep(type) {
+                if (!soundEnabled) return;
+                try {
+                    if (!audioCtx) audioCtx = new AudioContext();
+                    const oscillator = audioCtx.createOscillator();
+                    const gainNode = audioCtx.createGain();
+                    oscillator.connect(gainNode);
+                    gainNode.connect(audioCtx.destination);
+                    oscillator.type = 'sine';
+                    let frequency = 800;
+                    if (type === 'star') frequency = 1200;
+                    if (type === 'bomb') frequency = 200;
+                    if (type === 'win') frequency = 1500;
+                    oscillator.frequency.value = frequency;
+                    gainNode.gain.value = 0.1;
+                    oscillator.start();
+                    gainNode.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + 0.5);
+                    oscillator.stop(audioCtx.currentTime + 0.5);
+                } catch(e) {}
+            }
+            
+            return {
+                click: () => playBeep('click'),
+                star: () => playBeep('star'),
+                bomb: () => playBeep('bomb'),
+                win: () => playBeep('win')
+            };
+        }
+        
+        const playSound = initSounds();
+        
+        // ==================== API HELPERS ====================
+        async function apiRequest(endpoint, method, body = null) {
+            const headers = {
+                'Content-Type': 'application/json',
+                'X-Device-ID': deviceId,
+                'X-Client-Seed': clientSeed
+            };
+            const options = { method, headers };
+            if (body) options.body = JSON.stringify(body);
+            
+            const response = await fetch(`${API_BASE_URL}${endpoint}`, options);
+            const data = await response.json();
+            if (!response.ok) throw new Error(data.error || 'API error');
+            return data;
+        }
+        
+        async function fetchBalance() {
+            try {
+                const data = await apiRequest('/balance', 'GET');
+                balance = data.balance;
+                balanceEl.innerText = balance.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+                return balance;
+            } catch (e) {
+                console.error('Balance fetch error:', e);
+                return balance;
+            }
+        }
+        
+        async function checkActiveGame() {
+            try {
+                const data = await apiRequest('/active-game', 'GET');
+                if (data.hasActiveGame) {
+                    currentGameId = data.gameId;
+                    isGameActive = true;
+                    currentBet = data.betAmount;
+                    currentMines = data.mineCount;
+                    currentMultiplier = data.currentMultiplier;
+                    revealedCount = data.revealedTiles ? data.revealedTiles.length : 0;
+                    selectedMinesDisplay.innerText = currentMines;
+                    betInput.value = currentBet.toFixed(2);
+                    betInput.disabled = true;
+                    
+                    // Rebuild grid with revealed tiles
+                    rebuildGridFromState(data.revealedTiles || []);
+                    updateButtonUI(true);
+                    return true;
+                }
+                return false;
+            } catch (e) {
+                console.error('Check active game error:', e);
+                return false;
+            }
+        }
+        
+        async function startGame(betAmount, mineCount, customClientSeed = null) {
+            const seed = customClientSeed || clientSeed;
+            const data = await apiRequest('/start', 'POST', {
+                betAmount,
+                mineCount,
+                clientSeed: seed
+            });
+            currentGameId = data.gameId;
+            isGameActive = true;
+            currentBet = betAmount;
+            currentMultiplier = 1.00;
+            revealedCount = 0;
+            balance = data.balance;
+            balanceEl.innerText = balance.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            betInput.disabled = true;
+            initGrid();
+            updateButtonUI(true);
+            
+            // Store server seed hash for display
+            if (data.serverSeedHash) {
+                serverSeedHashDisplay.innerText = `Server Seed Hash: ${data.serverSeedHash.substring(0, 16)}...`;
+            }
+            return true;
+        }
+        
+        async function revealTile(tileIndex) {
+            const data = await apiRequest('/reveal', 'POST', {
+                gameId: currentGameId,
+                tileIndex
+            });
+            
+            if (data.error) throw new Error(data.error);
+            
+            if (data.status === 'bomb') {
+                playSound('bomb');
+                isGameActive = false;
+                betInput.disabled = false;
+                updateButtonUI(false);
+                
+                // Show bomb on tile
+                const tile = grid.children[tileIndex];
+                tile.classList.add('revealed');
+                tile.innerHTML = `<img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23e74c3c'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cline x1='8' y1='8' x2='16' y2='16' stroke='white' stroke-width='2'/%3E%3Cline x1='16' y1='8' x2='8' y2='16' stroke='white' stroke-width='2'/%3E%3C/svg%3E" class="bomb-img">`;
+                
+                await revealAllMines();
+                return { gameOver: true, isBomb: true };
+            } else if (data.status === 'safe') {
+                playSound('star');
+                currentMultiplier = data.multiplier;
+                revealedCount = data.revealedCount;
+                const tile = grid.children[tileIndex];
+                tile.classList.add('revealed');
+                tile.innerHTML = `<img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23f1c40f'%3E%3Cpolygon points='12,2 15,9 22,9 16,14 18,21 12,17 6,21 8,14 2,9 9,9'/%3E%3C/svg%3E" class="star-img">`;
+                updateButtonUI(true);
+                return { gameOver: false };
+            } else if (data.status === 'win') {
+                playSound('win');
+                isGameActive = false;
+                betInput.disabled = false;
+                balance = data.balance;
+                balanceEl.innerText = balance.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+                updateButtonUI(false);
+                
+                const tile = grid.children[tileIndex];
+                tile.classList.add('revealed');
+                tile.innerHTML = `<img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23f1c40f'%3E%3Cpolygon points='12,2 15,9 22,9 16,14 18,21 12,17 6,21 8,14 2,9 9,9'/%3E%3C/svg%3E" class="star-img">`;
+                
+                await revealAllMines();
+                return { gameOver: true, isWin: true, payout: data.payout };
+            }
+        }
+        
+        async function cashout() {
+            const data = await apiRequest('/cashout', 'POST', { gameId: currentGameId });
+            playSound('win');
+            balance = data.balance;
+            balanceEl.innerText = balance.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            isGameActive = false;
+            betInput.disabled = false;
+            updateButtonUI(false);
+            await revealAllMines();
+        }
+        
+        async function revealAllMines() {
+            // Reveal all remaining tiles (visual only)
+            const tiles = grid.children;
+            for (let i = 0; i < tiles.length; i++) {
+                if (!tiles[i].classList.contains('revealed')) {
+                    tiles[i].classList.add('revealed');
+                    tiles[i].classList.add('fade-out');
+                    // We don't know mine positions, just show generic
+                    tiles[i].innerHTML = `<img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%239ab0c6'%3E%3Crect x='4' y='4' width='16' height='16'/%3E%3C/svg%3E">`;
+                }
+            }
+        }
+        
+        function initGrid() {
+            grid.innerHTML = '';
+            for (let i = 0; i < 25; i++) {
+                const tile = document.createElement('button');
+                tile.classList.add('tile');
+                tile.dataset.index = i;
+                tile.onclick = () => handleTileClick(i);
+                grid.appendChild(tile);
+            }
+        }
+        
+        function rebuildGridFromState(revealedIndices) {
+            initGrid();
+            for (let idx of revealedIndices) {
+                const tile = grid.children[idx];
+                tile.classList.add('revealed');
+                tile.innerHTML = `<img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23f1c40f'%3E%3Cpolygon points='12,2 15,9 22,9 16,14 18,21 12,17 6,21 8,14 2,9 9,9'/%3E%3C/svg%3E" class="star-img">`;
+                tile.disabled = true;
+            }
+        }
+        
+        async function handleTileClick(index) {
+            if (!isGameActive) return;
+            const tile = grid.children[index];
+            if (tile.classList.contains('revealed')) return;
+            
+            playSound('click');
+            try {
+                const result = await revealTile(index);
+                if (result.gameOver) {
+                    if (isAutoPlaying) stopAutoPlay();
+                }
+            } catch (err) {
+                console.error(err);
+                alert(err.message);
+            }
+        }
+        
+        function updateButtonUI(showCashout) {
+            if (isGameActive && showCashout) {
+                const winAmount = currentBet * currentMultiplier;
+                btnMainText.innerText = 'CASHOUT';
+                btnIcon.style.display = 'none';
+                btnSubText.innerText = `${currentMultiplier.toFixed(2)}x • MWK ${winAmount.toFixed(2)}`;
+                btnSubText.style.display = 'block';
+                actionBtn.classList.add('cashout-state');
+                actionBtn.disabled = false;
+            } else {
+                btnMainText.innerText = 'BET';
+                btnIcon.style.display = 'block';
+                btnSubText.style.display = 'none';
+                actionBtn.classList.remove('cashout-state');
+                actionBtn.disabled = false;
+            }
+        }
+        
+        async function handleMainAction() {
+            playSound('click');
+            
+            if (autoSwitch.checked) {
+                if (isAutoPlaying) {
+                    stopAutoPlay();
+                } else {
+                    startAutoPlay();
+                }
+                return;
+            }
+            
+            if (!isGameActive) {
+                const betAmount = parseFloat(betInput.value);
+                if (isNaN(betAmount) || betAmount < 10) {
+                    alert('Invalid bet amount (minimum 10 MWK)');
+                    return;
+                }
+                if (balance < betAmount) {
+                    alert('Insufficient balance');
+                    return;
+                }
+                try {
+                    await startGame(betAmount, currentMines);
+                } catch (err) {
+                    alert(err.message);
+                }
+            } else {
+                try {
+                    await cashout();
+                } catch (err) {
+                    alert(err.message);
+                }
+            }
+        }
+        
+        async function handleRestart() {
+            playSound('click');
+            if (isGameActive) {
+                await cashout();
+            }
+            // After cashout, start new game
+            const betAmount = parseFloat(betInput.value);
+            if (balance >= betAmount && betAmount >= 10) {
+                await startGame(betAmount, currentMines);
+            } else {
+                alert('Insufficient balance or invalid bet');
+            }
+        }
+        
+        async function randomizeTiles() {
+            playSound('click');
+            if (isGameActive) await cashout();
+            // Random mines between 1 and 24
+            const newMines = Math.floor(Math.random() * 24) + 1;
+            currentMines = newMines;
+            selectedMinesDisplay.innerText = currentMines;
+            closeAllModals();
+        }
+        
+        // Auto Play
+        async function startAutoPlay() {
+            isAutoPlaying = true;
+            grid.classList.add('auto-playing');
+            btnMainText.innerText = 'STOP AUTO';
+            btnSubText.style.display = 'none';
+            btnIcon.style.display = 'none';
+            actionBtn.classList.add('auto-state');
+            autoLoop();
+        }
+        
+        function stopAutoPlay() {
+            isAutoPlaying = false;
+            grid.classList.remove('auto-playing');
+            if (autoLoopTimer) clearTimeout(autoLoopTimer);
+            btnMainText.innerText = 'BET';
+            btnIcon.style.display = 'block';
+            actionBtn.classList.remove('auto-state');
+            updateButtonUI(false);
+            if (autoSwitch.checked) autoSwitch.checked = false;
+        }
+        
+        async function autoLoop() {
+            if (!isAutoPlaying) return;
+            
+            if (!isGameActive) {
+                const betAmount = parseFloat(betInput.value);
+                if (balance < betAmount) {
+                    alert('Insufficient balance for auto play');
+                    stopAutoPlay();
+                    return;
+                }
+                try {
+                    await startGame(betAmount, currentMines);
+                } catch (err) {
+                    stopAutoPlay();
+                    return;
+                }
+            }
+            
+            await new Promise(r => setTimeout(r, 800));
+            
+            if (!isAutoPlaying || !isGameActive) {
+                autoLoopTimer = setTimeout(() => autoLoop(), 500);
+                return;
+            }
+            
+            // Randomly pick 1-3 tiles
+            const availableTiles = [];
+            for (let i = 0; i < 25; i++) {
+                if (!grid.children[i].classList.contains('revealed')) availableTiles.push(i);
+            }
+            const picks = Math.min(Math.floor(Math.random() * 3) + 1, availableTiles.length);
+            for (let p = 0; p < picks; p++) {
+                if (!isAutoPlaying || !isGameActive) break;
+                const randomIndex = availableTiles[Math.floor(Math.random() * availableTiles.length)];
+                await handleTileClick(randomIndex);
+                await new Promise(r => setTimeout(r, 600));
+            }
+            
+            if (isAutoPlaying && isGameActive) {
+                await cashout();
+                await new Promise(r => setTimeout(r, 1000));
+            }
+            
+            autoLoopTimer = setTimeout(() => autoLoop(), 500);
+        }
+        
+        // UI Helpers
+        function adjustBet(delta) {
+            if (isGameActive) return;
+            let val = parseFloat(betInput.value) || 0;
+            betInput.value = Math.max(10, val + delta).toFixed(2);
+        }
+        
+        function setHalfBet() {
+            if (isGameActive) return;
+            let val = balance / 2;
+            betInput.value = Math.max(10, Math.min(val, balance)).toFixed(2);
+        }
+        
+        function openModal(modal) {
+            overlay.classList.add('active');
+            modal.classList.add('active');
+        }
+        
+        function closeAllModals() {
+            overlay.classList.remove('active');
+            minesModal.classList.remove('active');
+            settingsModal.classList.remove('active');
+        }
+        
+        function populateMinesSelector() {
+            const container = document.getElementById('mines-grid-selector');
+            container.innerHTML = '';
+            for (let i = 1; i <= 24; i++) {
+                let btn = document.createElement('button');
+                btn.className = `mine-select-btn ${i === currentMines ? 'selected' : ''}`;
+                btn.innerText = i;
+                btn.onclick = () => {
+                    if (isGameActive) return;
+                    currentMines = i;
+                    selectedMinesDisplay.innerText = i;
+                    document.querySelectorAll('.mine-select-btn').forEach(b => b.classList.remove('selected'));
+                    btn.classList.add('selected');
+                    closeAllModals();
+                };
+                container.appendChild(btn);
+            }
+        }
+        
+        function updateClientSeed() {
+            clientSeedDisplay.innerText = `Client Seed: ${clientSeed}`;
+            localStorage.setItem('clientSeed', clientSeed);
+        }
+        
+        function generateNewSeed() {
+            if (isGameActive) {
+                alert('Cannot change seed during active game');
+                return;
+            }
+            clientSeed = crypto.randomUUID().slice(0, 16);
+            updateClientSeed();
+            playSound('click');
+        }
+        
+        // Event Listeners
+        document.getElementById('bet-minus').onclick = () => adjustBet(-10);
+        document.getElementById('bet-plus').onclick = () => adjustBet(10);
+        document.getElementById('bet-half').onclick = () => setHalfBet();
+        actionBtn.onclick = handleMainAction;
+        restartBtn.onclick = handleRestart;
+        randomBtn.onclick = randomizeTiles;
+        minesDropdown.onclick = () => openModal(minesModal);
+        settingsBtn.onclick = () => openModal(settingsModal);
+        document.getElementById('closeMinesModal').onclick = closeAllModals;
+        document.getElementById('closeSettingsModal').onclick = closeAllModals;
+        overlay.onclick = closeAllModals;
+        soundSwitch.onchange = () => { soundEnabled = soundSwitch.checked; };
+        newSeedBtn.onclick = generateNewSeed;
+        autoSwitch.onchange = () => {
+            if (autoSwitch.checked && !isAutoPlaying && !isGameActive) {
+                startAutoPlay();
+            } else if (!autoSwitch.checked && isAutoPlaying) {
+                stopAutoPlay();
+            }
+        };
+        
+        // Initialization
+        async function init() {
+            populateMinesSelector();
+            updateClientSeed();
+            await fetchBalance();
+            const hasActive = await checkActiveGame();
+            if (!hasActive) {
+                initGrid();
+                updateButtonUI(false);
+                betInput.disabled = false;
+            }
+        }
+        
+        init();
+    </script>
+</body>
+</html>
