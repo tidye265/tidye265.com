@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Mines Casino Game - Premium | Tidye265</title>
+    <style>
+        /* ============ CSS Reset & Variables – 100% UNCHANGED FROM ORIGINAL ============ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        :root {
+            --bg-body: #0d1721;
+            --bg-sidebar: #15222f;
+            --bg-input: #081017;
+            --bg-tile: #263849;
+            --bg-tile-hover: #375067;
+            --bg-tile-active: #081017;
+            --color-text: #9ab0c6;
+            --color-white: #e3edf7;
+            --color-accent: #509304;
+            --color-accent-hover: #5da800;
+            --color-danger: #e74c3c;
+            --color-modal-overlay: rgba(8, 16, 23, 0.85);
+        }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--color-text);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            overscroll-behavior: none;
+        }
+
+        .game-container {
+            display: flex;
+            flex-direction: column-reverse;
+            width: 100%;
+            height: 100%;
+            max-width: 800px;
+            max-height: 900px;
+            background-color: var(--bg-sidebar);
+            border-radius: 0;
+            position: relative;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.02);
+        }
+
+        /* ============ CONNECTING OVERLAY – BLUE WITH STATIC ASSETS ============ */
+        #connecting-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: var(--bg-body);
+            z-index: 50;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+        }
+
+        #connecting-overlay .connecting-icons {
+            display: flex;
+            gap: 30px;
+            opacity: 0.4;
+        }
+
+        #connecting-overlay .connecting-icons svg {
+            width: 60px;
+            height: 60px;
+            filter: drop-shadow(0 0 8px rgba(255,255,255,0.2));
+        }
+
+        #connecting-overlay .connecting-text {
+            color: var(--color-white);
+            font-size: 20px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+        }
+
+        /* ============ NOTIFICATION BANNER ============ */
+        .notification-container {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            right: 15px;
+            z-index: 45;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            pointer-events: none;
+        }
+
+        .notification-item {
+            background: #1a2533;
+            color: #fff;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 14px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            text-align: center;
+            border-left: 4px solid var(--color-accent);
+            animation: slideDown 0.3s ease-out, fadeOut 0.3s ease-out 2.7s forwards;
+            pointer-events: auto;
+        }
+
+        .notification-item.error {
+            border-left-color: var(--color-danger);
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes fadeOut {
+            to { opacity: 0; transform: translateY(-10px); }
+        }
+
+        .game-area {
+            flex: 1;
+            background-color: var(--bg-body);
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .game-area::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(38, 56, 73, 0.4) 0%, rgba(13, 23, 33, 0) 70%);
+            pointer-events: none;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+            width: 100%;
+            max-width: 400px;
+            aspect-ratio: 1 / 1;
+            position: relative;
+            z-index: 2;
+        }
+
+        .grid.auto-playing {
+            pointer-events: none;
+        }
+
+        /* ============ TILE – NO SCALING ANIMATIONS ============ */
+        .tile {
+            background: linear-gradient(145deg, var(--bg-tile), #1e2c3a);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 4px 0 #0b1116, 0 6px 10px rgba(0,0,0,0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            /* NO TRANSFORM ON HOVER/ACTIVE */
+        }
+
+        .tile::after {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%; width: 50%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+            transition: 0.5s;
+        }
+
+        .tile:hover:not(:disabled)::after {
+            left: 100%;
+        }
+
+        .tile:hover:not(:disabled) {
+            background: linear-gradient(145deg, var(--bg-tile-hover), var(--bg-tile));
+            box-shadow: 0 6px 0 #0b1116, 0 8px 15px rgba(0,0,0,0.3);
+        }
+
+        .tile:active:not(:disabled),
+        .tile.revealed {
+            box-shadow: 0 0 0 #0b1116, inset 0 3px 5px rgba(0,0,0,0.4);
+            background: var(--bg-tile-active);
+        }
+
+        .tile:disabled { cursor: default; }
+
+        /* Pending state (instant feedback on click) – subtle color change */
+        .tile.pending {
+            background: #2f4258;
+            box-shadow: 0 2px 0 #0b1116, inset 0 1px 4px rgba(0,0,0,0.3);
+            pointer-events: none;
+        }
+
+        .tile img {
+            width: 65%;
+            height: 65%;
+            object-fit: contain;
+            opacity: 0;
+            /* NO SCALE / ROTATE TRANSFORM – JUST OPACITY */
+            transition: opacity 0.2s ease;
+            transform: none;
+        }
+
+        .tile.revealed img.star-img {
+            opacity: 1;
+            transform: none;
+            filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.6));
+        }
+
+        .tile.revealed img.bomb-img {
+            opacity: 1;
+            transform: none;
+            filter: drop-shadow(0 0 12px rgba(231, 76, 60, 0.8));
+        }
+
+        .tile.fade-out img {
+            opacity: 0.3;
+            filter: none;
+        }
+
+        .controls {
+            padding: 20px 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            width: 100%;
+            position: relative;
+            z-index: 3;
+            background: var(--bg-sidebar);
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .user-greeting {
+            background: var(--bg-input);
+            border: 2px solid var(--bg-tile);
+            color: var(--color-accent);
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 110px;
+        }
+
+        .pill-btn {
+            background: var(--bg-tile);
+            border: none;
+            color: var(--color-white);
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+            flex: 1;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 3px 0 #0b1116;
+        }
+        .pill-btn:hover { background: var(--bg-tile-hover); transform: translateY(-1px); box-shadow: 0 4px 0 #0b1116; }
+        .pill-btn:active { transform: scale(0.95); box-shadow: 0 0 0 #0b1116; }
+
+        .auto-game-toggle {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--bg-tile);
+            padding: 6px 12px;
+            border-radius: 25px;
+            color: var(--color-white);
+            box-shadow: 0 3px 0 #0b1116;
+            font-weight: bold;
+            font-size: 13px;
+        }
+
+        .switch { position: relative; display: inline-block; width: 34px; height: 18px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--bg-input); transition: .4s; border-radius: 34px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.3); }
+        .slider:before { position: absolute; content: ""; height: 14px; width: 14px; left: 2px; bottom: 2px; background-color: white; transition: .4s; border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+        input:checked + .slider { background-color: var(--color-accent); }
+        input:checked + .slider:before { transform: translateX(16px); background-color: var(--color-white); }
+
+        .bet-action-row {
+            display: flex;
+            gap: 10px;
+            align-items: stretch;
+            margin-top: 5px;
+        }
+
+        .large-icon-btn {
+            width: 60px;
+            border-radius: 50%;
+            background: var(--bg-tile);
+            border: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 4px 0 #0b1116;
+            transition: 0.2s;
+            color: white;
+        }
+        .large-icon-btn:hover { background: var(--bg-tile-hover); transform: translateY(-1px); box-shadow: 0 5px 0 #0b1116; }
+        .large-icon-btn:active { transform: scale(0.92); box-shadow: 0 0 0 #0b1116; }
+
+        .action-btn {
+            background: var(--color-accent);
+            color: #ffffff;
+            border: 2px solid #000000;
+            border-radius: 35px;
+            padding: 12px;
+            font-size: 16px;
+            font-weight: 800;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: transform 0.1s ease, background 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 2px;
+            flex: 1;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        .action-btn:hover:not(:disabled) { background: var(--color-accent-hover); }
+        .action-btn:active:not(:disabled) { transform: scale(0.96); box-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+        .action-btn:disabled { background: var(--bg-tile); color: #6b7d8f; border-color: #0b1116; cursor: not-allowed; transform: none; box-shadow: none; }
+        .action-btn.cashout-state { background: #e67e22; border-color: #000000; }
+        .action-btn.cashout-state:hover:not(:disabled) { background: #d35400; }
+        .action-btn.auto-state { background: #c0392b; border-color: #000000; }
+        .action-btn.auto-state:hover:not(:disabled) { background: #a93226; }
+
+        .stake-row {
+            display: flex;
+            background: var(--bg-input);
+            border-radius: 35px;
+            border: 2px solid var(--bg-tile);
+            align-items: stretch;
+            transition: border-color 0.3s;
+            margin-top: 5px;
+            height: 50px;
+        }
+        .stake-row:focus-within { border-color: var(--bg-tile-hover); }
+
+        .stake-input-box {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2px 10px;
+        }
+        .stake-label { color: var(--color-text); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+        .stake-input-box input {
+            background: transparent;
+            border: none;
+            color: var(--color-white);
+            font-size: 18px;
+            font-weight: 900;
+            text-align: center;
+            outline: none;
+            width: 100%;
+            -moz-appearance: textfield;
+            margin-top: 1px;
+        }
+        .stake-input-box input::-webkit-outer-spin-button, .stake-input-box input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+        .stake-controls {
+            display: flex;
+            gap: 6px;
+            padding: 4px 10px;
+            background: #174873;
+            border-radius: 0 35px 35px 0;
+            align-items: center;
+        }
+        .circle-btn {
+            width: 32px; height: 32px;
+            border-radius: 50%;
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.2);
+            cursor: pointer;
+            display: flex; justify-content: center; align-items: center;
+            transition: 0.2s;
+            color: white;
+        }
+        .circle-btn:hover { background: rgba(255,255,255,0.1); }
+        .circle-btn:active { transform: scale(0.85); }
+
+        .bottom-info-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 5px;
+            margin-bottom: 28px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            white-space: nowrap;
+            scrollbar-width: none;
+            padding-bottom: 4px;
+        }
+        .bottom-info-row::-webkit-scrollbar { display: none; }
+
+        .mines-dropdown-container {
+            display: inline-flex;
+            align-items: center;
+            background: var(--bg-input);
+            border: 2px solid var(--bg-tile);
+            border-radius: 25px;
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: 0.2s;
+            flex-shrink: 0;
+        }
+        .mines-dropdown-container:active { transform: scale(0.96); }
+        .mines-dropdown-container span.label { color: var(--color-text); font-weight: 600; font-size: 12px; margin-right: 8px; }
+        .mines-dropdown-container span.value { color: var(--color-white); font-weight: 900; font-size: 14px; margin-right: 4px; }
+
+        .balance-display {
+            flex: 1;
+            text-align: right;
+            color: var(--color-white);
+            font-weight: 900;
+            font-size: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            line-height: 1.1;
+            flex-shrink: 0;
+        }
+        .balance-display span.label { font-size: 10px; color: var(--color-text); text-transform: uppercase; font-weight: 600;}
+        .balance-display span.currency { font-weight: 500; color: var(--color-text); font-size: 11px; margin-left: 2px; }
+
+        .menu-icon {
+            background: var(--bg-tile);
+            border: none;
+            width: 38px; height: 38px;
+            box-shadow: 0 3px 0 #0b1116;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            color: white;
+            transition: 0.2s;
+            flex-shrink: 0;
+        }
+        .menu-icon:active { transform: scale(0.9); box-shadow: 0 0 0 #0b1116; }
+
+        .modal-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: var(--color-modal-overlay);
+            z-index: 10;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            backdrop-filter: blur(3px);
+        }
+        .modal-overlay.active { opacity: 1; pointer-events: all; }
+
+        .slide-modal {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            background: var(--bg-sidebar);
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+            padding: 25px 20px;
+            z-index: 11;
+            transform: translateY(100%);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1);
+            box-shadow: 0 -10px 40px rgba(0,0,0,0.5);
+            max-height: 80%;
+            overflow-y: auto;
+        }
+        .slide-modal.active { transform: translateY(0); }
+
+        .slide-modal-left {
+            position: absolute;
+            top: 20px;
+            left: 0;
+            bottom: auto;
+            width: 280px;
+            max-height: 70%;
+            background: var(--bg-sidebar);
+            border-top-right-radius: 20px;
+            border-bottom-right-radius: 20px;
+            padding: 25px 20px;
+            z-index: 11;
+            transform: translateX(-100%);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1);
+            box-shadow: 10px 0 40px rgba(0,0,0,0.5);
+            overflow-y: auto;
+        }
+        .slide-modal-left.active { transform: translateX(0); }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            color: var(--color-white);
+            font-weight: bold;
+            font-size: 16px;
+        }
+        .close-modal-btn {
+            background: var(--bg-tile);
+            border: none;
+            color: white;
+            width: 30px; height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex; justify-content: center; align-items: center;
+        }
+
+        .mines-grid-selector {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 8px;
+        }
+        .mine-select-btn {
+            background: var(--bg-input);
+            border: 2px solid var(--bg-tile);
+            color: var(--color-white);
+            border-radius: 8px;
+            padding: 10px 0;
+            font-weight: 900;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .mine-select-btn.selected { background: var(--color-accent); border-color: var(--color-accent-hover); }
+        .mine-select-btn:active { transform: scale(0.9); }
+
+        .setting-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--bg-input);
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            color: var(--color-white);
+            font-weight: 600;
+        }
+
+        /* Removed old loading-spinner */
+
+        @media (min-width: 768px) {
+            .game-container { flex-direction: row; border-radius: 12px; max-height: 600px; height: 100%; }
+            .controls { width: 340px; border-right: 2px solid rgba(255,255,255,0.02); }
+            .game-area { padding: 40px; }
+            .slide-modal { position: absolute; left: 0; bottom: 0; width: 340px; border-radius: 0; border-top-right-radius: 20px; }
+            .slide-modal-left { width: 340px; }
+            .bottom-info-row { overflow-x: visible; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="game-container">
+        <!-- CONNECTING OVERLAY -->
+        <div id="connecting-overlay">
+            <div class="connecting-icons">
+                <!-- Static star SVG -->
+                <svg viewBox="0 0 24 24" fill="#FFD700" opacity="0.7" width="60" height="60">
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                </svg>
+                <!-- Static bomb SVG -->
+                <svg viewBox="0 0 24 24" fill="#e74c3c" opacity="0.7" width="60" height="60">
+                    <circle cx="12" cy="12" r="9" />
+                    <path d="M12 2 L14 6 L18 6 L14 10 L15 15 L12 12 L9 15 L10 10 L6 6 L10 6 L12 2Z" fill="#f1c40f" />
+                    <line x1="12" y1="18" x2="12" y2="22" stroke="#fff" stroke-width="2" />
+                </svg>
+            </div>
+            <div class="connecting-text">CONNECTING...</div>
+        </div>
+
+        <!-- NOTIFICATION AREA -->
+        <div class="notification-container" id="notification-container"></div>
+
+        <div class="controls">
+            
+            <div class="top-bar">
+                <span class="user-greeting" id="user-greeting">👤 Guest</span>
+                <button class="pill-btn" onclick="randomizeTiles()">RANDOM</button>
+                <div class="auto-game-toggle">
+                    <label class="switch">
+                        <input type="checkbox" id="auto-switch" onchange="toggleAutoModeUI()">
+                        <span class="slider round"></span>
+                    </label>
+                    <span>Auto</span>
+                </div>
+            </div>
+
+            <div class="bet-action-row">
+                <button class="large-icon-btn" onclick="handleRestart()" id="restart-btn">
+                    <img src="restart.svg" alt="Restart" width="30" height="30" onerror="this.style.display='none';this.parentElement.innerHTML='<svg viewBox=\\'0 0 24 24\\' fill=\\'none\\' stroke=\\'white\\' stroke-width=\\'2\\' width=\\'24\\' height=\\'24\\'><path d=\\'M1 4v6h6M23 20v-6h-6\\'/><path d=\\'M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15\\'/></svg>';">
+                </button>
+                <button id="action-btn" class="action-btn" onclick="handleMainAction()">
+                    <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; width:100%;">
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <svg id="btn-icon" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" width="20" height="20">
+                                <path d="M7 4 L19 12 L7 20 Z"></path>
+                            </svg>
+                            <span id="btn-main-text" style="letter-spacing: 0.5px;">BET</span>
+                        </div>
+                        <span id="btn-sub-text" style="display: none; font-size: 11px; margin-top:2px;"></span>
+                    </div>
+                </button>
+            </div>
+
+            <div class="stake-row">
+                <div class="stake-input-box">
+                    <span class="stake-label">Bet Amount</span> 
+                    <input type="number" id="bet-input" value="50.00" min="10.00" step="10.00">
+                </div>
+                <div class="stake-controls">
+                    <button class="circle-btn" onclick="adjustBet(-10)">
+                        <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="16" height="16"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    </button>
+                    <button class="circle-btn" style="border:none; box-shadow:none;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path></svg>
+                    </button>
+                    <button class="circle-btn" onclick="adjustBet(10)">
+                        <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="16" height="16"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="bottom-info-row">
+                <div class="mines-dropdown-container" onclick="openModal('mines-modal')">
+                    <span class="label">MINES</span>
+                    <span class="value" id="selected-mines-display">3</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="var(--color-text)" stroke-width="2" width="14" height="14"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </div>
+
+                <div class="balance-display">
+                    <span class="label">Balance</span>
+                    <div><span id="balance-amount">0.00</span><span class="currency">MWK</span></div>
+                </div>
+
+                <button class="menu-icon" onclick="openModal('settings-modal')">
+                    <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="20" height="20"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                </button>
+            </div>
+        </div>
+
+        <div class="game-area">
+            <div class="grid" id="grid"></div>
+        </div>
+
+        <div class="modal-overlay" id="overlay" onclick="closeAllModals()"></div>
+        
+        <div class="slide-modal" id="mines-modal">
+            <div class="modal-header">
+                <span>Select Mines</span>
+                <button class="close-modal-btn" onclick="closeAllModals()">✕</button>
+            </div>
+            <div class="mines-grid-selector" id="mines-grid-selector"></div>
+        </div>
+
+        <div class="slide-modal-left" id="settings-modal">
+            <div class="modal-header">
+                <span>Settings</span>
+                <button class="close-modal-btn" onclick="closeAllModals()">✕</button>
+            </div>
+            <div class="setting-row">
+                <span>Sound FX</span>
+                <label class="switch">
+                    <input type="checkbox" id="sound-switch" checked onchange="toggleSound()">
+                    <span class="slider round"></span>
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <audio id="sfx-click" src="clickmine.mp3" preload="auto"></audio>
+    <audio id="sfx-star" src="star.mp3" preload="auto"></audio>
+    <audio id="sfx-bomb" src="bomb.mp3" preload="auto"></audio>
+    <audio id="sfx-win" src="winmine.mp3" preload="auto"></audio>
+
+    <!-- Supabase initialization (same as account.html) -->
+    <script src="supabase.js"></script>
+    <script>
+        // ================================================================
+        //  PRODUCTION MINES GAME – LOGIN_265 INTEGRATION
+        //  Domain: www.tidye265.com
+        //  Design: 100% Preserved | No alert() → custom notifications
+        //  No tile scaling | Instant click feedback | Blue connecting screen
+        // ================================================================
+
+        // ---- Game State ----
+        let balance = 0;
+        let isGameActive = false;
+        let isAutoPlaying = false;
+        let soundEnabled = true;
+        let currentBet = 0;
+        let currentMines = 3;
+        let currentMultiplier = 1.00;
+        let currentGameId = null;
+        let sessionToken = null;
+        let username = 'Guest';
+        let userId = null;
+
+        // ---- Assets ----
+        const STAR_SVG = 'star.svg';
+        const BOMB_SVG = 'bomb.svg';
+
+        // ---- DOM ----
+        const grid = document.getElementById('grid');
+        const betInput = document.getElementById('bet-input');
+        const actionBtn = document.getElementById('action-btn');
+        const btnMainText = document.getElementById('btn-main-text');
+        const btnSubText = document.getElementById('btn-sub-text');
+        const btnIcon = document.getElementById('btn-icon');
+        const balanceEl = document.getElementById('balance-amount');
+        const autoSwitch = document.getElementById('auto-switch');
+        const selectedMinesDisplay = document.getElementById('selected-mines-display');
+        const userGreeting = document.getElementById('user-greeting');
+        const connectingOverlay = document.getElementById('connecting-overlay');
+
+        // ==================== CUSTOM NOTIFICATION (replaces alert) ====================
+        const notificationContainer = document.getElementById('notification-container');
+        function showNotification(message, isError = false) {
+            const notif = document.createElement('div');
+            notif.className = 'notification-item' + (isError ? ' error' : '');
+            notif.textContent = message;
+            notificationContainer.appendChild(notif);
+            setTimeout(() => {
+                if (notif.parentNode) notif.parentNode.removeChild(notif);
+            }, 3000);
+        }
+
+        // ==================== SESSION TOKEN (SAME AS account.html) ====================
+        function getCleanSessionToken() {
+            let rawToken = localStorage.getItem('tidye_session_token');
+            if (!rawToken || rawToken === 'null' || rawToken === 'undefined') return null;
+            try {
+                let parsed = JSON.parse(rawToken);
+                if (parsed && parsed.access_token) return parsed.access_token;
+                if (typeof parsed === 'string') return parsed;
+            } catch (e) {}
+            return rawToken.replace(/^["']|["']$/g, '').trim();
+        }
+
+        // ==================== FETCH BALANCE FROM WALLET-API ====================
+        async function fetchBalanceFromWallet() {
+            const token = getCleanSessionToken();
+            if (!token) return false;
+            try {
+                const res = await fetch(`${window.SUPABASE_URL}/functions/v1/wallet-api`, {
+                    method: 'GET',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    balance = Number(data.balance);
+                    updateBalanceDisplay();
+                    return true;
+                }
+            } catch (e) {
+                console.error('Balance fetch error:', e);
+            }
+            return false;
+        }
+
+        // ==================== CHECK SESSION & LOAD USER ====================
+        async function checkSession() {
+            const token = getCleanSessionToken();
+            if (token) {
+                sessionToken = token;
+                try {
+                    const res = await fetch(`${window.SUPABASE_URL}/functions/v1/wallet-api`, {
+                        headers: { 'Authorization': `Bearer ${token}` }
+                    });
+                    if (res.ok) {
+                        const data = await res.json();
+                        balance = Number(data.balance);
+                        username = data.username || 'Player';
+                        userId = data.user_id || null;
+                        userGreeting.textContent = `👑 ${username}`;
+                        userGreeting.style.color = 'var(--color-accent)';
+                        updateBalanceDisplay();
+                        return true;
+                    } else {
+                        localStorage.removeItem('tidye_session_token');
+                        sessionToken = null;
+                    }
+                } catch (e) {
+                    console.log('Session check failed, guest mode');
+                }
+            }
+            // Guest mode
+            userGreeting.textContent = '👤 Guest';
+            balance = 0;
+            updateBalanceDisplay();
+            return false;
+        }
+
+        // ==================== API CALLS TO MINE-API ====================
+        async function apiCall(action, extra = {}) {
+            // No global spinner; tile-level feedback handles pending state
+            const body = {
+                action,
+                sessionToken: getCleanSessionToken(),
+                ...extra
+            };
+            const res = await fetch(`${window.SUPABASE_URL}/functions/v1/mine-api`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+            });
+            const data = await res.json();
+            if (!data.success) {
+                throw new Error(data.error || 'Request failed');
+            }
+            return data;
+        }
+
+        // ==================== AUDIO ====================
+        const sounds = {
+            click: document.getElementById('sfx-click'),
+            star: document.getElementById('sfx-star'),
+            bomb: document.getElementById('sfx-bomb'),
+            win: document.getElementById('sfx-win')
+        };
+        function playSound(type) {
+            if (!soundEnabled) return;
+            try { sounds[type].currentTime = 0; sounds[type].play().catch(()=>{}); } catch(e) {}
+        }
+        function toggleSound() { soundEnabled = document.getElementById('sound-switch').checked; }
+
+        // ==================== MODALS ====================
+        function openModal(id) {
+            if(isGameActive && !isAutoPlaying && id === 'mines-modal') return;
+            document.getElementById('overlay').classList.add('active');
+            document.getElementById(id).classList.add('active');
+            playSound('click');
+        }
+        function closeAllModals() {
+            document.getElementById('overlay').classList.remove('active');
+            document.querySelectorAll('.slide-modal, .slide-modal-left').forEach(m => m.classList.remove('active'));
+            playSound('click');
+        }
+
+        // ==================== MINES SELECTOR ====================
+        function populateMinesSelector() {
+            const container = document.getElementById('mines-grid-selector');
+            container.innerHTML = '';
+            for (let i = 1; i <= 24; i++) {
+                let btn = document.createElement('button');
+                btn.className = `mine-select-btn ${i === currentMines ? 'selected' : ''}`;
+                btn.innerText = i;
+                btn.onclick = () => {
+                    if (isGameActive) return;
+                    currentMines = i;
+                    selectedMinesDisplay.innerText = i;
+                    document.querySelectorAll('.mine-select-btn').forEach(b => b.classList.remove('selected'));
+                    btn.classList.add('selected');
+                    closeAllModals();
+                };
+                container.appendChild(btn);
+            }
+        }
+
+        // ==================== BALANCE & BET ====================
+        function updateBalanceDisplay() {
+            balanceEl.innerText = balance.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        }
+        function adjustBet(amount) {
+            if(isGameActive || isAutoPlaying) return;
+            playSound('click');
+            let val = parseFloat(betInput.value) || 0;
+            betInput.value = Math.max(10.00, (val + amount)).toFixed(2);
+        }
+
+        // ==================== GRID ====================
+        function initGrid() {
+            grid.innerHTML = '';
+            for (let i = 0; i < 25; i++) {
+                const tile = document.createElement('button');
+                tile.classList.add('tile');
+                tile.dataset.index = i;
+                tile.onclick = () => handleTileClick(i, tile);
+                grid.appendChild(tile);
+            }
+        }
+
+        // ==================== MAIN ACTIONS ====================
+        function handleRestart() {
+            playSound('click');
+            if (isGameActive) {
+                cashout();
+                setTimeout(() => { if (balance >= parseFloat(betInput.value)) startGame(); }, 600);
+            } else {
+                if (balance >= parseFloat(betInput.value)) startGame();
+                else showNotification("Insufficient balance to restart.", true);
+            }
+        }
+
+        function toggleAutoModeUI() {
+            playSound('click');
+            if(!autoSwitch.checked && isAutoPlaying) stopAutoPlay();
+        }
+
+        function handleMainAction() {
+            playSound('click');
+            if (autoSwitch.checked) {
+                isAutoPlaying ? stopAutoPlay() : startAutoPlay();
+                return;
+            }
+            isGameActive ? cashout() : startGame();
+        }
+
+        // ==================== START GAME ====================
+        async function startGame() {
+            const token = getCleanSessionToken();
+            if (!token) {
+                showNotification('Please log in at www.tidye265.com to play.', true);
+                return;
+            }
+            currentBet = parseFloat(betInput.value);
+            if (isNaN(currentBet) || currentBet < 10 || balance < currentBet) {
+                showNotification("Invalid bet or insufficient balance.", true);
+                return;
+            }
+
+            try {
+                const data = await apiCall('new_game', {
+                    betAmount: currentBet,
+                    mineCount: currentMines,
+                    clientSeed: Math.random().toString(36).substring(2, 15)
+                });
+                
+                currentGameId = data.gameId;
+                balance = parseFloat(data.balance);
+                updateBalanceDisplay();
+                isGameActive = true;
+                currentMultiplier = 1.00;
+                betInput.disabled = true;
+                initGrid();
+                
+                if(!isAutoPlaying) updateButtonUI(true);
+                playSound('click');
+            } catch(e) {
+                showNotification('Failed to start: ' + e.message, true);
+            }
+        }
+
+        // ==================== TILE CLICK (with instant pending feedback) ====================
+        async function handleTileClick(index, tileElement) {
+            if (!isGameActive || !currentGameId) return;
+            if (tileElement.classList.contains('revealed') || tileElement.classList.contains('pending')) return;
+
+            // Instant feedback: mark tile as pending (no scaling, just color change)
+            tileElement.classList.add('pending');
+            tileElement.disabled = true;
+
+            try {
+                const data = await apiCall('reveal_tile', {
+                    gameId: currentGameId,
+                    tileIndex: index
+                });
+
+                // Remove pending state, add revealed
+                tileElement.classList.remove('pending');
+                tileElement.classList.add('revealed');
+
+                if (data.result === 'bomb') {
+                    playSound('bomb');
+                    tileElement.innerHTML = `<img src="${BOMB_SVG}" alt="Bomb" class="bomb-img">`;
+                    grid.style.boxShadow = "0 0 40px rgba(231,76,60,0.4)";
+                    setTimeout(() => grid.style.boxShadow = "none", 500);
+                    await finishGame(false);
+                } else {
+                    playSound('star');
+                    tileElement.innerHTML = `<img src="${STAR_SVG}" alt="Star" class="star-img">`;
+                    currentMultiplier = parseFloat(data.currentMultiplier);
+                    if(!isAutoPlaying) updateButtonUI(true);
+
+                    if (data.gameState === 'all_stars') {
+                        await cashout();
+                    }
+                }
+            } catch(e) {
+                // Revert pending state
+                tileElement.classList.remove('pending');
+                tileElement.disabled = false;
+                tileElement.innerHTML = '';
+                showNotification('Something went wrong. Please try again.', true);
+            }
+        }
+
+        // ==================== CASHOUT ====================
+        async function cashout() {
+            if (!isGameActive || !currentGameId) return;
+            try {
+                const data = await apiCall('cashout', { gameId: currentGameId });
+                balance = parseFloat(data.balance);
+                updateBalanceDisplay();
+                playSound('win');
+                await finishGame(true, data.payout);
+            } catch(e) {
+                showNotification('Cashout failed. Please try again.', true);
+            }
+        }
+
+        // ==================== FINISH GAME ====================
+        async function finishGame(isWin, winAmount = 0) {
+            isGameActive = false;
+            betInput.disabled = false;
+            actionBtn.classList.remove('cashout-state', 'auto-state');
+            currentGameId = null;
+
+            // Reveal remaining tiles
+            try {
+                const token = getCleanSessionToken();
+                if (token) {
+                    const data = await apiCall('get_game_state', {});
+                    if (data.minesPositions && data.revealedTiles) {
+                        const allTiles = grid.children;
+                        for (let i = 0; i < 25; i++) {
+                            if (!allTiles[i].classList.contains('revealed')) {
+                                allTiles[i].classList.add('revealed', 'fade-out');
+                                allTiles[i].disabled = true;
+                                if (data.minesPositions.includes(i)) {
+                                    allTiles[i].innerHTML = `<img src="${BOMB_SVG}" alt="Bomb" class="bomb-img">`;
+                                } else {
+                                    allTiles[i].innerHTML = `<img src="${STAR_SVG}" alt="Star" class="star-img">`;
+                                }
+                            }
+                        }
+                    }
+                }
+            } catch(e) {}
+
+            setTimeout(() => {
+                if(!isAutoPlaying) {
+                    btnMainText.innerText = 'BET';
+                    btnIcon.style.display = 'block';
+                    btnSubText.style.display = 'none';
+                    actionBtn.disabled = false;
+                }
+            }, 300);
+        }
+
+        function updateButtonUI(canCashout) {
+            if(isAutoPlaying) return;
+            if (isGameActive && canCashout) {
+                const winAmount = (currentBet * currentMultiplier).toFixed(2);
+                btnMainText.innerText = 'CASHOUT';
+                btnIcon.style.display = 'none';
+                btnSubText.innerText = `${currentMultiplier}x • MWK ${winAmount}`;
+                btnSubText.style.display = 'block';
+                actionBtn.classList.add('cashout-state');
+                actionBtn.disabled = false;
+            } else {
+                btnMainText.innerText = 'BET';
+                btnIcon.style.display = 'block';
+                btnSubText.style.display = 'none';
+                actionBtn.classList.remove('cashout-state');
+                actionBtn.disabled = false;
+            }
+        }
+
+        function randomizeTiles() {
+            playSound('click');
+            if (isGameActive) cashout();
+        }
+
+        // ==================== AUTO PLAY ====================
+        function startAutoPlay() {
+            isAutoPlaying = true;
+            grid.classList.add('auto-playing');
+            btnMainText.innerText = 'STOP AUTO';
+            btnSubText.style.display = 'none';
+            btnIcon.style.display = 'none';
+            actionBtn.classList.add('auto-state');
+            autoPlayLoop();
+        }
+
+        function stopAutoPlay() {
+            isAutoPlaying = false;
+            grid.classList.remove('auto-playing');
+            btnMainText.innerText = 'BET';
+            btnIcon.style.display = 'block';
+            actionBtn.classList.remove('auto-state');
+            updateButtonUI(false);
+            if(autoSwitch.checked) autoSwitch.checked = false;
+        }
+
+        async function autoPlayLoop() {
+            if (!isAutoPlaying) return;
+            currentBet = parseFloat(betInput.value);
+            if (balance < currentBet) { stopAutoPlay(); showNotification("Insufficient balance!", true); return; }
+            
+            if (!isGameActive) {
+                try { await startGame(); } catch(e) { stopAutoPlay(); return; }
+            }
+            await sleep(400);
+            if (!isAutoPlaying || !isGameActive) return;
+
+            let tilesToPick = Math.floor(Math.random() * 3) + 1;
+            for(let p = 0; p < tilesToPick; p++) {
+                if (!isAutoPlaying || !isGameActive) break;
+                let available = [];
+                for(let i=0; i<25; i++) {
+                    if(!grid.children[i].classList.contains('revealed')) available.push(i);
+                }
+                if(available.length === 0) break;
+                let pickIndex = available[Math.floor(Math.random() * available.length)];
+                await handleTileClick(pickIndex, grid.children[pickIndex]);
+                await sleep(500);
+            }
+            if (isAutoPlaying && isGameActive) { await cashout(); await sleep(1500); autoPlayLoop(); }
+            else if (isAutoPlaying && !isGameActive) { await sleep(1500); autoPlayLoop(); }
+        }
+
+        const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+        // ==================== INIT ====================
+        async function initApp() {
+            initGrid();
+            populateMinesSelector();
+            await checkSession();
+            // Hide connecting overlay once session and balance are loaded
+            connectingOverlay.style.display = 'none';
+            // If no session, inform user gracefully
+            if (!getCleanSessionToken()) {
+                showNotification('Guest mode – balance: 0 MWK. Log in at tidye265.com');
+            }
+        }
+
+        initApp();
+    </script>
+</body>
+</html>
