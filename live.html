@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Tidye265 | Live</title>
+    <meta name="theme-color" content="#121212">
+    <meta name="robots" content="noindex, nofollow">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://*.supabase.co https://cdn.jsdelivr.net https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; img-src 'self' https: data: blob:; connect-src 'self' https://*.supabase.co https://challenges.cloudflare.com; frame-src 'self' https://challenges.cloudflare.com;">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --bg: #F4F6F8;
+            --primary: #FFD700;
+            --card-bg: #FFFFFF;
+            --text-light: #1a1d21;
+            --text-dim: #6b7280;
+            --success: #10b981;
+            --border: #eef2f6;
+            --danger: #ff4757;
+            --header-bg: #29282b;
+            --sub-header-bg: #29282b;
+            --dark-skeleton-base: #363538;
+            --dark-skeleton-shine: #29282b;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        body {
+            background-color: var(--bg);
+            color: var(--text-light);
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            padding-bottom: 95px;
+            overflow-x: hidden;
+        }
+        .sticky-nav-holder {
+            position: -webkit-sticky;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: var(--header-bg);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .skeleton {
+            background: #363538;
+            background: linear-gradient(90deg, #363538 25%, #29282b 50%, #363538 75%);
+            background-size: 200% 100%;
+            animation: skeleton-loading 1.5s infinite;
+        }
+        @keyframes skeleton-loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        .bal-skeleton {
+            width: 80px;
+            height: 16px;
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        header {
+            padding: 0 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #3a3a3a;
+            height: 70px;
+            position: relative;
+            background: var(--header-bg);
+        }
+        .logo-container img {
+            height: 46px;
+            border-radius: 5px;
+            object-fit: contain;
+        }
+        .search-wrapper {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--header-bg);
+            display: flex;
+            align-items: center;
+            padding: 0 15px;
+            gap: 12px;
+            transform: translateY(-100%);
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 20;
+        }
+        .search-wrapper.active {
+            transform: translateY(0);
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .search-inner-box {
+            flex: 1;
+            background: #3a3a3a;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            padding: 0 15px;
+        }
+        .search-inner-box input {
+            background: transparent;
+            border: none;
+            outline: none;
+            width: 100%;
+            font-size: 15px;
+            font-family: inherit;
+            margin-left: 10px;
+            color: #f0f0f0;
+        }
+        .search-inner-box input::placeholder { color: #aaa; }
+        .search-inner-box i { color: #ccc; }
+        .search-close-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: #e0e0e0;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            padding: 5px;
+        }
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 10;
+        }
+        .age-badge {
+            width: 30px;
+            height: 30px;
+            object-fit: contain;
+            border-radius: 4px;
+        }
+        .header-balance-container {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            background: #3a3a3a;
+            padding: 5px 5px 5px 12px;
+            border-radius: 10px;
+            border: 1px solid #4a4a4a;
+            cursor: pointer;
+            transition: 0.2s;
+            text-decoration: none;
+            color: #f0f0f0;
+            min-width: 110px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+        .header-balance-container:active { transform: scale(0.96); }
+        .bal-label {
+            font-size: 8px;
+            font-weight: 800;
+            color: #bbb;
+            text-transform: uppercase;
+            display: block;
+            line-height: 1.1;
+            font-family: inherit;
+        }
+        .bal-amount {
+            font-size: 13px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            font-family: inherit;
+            color: #fff;
+        }
+        .bal-cents {
+            opacity: 0.5;
+            font-size: 13px;
+            margin-left: 1px;
+        }
+        .header-dep-btn {
+            background: var(--primary);
+            color: #1a1d21;
+            width: 34px;
+            height: 32px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 17px;
+            border: none;
+            font-weight: 800;
+            margin-left: auto;
+            font-family: inherit;
+        }
+
+        /* ===== SUB-HEADER ===== */
+        .sub-header {
+            display: flex;
+            overflow-x: auto;
+            white-space: nowrap;
+            padding: 10px 12px;
+            gap: 16px;
+            background: var(--sub-header-bg);
+            border-bottom: 1px solid #1a1a1a;
+            scrollbar-width: none;
+            align-items: center;
+        }
+        .sub-header::-webkit-scrollbar { display: none; }
+        .sub-item {
+            font-family: inherit;
+            font-size: 11px;
+            font-weight: 600;
+            color: #b0b0b0;
+            text-decoration: none;
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            position: relative;
+            transition: all 0.25s ease;
+            cursor: pointer;
+            background: none;
+            border: none;
+            flex-shrink: 0;
+            padding: 4px 6px 2px;
+        }
+        .sub-item.active {
+            color: #FFD700 !important;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 0px;
+        }
+        .sub-item:hover { color: #fff; }
+        .sub-item .category-icon {
+            width: 20px;
+            height: 20px;
+            object-fit: contain;
+            filter: brightness(0) invert(1);
+            transition: filter 0.25s;
+        }
+        .sub-item.active .category-icon {
+            filter: brightness(0) invert(1);
+        }
+
+        /* Badges */
+        .live-badge {
+            position: absolute;
+            top: -2px;
+            right: -4px;
+            background: #ff4757;
+            color: #fff;
+            font-size: 8px;
+            font-weight: 800;
+            padding: 1px 5px;
+            border-radius: 4px;
+            line-height: 1;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            pointer-events: none;
+        }
+        .virtual-badge {
+            position: absolute;
+            top: -1px;
+            right: -6px;
+            background: #ff4757;
+            color: #fff;
+            font-size: 6px;
+            font-weight: 800;
+            padding: 1px 4px;
+            border-radius: 3px;
+            line-height: 1;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+            pointer-events: none;
+        }
+
+        .more-btn {
+            color: #b0b0b0;
+            font-size: 9px;
+            font-weight: 600;
+            text-transform: uppercase;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 3px;
+            letter-spacing: 0.3px;
+            opacity: 0.85;
+            transition: opacity 0.25s, color 0.25s;
+        }
+        .more-btn i {
+            font-size: 18px;
+            color: #b0b0b0;
+            transition: color 0.2s;
+        }
+        .more-btn:hover i,
+        .more-btn:hover { color: #FFD700; opacity: 1; }
+
+        .more-items {
+            display: none;
+        }
+        .sub-header.show-more .more-items {
+            display: inline-flex;
+            gap: 16px;
+        }
+
+        /* ===== LIVE MATCH CARDS ===== */
+        .match-card-wrapper { padding: 10px 15px; }
+        .match-card {
+            background: white;
+            border-radius: 18px;
+            margin-bottom: 14px;
+            border: 1px solid #eef2f6;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.015);
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .match-top-row { display: flex; justify-content: space-between; align-items: center; }
+        .match-time { font-size: 13px; color: #1a1d21; font-weight: 500; }
+        .match-live-badge { background: #ff4757; color: white; font-size: 10px; padding: 2px 8px; border-radius: 10px; font-weight: 700; }
+        .match-teams-container { display: flex; flex-direction: column; gap: 4px; }
+        .match-team-line { font-size: 18px; font-weight: 700; color: #1a1d21; }
+        .match-meta-info { font-size: 13px; color: #9ca3af; font-weight: 400; }
+        .match-odds-container { display: flex; align-items: center; justify-content: flex-end; gap: 10px; }
+        .lock-icon { background: #f4f6f8; padding: 8px 12px; border-radius: 10px; font-size: 16px; color: #6b7280; border: 1px solid #eaedf1; }
+        .arrow-btn { background: #ffffff; width: 42px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background 0.2s; border: 1px solid #eaedf1; color: #4b5563; text-decoration: none; }
+        .arrow-btn:active { background: #f3f4f6; }
+
+        .empty-state-card {
+            padding: 30px 20px;
+            text-align: center;
+            color: var(--text-dim);
+            font-size: 14px;
+            background: #fff;
+            border-radius: 12px;
+            border: 1px dashed #ccc;
+            margin: 15px;
+        }
+        .empty-state-card i { font-size: 24px; color: #ccc; margin-bottom: 10px; display: block; }
+
+        .network-modal {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.34);
+            backdrop-filter: blur(3px);
+            display: flex; align-items: center; justify-content: center;
+            z-index: 10005; opacity: 0; pointer-events: none;
+            transition: opacity 0.3s ease; padding: 20px;
+        }
+        .network-modal.show { opacity: 1; pointer-events: auto; }
+        .network-modal-content {
+            background: #ffffff; padding: 24px 20px; border-radius: 20px;
+            max-width: 310px; width: 100%; text-align: center;
+            transform: scale(0.9); transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .network-modal.show .network-modal-content { transform: scale(1); }
+        .network-modal-icon {
+            width: 50px; height: 50px; background: #FFF9E6; color: #FFB800;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-size: 20px; margin: 0 auto 14px auto;
+        }
+
+        /* Bottom Nav */
+        .bottom-nav {
+            position: fixed; bottom: 0; left: 0; width: 100%;
+            background: #2E2F32; display: flex; justify-content: space-between; align-items: center;
+            z-index: 9999; height: calc(53px + env(safe-area-inset-bottom, 0px));
+            padding-bottom: env(safe-area-inset-bottom, 0px);
+            border-top: 1px solid #404247; padding-left: 5px; padding-right: 5px;
+            user-select: none; transform: translate3d(0,0,0); backface-visibility: hidden;
+        }
+        .nav-item, .trade-btn-container {
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            color: #b9bbc0; text-decoration: none; font-size: 12px;
+            font-family: inherit; transition: all 0.15s cubic-bezier(0.4,0,0.2,1);
+            cursor: pointer; border: none; background: none; flex: 1; height: 100%;
+            min-width: 0; -webkit-tap-highlight-color: transparent;
+        }
+        .nav-item i, .trade-btn-container i {
+            font-size: 20px; font-weight: 900; -webkit-text-stroke: 0.9px currentColor;
+            margin-bottom: 2px; display: block; transition: transform 0.15s ease, color 0.15s ease;
+            color: #b9bbc0;
+        }
+        .nav-item span, .trade-btn-container span {
+            display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+            transition: color 0.15s ease; font-weight: 500; padding-bottom: 10px; font-family: inherit;
+        }
+        .nav-item.active, .nav-item.active i, .nav-item.active span,
+        .trade-btn-container.active, .trade-btn-container.active i, .trade-btn-container.active span {
+            color: #FFD700 !important; font-weight: 800;
+        }
+        .nav-item.active i, .trade-btn-container.active i {
+            transform: translateY(-2px); -webkit-text-stroke: 0.8px #FFD700 !important;
+        }
+        .nav-item:active, .trade-btn-container:active { transform: scale(1.20); }
+
+        /* Footer placeholder */
+        #footer-placeholder { margin-top: 30px; }
+    </style>
+</head>
+<body>
+    <div id="turnstile-bg-holder" style="display: none !important;"></div>
+    <div id="slowNetModal" class="network-modal">
+        <div class="network-modal-content">
+            <div class="network-modal-icon"><i class="bi bi-wifi-off"></i></div>
+            <div class="network-modal-title">No Internet Connection</div>
+            <div class="network-modal-text">You appear to be offline. Please check your connection and try again.</div>
+            <button class="network-modal-btn" style="background:#FFD700; border:none; padding:10px; border-radius:12px; width:100%;" onclick="location.reload()">Retry</button>
+        </div>
+    </div>
+
+    <div class="sticky-nav-holder">
+        <header id="mainHeader">
+            <div class="logo-container"><img src="logoo.jpg" alt="Tidye265" id="mainLogo"></div>
+            <div class="search-wrapper" id="searchBar" aria-hidden="true">
+                <div class="search-inner-box"><i class="bi bi-search"></i><input type="text" placeholder="Search matches..." id="searchInput"></div>
+                <button class="search-close-btn" id="searchClose"><i class="bi bi-x-lg"></i></button>
+            </div>
+            <div class="header-controls">
+                <img src="18+.png" alt="18+" class="age-badge" id="ageBadge" onerror="this.style.display='none';">
+                <a href="deposit.html" class="header-balance-container" id="walletTrigger">
+                    <div class="header-balance-info">
+                        <span class="bal-label">BALANCE</span>
+                        <span class="bal-amount" id="balanceDisplay"><span class="skeleton bal-skeleton"></span></span>
+                    </div>
+                    <div class="header-dep-btn"><i class="bi bi-plus-lg"></i></div>
+                </a>
+            </div>
+        </header>
+
+        <nav class="sub-header" id="categoryNav">
+            <a href="live.html" class="sub-item active" data-category="live">
+                <img src="live.svg" class="category-icon" onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2215%22 height=%2215%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22currentColor%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Ccircle cx=%2212%22 cy=%2212%22 r=%2210%22%3E%3C/circle%3E%3Cline x1=%222%22 y1=%2212%22 x2=%2222%22 y2=%2212%22%3E%3C/line%3E%3Cpath d=%22M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z%22%3E%3C/path%3E%3C/svg%3E';">
+                <span>Live</span>
+                <span class="live-badge">LIVE</span>
+            </a>
+            <a href="matches.html" class="sub-item" data-category="matches">
+                <img src="matches.svg" class="category-icon" onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2215%22 height=%2215%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22currentColor%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Crect x=%223%22 y=%224%22 width=%2218%22 height=%2218%22 rx=%222%22 ry=%222%22%3E%3C/rect%3E%3Cline x1=%2216%22 y1=%222%22 x2=%2216%22 y2=%226%22%3E%3C/line%3E%3Cline x1=%228%22 y1=%222%22 x2=%228%22 y2=%226%22%3E%3C/line%3E%3Cline x1=%223%22 y1=%2210%22 x2=%2221%22 y2=%2210%22%3E%3C/line%3E%3C/svg%3E';">
+                <span>Sports</span>
+            </a>
+            <a href="casino.html" class="sub-item" data-category="casino">
+                <img src="casino.svg" class="category-icon" onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2215%22 height=%2215%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22currentColor%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Crect x=%222%22 y=%226%22 width=%2220%22 height=%2212%22 rx=%222%22%3E%3C/rect%3E%3Cpath d=%22M12 12h.01%22%3E%3C/path%3E%3Cpath d=%22M16 12h.01%22%3E%3C/path%3E%3Cpath d=%22M8 12h.01%22%3E%3C/path%3E%3C/svg%3E';">
+                <span>Casino</span>
+            </a>
+            <a href="casino.html" class="sub-item" data-category="aviator">
+                <img src="aviator.png" class="category-icon" onerror="this.onerror=null; this.innerHTML='<i class=%27bi bi-airplane%27></i>';">
+                <span>Aviator</span>
+            </a>
+            <a href="virtual.html" class="sub-item" data-category="virtual">
+                <img src="vi.png" class="category-icon" onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2222%22 height=%2222%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22currentColor%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Crect x=%222%22 y=%222%22 width=%2220%22 height=%2220%22 rx=%225%22%3E%3C/rect%3E%3Ccircle cx=%2212%22 cy=%2212%22 r=%224%22%3E%3C/circle%3E%3Cpath d=%22M12 2v4%22%3E%3C/path%3E%3Cpath d=%22M12 18v4%22%3E%3C/path%3E%3Cpath d=%22M2 12h4%22%3E%3C/path%3E%3Cpath d=%22M18 12h4%22%3E%3C/path%3E%3C/svg%3E';">
+                <span>Virtual</span>
+                <span class="virtual-badge">VIRTUAL</span>
+            </a>
+            <div class="sub-item more-btn" id="seeMoreSubBtn">
+                <i class="bi bi-three-dots"></i>
+                <span>See More</span>
+            </div>
+            <div class="more-items" id="moreCategories">
+                <a href="games.html" class="sub-item" data-category="games">
+                    <img src="games.svg" class="category-icon" onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2220%22 height=%2220%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22currentColor%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Crect x=%222%22 y=%224%22 width=%2220%22 height=%2216%22 rx=%222%22%3E%3C/rect%3E%3Cpath d=%22M8 8h8%22%3E%3C/path%3E%3C/svg%3E';">
+                    <span>Games</span>
+                </a>
+                <a href="esports.html" class="sub-item" data-category="esports">
+                    <img src="games.svg" class="category-icon" onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2220%22 height=%2220%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22currentColor%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Crect x=%222%22 y=%224%22 width=%2220%22 height=%2216%22 rx=%222%22%3E%3C/rect%3E%3Cpath d=%22M8 8h8%22%3E%3C/path%3E%3C/svg%3E';">
+                    <span>eSports</span>
+                </a>
+            </div>
+        </nav>
+    </div>
+
+    <main role="main" id="mainContent">
+        <div id="dynamicView">
+            <div class="match-card-wrapper">
+                <div class="match-card">
+                    <div class="match-top-row"><span class="match-time">Loading live matches...</span></div>
+                    <div class="match-teams-container"><div class="match-team-line">Please wait</div></div>
+                    <div class="match-odds-container"><div class="lock-icon"><i class="bi bi-lock"></i> No odds</div></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <nav class="bottom-nav" aria-label="Main Navigation" id="mainBottomNav">
+        <a href="dashboard.html" class="nav-item" data-page="dashboard" aria-label="Home"><i class="bi bi-house-door"></i><span>Home</span></a>
+        <a href="game.html" class="nav-item" data-page="game" aria-label="Games"><i class="bi bi-controller"></i><span>Games</span></a>
+        <a href="betslip.html" class="trade-btn-container" data-page="myslip" aria-label="My Slip"><i class="bi bi-receipt-cutoff"></i><span>Myslip</span></a>
+        <a href="mybet.html" class="nav-item" data-page="akungi" aria-label="Akungi"><i class="bi bi-pass"></i><span>Akungi</span></a>
+        <a href="account.html" class="nav-item" data-page="account" aria-label="Account"><i class="bi bi-person"></i><span>Me</span></a>
+    </nav>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase.js"></script>
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
+    <script>
+        // ========== BET SLIP DATA ==========
+        let currentBets = JSON.parse(localStorage.getItem('tidye_bet_slip') || '[]');
+        function saveBets() { localStorage.setItem('tidye_bet_slip', JSON.stringify(currentBets)); }
+        function removeBet(index) { currentBets.splice(index, 1); saveBets(); }
+        window.removeBet = removeBet;
+
+        // ========== SESSION TOKEN ==========
+        function getCleanSessionToken() {
+            let rawToken = localStorage.getItem('tidye_session_token');
+            if (!rawToken || rawToken === 'null' || rawToken === 'undefined') return null;
+            try {
+                let parsed = JSON.parse(rawToken);
+                if (parsed?.access_token) return parsed.access_token;
+                if (typeof parsed === 'string') return parsed;
+            } catch (e) {}
+            return rawToken.replace(/^["']|["']$/g, '').trim();
+        }
+
+        // ========== API LOCK (Maintenance Mode) ==========
+        async function checkApiLock() {
+            try {
+                const response = await fetch(`${window.SUPABASE_URL}/functions/v1/api-lock`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${window.SUPABASE_ANON_KEY}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                if (!response.ok) throw new Error('Lock check failed');
+                const result = await response.json();
+                if (result.locked) {
+                    window.location.replace('updating.html');
+                }
+            } catch (e) {
+                console.warn('API lock check failed:', e);
+            }
+        }
+
+        // ========== BALANCE ==========
+        const balanceDisplay = document.getElementById('balanceDisplay');
+        async function fetchBalance() {
+            const sessionToken = getCleanSessionToken();
+            if (!sessionToken) {
+                balanceDisplay.innerHTML = `MWK 0<span class="bal-cents">.00</span>`;
+                return;
+            }
+            try {
+                const res = await fetch(`${window.SUPABASE_URL}/functions/v1/wallet-api`, {
+                    method: 'GET',
+                    headers: { 'Authorization': `Bearer ${sessionToken}` }
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    const val = Number(data.balance).toFixed(2);
+                    const [main, cents] = val.split('.');
+                    balanceDisplay.innerHTML = `MWK ${parseInt(main).toLocaleString()}<span class="bal-cents">.${cents}</span>`;
+                } else throw new Error();
+            } catch (e) {
+                balanceDisplay.innerHTML = `MWK 0<span class="bal-cents">.00</span>`;
+            }
+        }
+
+        // ========== LIVE MATCHES FETCH ==========
+        async function fetchLiveMatches() {
+            const sessionToken = getCleanSessionToken();
+            if (!sessionToken) return;
+            try {
+                const response = await fetch(`${window.SUPABASE_URL}/functions/v1/get-live-api`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${sessionToken}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                if (!response.ok) throw new Error('Failed to fetch live matches');
+                const data = await response.json();
+                if (data.success) {
+                    renderLiveMatches(data.matches || []);
+                } else {
+                    throw new Error(data.error || 'Unknown error');
+                }
+            } catch (err) {
+                console.error(err);
+                document.getElementById('dynamicView').innerHTML = `<div class="empty-state-card"><i class="bi bi-emoji-frown"></i> Unable to load live matches.</div>`;
+            }
+        }
+
+        function renderLiveMatches(matches) {
+            if (!matches.length) {
+                document.getElementById('dynamicView').innerHTML = `<div class="empty-state-card"><i class="bi bi-emoji-frown"></i> No live matches at the moment.</div>`;
+                return;
+            }
+            let html = '<div class="match-card-wrapper">';
+            matches.forEach(m => {
+                // Format time
+                const matchTime = m.live_time ? `Live: ${m.live_time}` : 'Upcoming';
+                const scoreDisplay = m.home_score !== undefined && m.away_score !== undefined ? `${m.home_score} - ${m.away_score}` : '? - ?';
+                html += `
+                    <div class="match-card">
+                        <div class="match-top-row">
+                            <span class="match-time">${matchTime}</span>
+                            <span class="match-live-badge">LIVE</span>
+                        </div>
+                        <div class="match-teams-container">
+                            <div class="match-team-line">${m.home_team} ${scoreDisplay} ${m.away_team}</div>
+                        </div>
+                        <div class="match-meta-info">${m.match_status || ''}</div>
+                        <div class="match-odds-container">
+                            <div class="lock-icon"><i class="bi bi-lock"></i> No odds</div>
+                            <a href="match-details.html?id=${m.id}" class="arrow-btn"><i class="bi bi-chevron-right"></i></a>
+                        </div>
+                    </div>
+                `;
+            });
+            html += '</div>';
+            document.getElementById('dynamicView').innerHTML = html;
+        }
+
+        // ========== TURNSTILE (silent) ==========
+        const TURNSTILE_SITEKEY = "0x4AAAAAADQhPHJB5viRCO84";
+        let turnstileWidgetId = null;
+        window.turnstileToken = null;
+        window.turnstileTokenCreatedAt = 0;
+
+        function triggerSilentTurnstileVerification() {
+            if (typeof turnstile === 'undefined') {
+                setTimeout(triggerSilentTurnstileVerification, 100);
+                return;
+            }
+            try {
+                turnstileWidgetId = turnstile.render('#turnstile-bg-holder', {
+                    sitekey: TURNSTILE_SITEKEY,
+                    action: 'live_page',
+                    size: 'invisible',
+                    callback: function(token) {
+                        window.turnstileToken = token;
+                        window.turnstileTokenCreatedAt = Date.now();
+                        sessionStorage.setItem('tidye_turnstile_token', token);
+                        sessionStorage.setItem('tidye_turnstile_created_at', window.turnstileTokenCreatedAt);
+                    },
+                    'expired-callback': function() { window.turnstileToken = null; },
+                    'error-callback': function() { window.turnstileToken = null; }
+                });
+            } catch (err) { console.error(err); }
+        }
+
+        // ========== FOOTER INJECT ==========
+        async function injectDynamicFooter() {
+            try {
+                const res = await fetch('footer.html');
+                if (res.ok) {
+                    const htmlContent = await res.text();
+                    const footerPlaceholder = document.getElementById('footer-placeholder');
+                    if (footerPlaceholder) footerPlaceholder.innerHTML = htmlContent;
+                }
+            } catch(err) {}
+        }
+
+        // ========== INIT ==========
+        document.addEventListener('DOMContentLoaded', async () => {
+            await checkApiLock();
+            await fetchBalance();
+            await fetchLiveMatches();
+            triggerSilentTurnstileVerification();
+            injectDynamicFooter();
+
+            // Bottom nav active state
+            const navElements = document.querySelectorAll("#mainBottomNav .nav-item, #mainBottomNav .trade-btn-container");
+            const currentFileName = window.location.pathname.split("/").pop() || "dashboard.html";
+            navElements.forEach(el => {
+                const dataPage = el.getAttribute("data-page");
+                if (dataPage && currentFileName.includes(dataPage) && dataPage !== 'myslip') el.classList.add("active");
+                else el.classList.remove("active");
+            });
+            if (!document.querySelector("#mainBottomNav .active") && (currentFileName === "" || currentFileName === "index.html" || currentFileName === "dashboard.html")) {
+                const home = document.querySelector('[data-page="dashboard"]');
+                if (home) home.classList.add("active");
+            }
+
+            // See More toggle
+            const seeMoreSubBtn = document.getElementById('seeMoreSubBtn');
+            const subHeader = document.getElementById('categoryNav');
+            const moreItems = document.getElementById('moreCategories');
+            if (seeMoreSubBtn && subHeader && moreItems) {
+                seeMoreSubBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    subHeader.classList.toggle('show-more');
+                    if (subHeader.classList.contains('show-more')) {
+                        seeMoreSubBtn.querySelector('span').textContent = 'Less';
+                    } else {
+                        seeMoreSubBtn.querySelector('span').textContent = 'See More';
+                    }
+                });
+            }
+
+            // Search functionality (basic filter by team name)
+            const searchInput = document.getElementById('searchInput');
+            const searchToggle = document.getElementById('searchToggle');
+            const searchBar = document.getElementById('searchBar');
+            const searchClose = document.getElementById('searchClose');
+
+            searchToggle.onclick = () => {
+                searchBar.classList.add('active');
+                searchInput.focus();
+            };
+            searchClose.onclick = () => {
+                searchBar.classList.remove('active');
+                searchInput.value = '';
+                fetchLiveMatches(); // reload all matches
+            };
+            searchInput.addEventListener('input', async () => {
+                const term = searchInput.value.toLowerCase().trim();
+                if (!term) {
+                    fetchLiveMatches();
+                    return;
+                }
+                // Re-fetch and filter (alternatively, filter client-side if already loaded)
+                const sessionToken = getCleanSessionToken();
+                if (!sessionToken) return;
+                try {
+                    const response = await fetch(`${window.SUPABASE_URL}/functions/v1/get-live-api`, {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': `Bearer ${sessionToken}`,
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                    const data = await response.json();
+                    if (data.success) {
+                        const filtered = data.matches.filter(m => 
+                            m.home_team.toLowerCase().includes(term) || 
+                            m.away_team.toLowerCase().includes(term)
+                        );
+                        renderLiveMatches(filtered);
+                    }
+                } catch (err) { console.error(err); }
+            });
+
+            // Offline modal (minimal)
+            window.addEventListener('offline', () => { slowNetModal.classList.add('show'); });
+            window.addEventListener('online', () => { slowNetModal.classList.remove('show'); location.reload(); });
+            if (!navigator.onLine) slowNetModal.classList.add('show');
+        });
+    </script>
+</body>
+</html>
