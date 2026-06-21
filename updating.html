@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tidye265 – Under Maintenance</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+            background: #121212;
+            color: #fff;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .bg-img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.25;
+            z-index: 0;
+        }
+        .content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: 20px;
+        }
+        .lock-icon {
+            font-size: 80px;
+            color: #FFD700;
+            margin-bottom: 20px;
+        }
+        h1 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            color: #FFD700;
+            margin-bottom: 15px;
+            text-shadow: 0 0 20px rgba(255,215,0,0.5);
+        }
+        p {
+            font-size: 1.1rem;
+            color: #ddd;
+            margin-bottom: 35px;
+            line-height: 1.6;
+        }
+        .loader {
+            display: inline-block;
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(255,215,0,0.3);
+            border-top: 4px solid #FFD700;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 25px;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Football animation */
+        .football-container {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 300px;
+            height: 100px;
+            overflow: hidden;
+            z-index: 10;
+        }
+        .football {
+            font-size: 40px;
+            position: absolute;
+            animation: moveBall 2.5s ease-in-out infinite;
+        }
+        @keyframes moveBall {
+            0% { left: 0; transform: translateY(0) rotate(0deg); }
+            25% { left: 80%; transform: translateY(-15px) rotate(120deg); }
+            50% { left: 100%; transform: translateY(0) rotate(240deg); }
+            75% { left: 80%; transform: translateY(-15px) rotate(360deg); }
+            100% { left: 0; transform: translateY(0) rotate(480deg); }
+        }
+
+        .status-text {
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <!-- lock.png yomwe mukufuna iwonetsedwa ngati background -->
+    <img src="lock.png" alt="Maintenance" class="bg-img" onerror="this.style.display='none';">
+
+    <div class="content">
+        <div class="lock-icon">🔒</div>
+        <h1>We'll Be Back Soon!</h1>
+        <p>Our team is working hard to improve your experience.<br>Please check back shortly.</p>
+        <div class="loader"></div>
+        <div class="status-text" id="statusMessage">Checking system status...</div>
+    </div>
+
+    <div class="football-container">
+        <div class="football">⚽</div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase.js"></script>
+    <script>
+        // Yang'anani ngati system yatsegulidwa
+        async function checkLockStatus() {
+            try {
+                const { data, error } = await supabase
+                    .from('system_config')
+                    .select('value')
+                    .eq('key', 'api_lock')
+                    .single();
+
+                if (error) throw error;
+                if (data && data.value === 'on') {
+                    // System yatsegulidwa - pitani ku casino.html
+                    window.location.href = 'casino.html';
+                } else {
+                    document.getElementById('statusMessage').textContent = 'Still updating... please wait.';
+                }
+            } catch (e) {
+                document.getElementById('statusMessage').textContent = 'Unable to check status. Retrying...';
+            }
+        }
+
+        // Fufuzani mphindi ziwiri zilizonse
+        setInterval(checkLockStatus, 5000);
+        checkLockStatus();
+    </script>
+</body>
+</html>
