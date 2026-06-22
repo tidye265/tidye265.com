@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logging out...</title>
+    <meta name="robots" content="noindex, nofollow">
+    <style>
+        body {
+            background: #121212;
+            color: #fff;
+            font-family: system-ui, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            flex-direction: column;
+        }
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(255,215,0,0.3);
+            border-top: 4px solid #FFD700;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .message {
+            font-size: 16px;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+        .detail {
+            font-size: 14px;
+            color: #aaa;
+        }
+    </style>
+</head>
+<body>
+    <div class="spinner" id="spinner"></div>
+    <div class="message" id="statusMessage">Securely logging you out...</div>
+    <div class="detail" id="detailMessage"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase.js"></script>
+    <script>
+        async function performLogout() {
+            const messageEl = document.getElementById('statusMessage');
+            const detailEl = document.getElementById('detailMessage');
+
+            // Retrieve stored session details
+            let sessionToken = null;
+            try {
+                const raw = localStorage.getItem('tidye_session_token');
+                if (raw) {
+                    const parsed = JSON.parse(raw);
+                    sessionToken = parsed.access_token || parsed;
+                }
+            } catch (e) {}
+
+            const userId = localStorage.getItem('tidye_user_code') || localStorage.getItem('tidye_user_id');
+
+            // Call backend to delete session if we have the data
+            if (userId && sessionToken) {
+                try {
+                    const response = await fetch(`${window.SUPABASE_URL}/functions/v1/api-logout`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${window.SUPABASE_ANON_KEY}`
+                        },
+                        body: JSON.stringify({
+                            user_id: userId,
+                            session_token: sessionToken
+                        })
+                    });
+
+                    const result = await response.json();
+                    if (result.data && result.data.success) {
+                        // 🎯 Show the success message from the backend
+                        messageEl.textContent = result.data.description || 'Logged out successfully!';
+                        detailEl.textContent = 'Redirecting to login...';
+                    } else {
+                        messageEl.textContent = 'Logout completed locally.';
+                        detailEl.textContent = result.description || 'Session cleared.';
+                    }
+                } catch (e) {
+                    console.warn('Logout API call failed, clearing locally', e);
+                    messageEl.textContent = 'Logged out locally.';
+                    detailEl.textContent = 'Redirecting...';
+                }
+            } else {
+                messageEl.textContent = 'Logged out.';
+                detailEl.textContent = 'No active session found.';
+            }
+
+            // Clear all auth data
+            localStorage.removeItem('tidye_session_token');
+            localStorage.removeItem('tidye_user_code');
+            localStorage.removeItem('tidye_user_id');
+            localStorage.removeItem('tidye_user_favorites');
+
+            // Show message briefly, then redirect
+            document.getElementById('spinner').style.display = 'none';
+            setTimeout(() => {
+                window.location.href = 'login.html';
+            }, 1500);
+        }
+
+        performLogout();
+    </script>
+</body>
+</html>
