@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>tiDye265 | Support Centre</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --bg: #121212;
+            --card: #1e1e1e;
+            --primary: #FFD700;
+            --text: #e0e0e0;
+            --dim: #9ca3af;
+            --success: #10b981;
+            --danger: #ff4757;
+            --sub-header-bg: #18181b;
+            --border: #2a2a2e;
+            --skeleton-base: #2a2a2e;
+            --skeleton-shine: #3a3a3e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: system-ui, -apple-system, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ---------- HEADER ---------- */
+        .header {
+            background: var(--card);
+            padding: 0 20px;
+            height: 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-area img {
+            height: 32px;
+            width: auto;
+            border-radius: 6px;
+        }
+
+        .logo-area h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--primary);
+            letter-spacing: -0.3px;
+        }
+
+        .user-area {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .user-area span {
+            font-size: 13px;
+            color: var(--dim);
+            font-weight: 500;
+        }
+
+        .logout-btn {
+            background: var(--danger);
+            color: #fff;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .logout-btn:hover {
+            background: #e03a4a;
+        }
+
+        /* ---------- SUB-HEADER (TABS) ---------- */
+        .sub-header {
+            display: flex;
+            overflow-x: auto;
+            white-space: nowrap;
+            padding: 12px 16px;
+            gap: 8px;
+            background: var(--sub-header-bg);
+            border-bottom: 1px solid #1a1a1a;
+            scrollbar-width: none;
+            align-items: center;
+        }
+
+        .sub-header::-webkit-scrollbar {
+            display: none;
+        }
+
+        .sub-item {
+            font-family: inherit;
+            font-size: 12px;
+            font-weight: 600;
+            color: #b0b0b0;
+            background: transparent;
+            border: none;
+            padding: 6px 18px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .sub-item i {
+            font-size: 14px;
+        }
+
+        .sub-item.active {
+            background: var(--primary);
+            color: #121212;
+        }
+
+        /* ---------- CONTENT ---------- */
+        .tab-content {
+            display: none;
+            padding: 20px;
+            flex: 1;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* ---------- SEARCH BAR ---------- */
+        .search-bar {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .search-input {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 10px 16px;
+            color: var(--text);
+            font-size: 14px;
+            width: 300px;
+            outline: none;
+            transition: border 0.2s;
+        }
+
+        .search-input:focus {
+            border-color: var(--primary);
+        }
+
+        .search-input::placeholder {
+            color: var(--dim);
+        }
+
+        /* ---------- TABLE ---------- */
+        .table-wrapper {
+            overflow-x: auto;
+            border-radius: 10px;
+            background: var(--card);
+            border: 1px solid var(--border);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        th,
+        td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            color: var(--dim);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 11px;
+            letter-spacing: 0.5px;
+            background: #1a1a1d;
+        }
+
+        td {
+            color: var(--text);
+        }
+
+        .badge {
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: capitalize;
+        }
+
+        .badge.win {
+            background: #065f46;
+            color: #a7f3d0;
+        }
+
+        .badge.lose {
+            background: #7f1d1d;
+            color: #fecaca;
+        }
+
+        .badge.play {
+            background: #1e3a5f;
+            color: #bfdbfe;
+        }
+
+        .badge.deposit {
+            background: #064e3b;
+            color: #a7f3d0;
+        }
+
+        .badge.withdraw {
+            background: #7c2d12;
+            color: #fecaca;
+        }
+
+        .view-btn {
+            background: var(--primary);
+            color: #121212;
+            border: none;
+            padding: 4px 12px;
+            border-radius: 5px;
+            font-weight: 600;
+            font-size: 12px;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .view-btn:hover {
+            opacity: 0.85;
+        }
+
+        /* ---------- SKELETON ---------- */
+        @keyframes shimmer {
+            0% {
+                background-position: -200px 0;
+            }
+            100% {
+                background-position: 200px 0;
+            }
+        }
+
+        .skeleton-row td {
+            background: linear-gradient(90deg, var(--skeleton-base) 25%, var(--skeleton-shine) 50%, var(--skeleton-base) 75%);
+            background-size: 200px 100%;
+            animation: shimmer 1.5s infinite;
+            border-radius: 4px;
+            color: transparent;
+            user-select: none;
+        }
+
+        .skeleton-row td::after {
+            content: ".";
+            visibility: hidden;
+        }
+
+        /* ---------- MODAL ---------- */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 200;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            width: 90%;
+            max-width: 700px;
+            max-height: 85vh;
+            overflow-y: auto;
+            padding: 24px;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 12px;
+            right: 16px;
+            background: none;
+            border: none;
+            color: var(--dim);
+            font-size: 20px;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .modal-close:hover {
+            color: var(--text);
+        }
+
+        .user-detail-header {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+
+        .user-detail-header h2 {
+            font-size: 20px;
+            color: var(--primary);
+        }
+
+        .user-detail-header p {
+            font-size: 14px;
+            color: var(--dim);
+        }
+
+        .detail-tabs {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 10px;
+        }
+
+        .detail-tab {
+            background: none;
+            border: none;
+            color: var(--dim);
+            font-weight: 600;
+            font-size: 13px;
+            padding: 6px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .detail-tab.active {
+            background: var(--primary);
+            color: #121212;
+        }
+
+        .detail-table-wrapper {
+            max-height: 300px;
+            overflow-y: auto;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER -->
+    <div class="header">
+        <div class="logo-area">
+            <img src="../logo.jpg" alt="tiDye265" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+            <h3 style="display:block;">tiDye265 Support Centre</h3>
+        </div>
+        <div class="user-area">
+            <span id="supportNameDisplay">Support Agent</span>
+            <button class="logout-btn" onclick="logout()"><i class="bi bi-box-arrow-right"></i> Logout</button>
+        </div>
+    </div>
+
+    <!-- SUB-HEADER (TABS) -->
+    <div class="sub-header">
+        <button class="sub-item active" data-tab="users"><i class="bi bi-people-fill"></i> Users</button>
+        <button class="sub-item" data-tab="casino"><i class="bi bi-dice-6-fill"></i> Casino Transactions</button>
+        <button class="sub-item" data-tab="financial"><i class="bi bi-cash-stack"></i> Deposits / Withdrawals</button>
+    </div>
+
+    <!-- USERS TAB -->
+    <div class="tab-content active" id="tab-users">
+        <div class="search-bar">
+            <input type="text" class="search-input" id="userSearch" placeholder="Search by phone number...">
+        </div>
+        <div class="table-wrapper">
+            <table id="usersTable">
+                <thead>
+                    <tr>
+                        <th>Phone / Username</th>
+                        <th>Balance (MWK)</th>
+                        <th>Last Wallet Update</th>
+                        <th>Registered</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="usersBody">
+                    <!-- skeleton rows inserted by JS -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- CASINO TAB -->
+    <div class="tab-content" id="tab-casino">
+        <div class="table-wrapper">
+            <table id="casinoTable">
+                <thead>
+                    <tr>
+                        <th>User (Phone)</th>
+                        <th>Round</th>
+                        <th>Game</th>
+                        <th>Type</th>
+                        <th>Amount</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody id="casinoBody"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- FINANCIAL TAB -->
+    <div class="tab-content" id="tab-financial">
+        <div class="table-wrapper">
+            <table id="financialTable">
+                <thead>
+                    <tr>
+                        <th>User (Phone)</th>
+                        <th>Type</th>
+                        <th>Amount</th>
+                        <th>Reference</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody id="financialBody"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- USER DETAIL MODAL -->
+    <div class="modal-overlay" id="userModal">
+        <div class="modal">
+            <button class="modal-close" onclick="closeModal()"><i class="bi bi-x-lg"></i></button>
+            <div class="user-detail-header" id="modalUserInfo"></div>
+            <div class="detail-tabs">
+                <button class="detail-tab active" data-detail="casino">Casino History</button>
+                <button class="detail-tab" data-detail="financial">Financial History</button>
+            </div>
+            <div class="detail-table-wrapper">
+                <table id="detailTable">
+                    <thead></thead>
+                    <tbody id="detailBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ---------- CONFIG ----------
+        const SUPABASE_URL = 'https://egepxfikpdmpruilzism.supabase.co';
+        const FUNCTION_ENDPOINT = `${SUPABASE_URL}/functions/v1/api-admin-all-users`;
+
+        // ---------- AUTH ----------
+        const supportToken = sessionStorage.getItem('admin_token') || sessionStorage.getItem('support_token');
+        const supportUser = JSON.parse(sessionStorage.getItem('admin_user') || sessionStorage.getItem('support_user') || '{}');
+
+        if (!supportToken || !supportUser.id) {
+            window.location.href = 'login.html';
+        }
+
+        document.getElementById('supportNameDisplay').textContent = supportUser.full_name || supportUser.email || 'Support Agent';
+
+        // ---------- STATE ----------
+        let allData = null;
+        let currentFilteredUsers = [];
+
+        // ---------- SKELETON ----------
+        function showSkeleton(tableBodyId, rows = 5, cols = 5) {
+            const tbody = document.getElementById(tableBodyId);
+            tbody.innerHTML = '';
+            for (let i = 0; i < rows; i++) {
+                const tr = document.createElement('tr');
+                tr.classList.add('skeleton-row');
+                for (let j = 0; j < cols; j++) {
+                    const td = document.createElement('td');
+                    td.innerHTML = '&nbsp;';
+                    tr.appendChild(td);
+                }
+                tbody.appendChild(tr);
+            }
+        }
+
+        // ---------- FETCH DATA ----------
+        async function fetchData() {
+            showSkeleton('usersBody', 8, 5);
+            showSkeleton('casinoBody', 8, 6);
+            showSkeleton('financialBody', 8, 5);
+
+            try {
+                const res = await fetch(FUNCTION_ENDPOINT, {
+                    headers: { 'Authorization': `Bearer ${supportToken}` }
+                });
+                if (res.status === 401) {
+                    logout();
+                    return;
+                }
+                const json = await res.json();
+                if (json.success) {
+                    allData = json.data;
+                    currentFilteredUsers = [...allData.users];
+                    renderAll();
+                } else {
+                    showError('Failed to load data.');
+                }
+            } catch (e) {
+                console.error(e);
+                showError('Network error. Please try again.');
+            }
+        }
+
+        function showError(msg) {
+            document.querySelectorAll('.tab-content').forEach(el => {
+                el.innerHTML = `<div style="text-align:center; padding:40px; color:var(--dim);"><i class="bi bi-exclamation-triangle" style="color: var(--danger); font-size:24px;"></i><p>${msg}</p></div>`;
+            });
+        }
+
+        // ---------- RENDER ALL ----------
+        function renderAll() {
+            renderUsersTable();
+            renderCasinoTable();
+            renderFinancialTable();
+        }
+
+        function renderUsersTable() {
+            const tbody = document.getElementById('usersBody');
+            tbody.innerHTML = '';
+            if (currentFilteredUsers.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:30px; color:var(--dim);">No users found.</td></tr>';
+                return;
+            }
+            currentFilteredUsers.forEach(u => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${escapeHTML(u.phone)}</td>
+                    <td>MWK ${Number(u.balance).toLocaleString()}</td>
+                    <td>${u.lastWalletUpdate ? new Date(u.lastWalletUpdate).toLocaleString() : 'N/A'}</td>
+                    <td>${new Date(u.createdAt).toLocaleDateString()}</td>
+                    <td><button class="view-btn" onclick="openUserDetail('${u.id}')"><i class="bi bi-eye"></i> View</button></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function renderCasinoTable() {
+            const tbody = document.getElementById('casinoBody');
+            tbody.innerHTML = '';
+            const tx = allData.casino_transactions || [];
+            if (tx.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:30px; color:var(--dim);">No transactions yet.</td></tr>';
+                return;
+            }
+            tx.forEach(t => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${escapeHTML(t.user_identifier)}</td>
+                    <td>${t.round_id}</td>
+                    <td>${t.game}</td>
+                    <td><span class="badge ${t.type.toLowerCase()}">${t.type}</span></td>
+                    <td>MWK ${Number(t.amount).toLocaleString()}</td>
+                    <td>${new Date(t.created_at).toLocaleString()}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function renderFinancialTable() {
+            const tbody = document.getElementById('financialBody');
+            tbody.innerHTML = '';
+            const tx = allData.financial_transactions || [];
+            if (tx.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:30px; color:var(--dim);">No transactions yet.</td></tr>';
+                return;
+            }
+            tx.forEach(t => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${escapeHTML(t.user_identifier)}</td>
+                    <td><span class="badge ${t.type}">${t.type}</span></td>
+                    <td>MWK ${Number(t.amount).toLocaleString()}</td>
+                    <td>${t.reference || 'N/A'}</td>
+                    <td>${new Date(t.created_at).toLocaleString()}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // ---------- SEARCH ----------
+        document.getElementById('userSearch').addEventListener('input', function(e) {
+            const query = e.target.value.trim().toLowerCase();
+            if (!allData) return;
+            currentFilteredUsers = allData.users.filter(u => (u.phone || '').toLowerCase().includes(query));
+            renderUsersTable();
+        });
+
+        // ---------- TABS ----------
+        document.querySelectorAll('.sub-item').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.sub-item').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                const tabId = this.getAttribute('data-tab');
+                document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
+                document.getElementById(`tab-${tabId}`).classList.add('active');
+            });
+        });
+
+        // ---------- USER DETAIL MODAL ----------
+        function openUserDetail(userId) {
+            if (!allData) return;
+            const user = allData.users.find(u => u.id === userId);
+            if (!user) return;
+
+            // Build header
+            document.getElementById('modalUserInfo').innerHTML = `
+                <h2>${escapeHTML(user.phone)}</h2>
+                <p><strong>Balance:</strong> MWK ${Number(user.balance).toLocaleString()}</p>
+                <p><strong>Registered:</strong> ${new Date(user.createdAt).toLocaleString()}</p>
+            `;
+
+            // Filter transactions
+            const userCasino = allData.casino_transactions.filter(t => t.user_identifier === user.phone);
+            const userFinancial = allData.financial_transactions.filter(t => t.user_identifier === user.phone);
+
+            // Store for tab switching
+            document.getElementById('userModal')._userCasino = userCasino;
+            document.getElementById('userModal')._userFinancial = userFinancial;
+
+            // Activate default detail tab
+            document.querySelectorAll('.detail-tab').forEach(t => t.classList.remove('active'));
+            document.querySelector('.detail-tab[data-detail="casino"]').classList.add('active');
+            renderDetailTable('casino');
+
+            document.getElementById('userModal').classList.add('active');
+        }
+
+        function renderDetailTable(type) {
+            const data = type === 'casino'
+                ? document.getElementById('userModal')._userCasino
+                : document.getElementById('userModal')._userFinancial;
+
+            const thead = document.querySelector('#detailTable thead');
+            const tbody = document.getElementById('detailBody');
+
+            if (type === 'casino') {
+                thead.innerHTML = '<tr><th>Round</th><th>Game</th><th>Type</th><th>Amount</th><th>Date</th></tr>';
+                tbody.innerHTML = data.length === 0
+                    ? '<tr><td colspan="5" style="text-align:center; padding:20px; color:var(--dim);">No casino activity.</td></tr>'
+                    : data.map(t => `
+                        <tr>
+                            <td>${t.round_id}</td>
+                            <td>${t.game}</td>
+                            <td><span class="badge ${t.type.toLowerCase()}">${t.type}</span></td>
+                            <td>MWK ${Number(t.amount).toLocaleString()}</td>
+                            <td>${new Date(t.created_at).toLocaleString()}</td>
+                        </tr>`).join('');
+            } else {
+                thead.innerHTML = '<tr><th>Type</th><th>Amount</th><th>Reference</th><th>Date</th></tr>';
+                tbody.innerHTML = data.length === 0
+                    ? '<tr><td colspan="4" style="text-align:center; padding:20px; color:var(--dim);">No financial transactions.</td></tr>'
+                    : data.map(t => `
+                        <tr>
+                            <td><span class="badge ${t.type}">${t.type}</span></td>
+                            <td>MWK ${Number(t.amount).toLocaleString()}</td>
+                            <td>${t.reference || 'N/A'}</td>
+                            <td>${new Date(t.created_at).toLocaleString()}</td>
+                        </tr>`).join('');
+            }
+        }
+
+        // Detail tab switching inside modal
+        document.querySelectorAll('.detail-tab').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.detail-tab').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                const detailType = this.getAttribute('data-detail');
+                renderDetailTable(detailType);
+            });
+        });
+
+        function closeModal() {
+            document.getElementById('userModal').classList.remove('active');
+        }
+
+        // Close modal on overlay click
+        document.getElementById('userModal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+
+        // ---------- UTILS ----------
+        function escapeHTML(str) {
+            if (!str) return '';
+            return String(str).replace(/[&<>"']/g, function(m) {
+                return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m];
+            });
+        }
+
+        function logout() {
+            sessionStorage.removeItem('admin_token');
+            sessionStorage.removeItem('support_token');
+            sessionStorage.removeItem('admin_user');
+            sessionStorage.removeItem('support_user');
+            window.location.href = 'login.html';
+        }
+
+        // ---------- INIT ----------
+        fetchData();
+    </script>
+</body>
+</html>
