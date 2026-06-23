@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Generate bcryptjs Hash</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bcryptjs/2.4.3/bcrypt.min.js"></script>
+</head>
+<body>
+    <h2>bcryptjs Hash Generator</h2>
+    <p>Hash for "Khondowe@tidye265":</p>
+    <pre id="hashOutput"></pre>
+    <script>
+        const salt = dcodeIO.bcrypt.genSaltSync(10);
+        const hash = dcodeIO.bcrypt.hashSync("Khondowe@tidye265", salt);
+        document.getElementById('hashOutput').textContent = hash;
+    </script>
+</body>
+</html>
