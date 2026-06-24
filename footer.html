@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>tidye265 - Footer & Navigation</title>
+    <style nonce="tidye265SecureNonce">
+        /* ===== GLOBAL RESET ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: #F8F9FA;
+            color: #1C1D21;
+        }
+
+        /* ===== FOOTER - MODERN DARK THEME ===== */
+        .site-footer {
+            background: #1C1D21;  /* rich dark */
+            color: #E5E7EB;
+            padding: 48px 20px calc(130px + env(safe-area-inset-bottom, 0px)) 20px;
+            position: relative;
+            z-index: 10;
+            border-top: 1px solid #2E2F35;
+        }
+
+        .footer-top {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .footer-logo {
+            height: 42px;
+            width: auto;
+            display: block;
+        }
+
+        .footer-tagline {
+            font-size: 14px;
+            color: #9CA3AF;
+            line-height: 1.6;
+            max-width: 480px;
+            margin: 0;
+            font-weight: 400;
+        }
+
+        .security-badges {
+            display: flex;
+            gap: 18px;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-top: 4px;
+        }
+
+        .age-limit {
+            border: 1px solid #9CA3AF;
+            color: #9CA3AF;
+            font-weight: 700;
+            font-size: 12px;
+            padding: 4px 8px;
+            border-radius: 6px;
+            letter-spacing: 0.5px;
+        }
+
+        .security-badges svg {
+            width: 20px;
+            height: 20px;
+            fill: #9CA3AF;
+            transition: fill 0.2s;
+        }
+
+        .security-badges svg:hover {
+            fill: #FFD700;
+        }
+
+        .footer-divider {
+            border: 0;
+            border-top: 1px solid #2E2F35;
+            margin: 32px 0;
+        }
+
+        /* ===== LINKS GRID ===== */
+        .footer-links-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 30px;
+        }
+
+        .footer-col h5 {
+            font-size: 13px;
+            color: #FFD700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            font-weight: 700;
+            margin-bottom: 18px;
+            font-family: 'Lexend', sans-serif;
+        }
+
+        .footer-col ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .footer-col li {
+            margin-bottom: 12px;
+        }
+
+        .footer-col a {
+            display: inline-block;
+            color: #D1D5DB;
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s ease, transform 0.2s ease;
+        }
+
+        .footer-col a:hover {
+            color: #FFD700;
+            transform: translateX(4px);
+        }
+
+        /* ===== SUPPORT BOX ===== */
+        .support-box {
+            background: #25262B;
+            border-left: 3px solid #FFD700;
+            padding: 16px 18px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 20px;
+        }
+
+        .support-box-title {
+            font-size: 11px;
+            color: #9CA3AF;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+
+        .support-box a {
+            color: #FFD700 !important;
+            font-size: 16px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .support-box a svg {
+            width: 22px;
+            height: 22px;
+            fill: #FFD700;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #D1D5DB;
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        .contact-item svg {
+            width: 18px;
+            height: 18px;
+            fill: #FFD700;
+            flex-shrink: 0;
+        }
+
+        .contact-item a {
+            color: #D1D5DB;
+            text-decoration: none;
+        }
+
+        .contact-item a:hover {
+            color: #FFD700;
+        }
+
+        /* ===== SOCIAL ICONS ===== */
+        .footer-socials {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .footer-socials a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: #25262B;
+            border-radius: 8px;
+            transition: background 0.25s ease, transform 0.2s ease;
+        }
+
+        .footer-socials a svg {
+            width: 20px;
+            height: 20px;
+            fill: #FFFFFF;
+            transition: fill 0.25s;
+        }
+
+        .footer-socials a:hover {
+            background: #FFD700;
+            transform: translateY(-3px);
+        }
+
+        .footer-socials a:hover svg {
+            fill: #1C1D21;
+        }
+
+        /* ===== PAYMENT METHODS ===== */
+        .payment-methods {
+            margin-top: 28px;
+        }
+
+        .payment-methods h5 {
+            font-size: 12px;
+            color: #9CA3AF;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .payment-icons {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .payment-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 12px;
+            letter-spacing: 0.3px;
+        }
+
+        .payment-badge.airtel {
+            background: #ffffff;
+            color: #e51c24;
+        }
+
+        .payment-badge.tnm {
+            background: #00a651;
+            color: #ffffff;
+        }
+
+        /* ===== FOOTER BOTTOM ===== */
+        .footer-bottom {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            text-align: left;
+            font-size: 12px;
+            color: #9CA3AF;
+            line-height: 1.6;
+            margin-top: 8px;
+        }
+
+        /* ===== SLIP BANNER ===== */
+        .slip-banner {
+            position: fixed;
+            bottom: calc(53px + env(safe-area-inset-bottom, 0px));
+            left: 0;
+            width: 100%;
+            background: #FFD700;
+            color: #1C1D21;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 16px;
+            font-family: 'Lexend', sans-serif;
+            z-index: 9998;
+            border-top: 2px solid #e5c100;
+            box-sizing: border-box;
+            cursor: pointer;
+            box-shadow: 0 -4px 12px rgba(0,0,0,0.08);
+            transition: background 0.2s;
+        }
+
+        .slip-banner:active {
+            background: #e5c100;
+        }
+
+        .slip-banner-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .slip-banner-icon {
+            background: #1C1D21;
+            color: #FFD700;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .slip-banner-icon svg {
+            width: 16px;
+            height: 16px;
+            fill: #FFD700;
+        }
+
+        .slip-banner-text {
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            flex-direction: column;
+            line-height: 1.2;
+        }
+
+        .slip-banner-subtext {
+            font-size: 10px;
+            font-weight: 400;
+            color: #333;
+        }
+
+        .slip-banner-right {
+            font-size: 15px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .slip-banner-right svg {
+            width: 16px;
+            height: 16px;
+            fill: #1C1D21;
+            transition: transform 0.2s;
+        }
+
+        .slip-banner.open .slip-banner-right svg {
+            transform: rotate(180deg);
+        }
+
+        /* ===== MY SLIP OVERLAY ===== */
+        .myslip-overlay {
+            position: fixed;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            height: calc(100% - (53px + env(safe-area-inset-bottom, 0px)));
+            background: #ffffff;
+            z-index: 9997;
+            transition: top 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            font-family: 'Inter', sans-serif;
+            box-shadow: 0 -8px 20px rgba(0,0,0,0.1);
+        }
+
+        .myslip-overlay.open {
+            top: 0;
+        }
+
+        .myslip-header {
+            background: #1C1D21;
+            color: #ffffff;
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .myslip-header h2 {
+            margin: 0;
+            font-size: 18px;
+            color: #FFD700;
+            font-weight: 700;
+        }
+
+        .close-slip-btn {
+            background: none;
+            border: none;
+            color: #ffffff;
+            font-size: 28px;
+            cursor: pointer;
+            line-height: 1;
+            padding: 0 4px;
+            transition: transform 0.2s;
+        }
+
+        .close-slip-btn:hover {
+            transform: rotate(90deg);
+        }
+
+        .myslip-content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            color: #1C1D21;
+        }
+
+        .empty-slip-msg {
+            text-align: center;
+            color: #6B7280;
+            margin-top: 60px;
+            font-size: 15px;
+        }
+
+        .empty-slip-msg svg {
+            width: 56px;
+            height: 56px;
+            fill: #D1D5DB;
+            display: block;
+            margin: 0 auto 16px;
+        }
+
+        .myslip-footer {
+            padding: 16px 20px;
+            border-top: 1px solid #E5E7EB;
+            background: #F9FAFB;
+        }
+
+        .bet-now-btn {
+            width: 100%;
+            background: #FFD700;
+            color: #1C1D21;
+            border: none;
+            padding: 14px;
+            font-size: 16px;
+            font-weight: 700;
+            font-family: 'Lexend', sans-serif;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.15s;
+        }
+
+        .bet-now-btn:active {
+            transform: scale(0.98);
+            background: #e5c100;
+        }
+
+        /* ===== BOTTOM NAVIGATION ===== */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: #1C1D21;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 9999;
+            height: calc(53px + env(safe-area-inset-bottom, 0px));
+            padding-bottom: env(safe-area-inset-bottom, 0px);
+            border-top: 1px solid #2E2F35;
+            user-select: none;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        .nav-item,
+        .trade-btn-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #9CA3AF;
+            text-decoration: none;
+            font-size: 11px;
+            font-family: 'Lexend', sans-serif;
+            transition: color 0.2s ease;
+            cursor: pointer;
+            border: none;
+            background: none;
+            flex: 1;
+            height: 100%;
+            min-width: 0;
+            -webkit-tap-highlight-color: transparent;
+            position: relative;
+        }
+
+        .nav-item svg,
+        .trade-btn-container svg {
+            width: 26px;
+            height: 26px;
+            fill: #9CA3AF;
+            transition: fill 0.2s ease, transform 0.2s ease;
+            margin-bottom: 2px;
+        }
+
+        .nav-item span,
+        .trade-btn-container span {
+            display: block;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-weight: 500;
+            transition: color 0.2s;
+            font-size: 10px;
+            letter-spacing: 0.3px;
+        }
+
+        /* Active state */
+        .nav-item.active,
+        .trade-btn-container.active {
+            color: #FFD700 !important;
+        }
+
+        .nav-item.active svg,
+        .trade-btn-container.active svg {
+            fill: #FFD700 !important;
+            transform: translateY(-2px);
+        }
+
+        .nav-item.active span,
+        .trade-btn-container.active span {
+            color: #FFD700 !important;
+            font-weight: 700;
+        }
+
+        .nav-item:active,
+        .trade-btn-container:active {
+            transform: scale(0.92);
+        }
+
+        /* Small indicator dot for active */
+        .nav-item.active::after,
+        .trade-btn-container.active::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            right: 50%;
+            transform: translateX(50%);
+            width: 5px;
+            height: 5px;
+            background: #FFD700;
+            border-radius: 50%;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (min-width: 640px) {
+            .site-footer {
+                padding: 56px 40px calc(130px + env(safe-area-inset-bottom, 0px)) 40px;
+            }
+            .footer-links-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            .footer-col[style*="grid-column: 1 / -1;"] {
+                grid-column: auto !important;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .bottom-nav {
+                max-width: 480px;
+                left: 50%;
+                transform: translateX(-50%);
+                border-radius: 16px 16px 0 0;
+            }
+            .slip-banner {
+                max-width: 480px;
+                left: 50%;
+                transform: translateX(-50%);
+                border-radius: 12px 12px 0 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== MAIN FOOTER ===== -->
+    <footer class="site-footer">
+        <div class="footer-top">
+            <div>
+                <!-- Replace with your actual logo -->
+                <img src="logo2.jpg" alt="tidye265 Logo" class="footer-logo">
+                <p class="footer-tagline">Premium online gaming and rewards platform designed for smooth play, fair outcomes, and instant digital experiences in Malawi.</p>
+            </div>
+            <div class="security-badges">
+                <span class="age-limit">18+</span>
+                <!-- Shield icon -->
+                <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
+                <!-- Lock icon -->
+                <svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+                <!-- Lightning icon -->
+                <svg viewBox="0 0 24 24"><path d="M13 3L4 14h7v7l9-11h-7z"/></svg>
+            </div>
+        </div>
+
+        <div class="footer-links-grid">
+            <div class="footer-col">
+                <h5>Sports &amp; Betting</h5>
+                <ul>
+                    <li><a href="#">Live Betting</a></li>
+                    <li><a href="#">Upcoming Matches</a></li>
+                    <li><a href="#">Virtual Sports</a></li>
+                    <li><a href="#">Jackpots</a></li>
+                    <li><a href="#">Check Bet Slip</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h5>Company &amp; Rules</h5>
+                <ul>
+                    <li><a href="terms.html">Terms &amp; Conditions</a></li>
+                    <li><a href="privacy.html">Privacy Policy</a></li>
+                    <li><a href="#">Responsible Gaming</a></li>
+                    <li><a href="faq.html">Help &amp; FAQ</a></li>
+                    <li><a href="#">Betting Rules</a></li>
+                </ul>
+            </div>
+            <div class="footer-col" style="grid-column: 1 / -1;">
+                <h5>Need Help?</h5>
+                <div class="support-box">
+                    <div class="support-box-title">24/7 Customer Support</div>
+                    <a href="https://wa.me/265885699967" target="_blank" rel="noopener noreferrer">
+                        <!-- WhatsApp SVG -->
+                        <svg viewBox="0 0 24 24"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.1 1.29 4.74 1.29 5.46 0 9.91-4.45 9.91-9.91 0-5.45-4.45-9.9-9.91-9.9zm0 18c-1.45 0-2.87-.39-4.12-1.14l-.3-.17-3.26.86.87-3.18-.19-.3c-.75-1.23-1.16-2.65-1.16-4.14 0-4.53 3.68-8.21 8.21-8.21s8.21 3.68 8.21 8.21-3.69 8.22-8.21 8.22zm4.67-5.63c-.24-.12-1.44-.72-1.66-.8-.22-.08-.38-.12-.54.12-.16.24-.64.8-.78.96-.14.16-.28.2-.52.08-.24-.12-1.02-.38-1.94-1.2-.72-.64-1.2-1.44-1.34-1.68-.14-.24-.02-.36.1-.48.11-.11.24-.28.36-.44.12-.16.16-.28.24-.48.08-.2 0-.4-.04-.56-.04-.16-.54-1.32-.74-1.8-.2-.48-.4-.4-.54-.4-.14 0-.3-.04-.46-.04-.16 0-.42.04-.64.2-.22.16-1.1 1.08-1.1 2.63 0 1.55 1.12 3.05 1.28 3.26.16.21 2.2 3.36 5.34 4.72.74.32 1.32.52 1.78.66.74.24 1.42.2 1.94.12.6-.08 1.84-.72 2.1-1.44.26-.72.26-1.34.18-1.46-.08-.12-.3-.2-.54-.32z"/></svg>
+                        088 569 9967
+                    </a>
+                </div>
+                <div class="contact-item">
+                    <!-- Phone SVG -->
+                    <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+                    088 569 9967
+                </div>
+                <div class="contact-item">
+                    <!-- Email SVG -->
+                    <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                    <a href="mailto:support@tidye265.com">support@tidye265.com</a>
+                </div>
+                <div class="footer-socials">
+                    <!-- Facebook -->
+                    <a href="#" aria-label="Facebook">
+                        <svg viewBox="0 0 24 24"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95C18.05 21.2 22 17.04 22 12z"/></svg>
+                    </a>
+                    <!-- Twitter/X -->
+                    <a href="#" aria-label="Twitter">
+                        <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                    </a>
+                    <!-- Instagram -->
+                    <a href="#" aria-label="Instagram">
+                        <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+                    </a>
+                    <!-- Telegram -->
+                    <a href="#" aria-label="Telegram">
+                        <svg viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 000 12a12 12 0 0012 12 12 12 0 0012-12A12 12 0 0012 0a12 12 0 00-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 01.171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="payment-methods">
+            <h5>Accepted Networks</h5>
+            <div class="payment-icons">
+                <span class="payment-badge airtel">Airtel Money</span>
+                <span class="payment-badge tnm">TNM Mpamba</span>
+            </div>
+        </div>
+
+        <hr class="footer-divider">
+
+        <div class="footer-bottom">
+            <div>&copy; 2026 tidye265. All rights reserved.</div>
+            <div>Licensed and regulated by the Malawi Gaming Board. Operations restricted to users physically located in Malawi.</div>
+        </div>
+    </footer>
+
+    <!-- ===== SLIP BANNER ===== -->
+    <div class="slip-banner" id="slipBannerTrigger">
+        <div class="slip-banner-left">
+            <div class="slip-banner-icon">
+                <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 18H4V4h16v16z"/><path d="M6 7h12v2H6V7zm0 4h12v2H6v-2zm0 4h8v2H6v-2z"/></svg>
+            </div>
+            <div class="slip-banner-text">
+                <span>0 Selections</span>
+                <span class="slip-banner-subtext">Big bonus up to 200%</span>
+            </div>
+        </div>
+        <div class="slip-banner-right">
+            MWK 0.00
+            <svg viewBox="0 0 24 24"><path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/></svg>
+        </div>
+    </div>
+
+    <!-- ===== MY SLIP OVERLAY ===== -->
+    <div class="myslip-overlay" id="mySlipOverlay">
+        <div class="myslip-header">
+            <h2>Bet Slip</h2>
+            <button class="close-slip-btn" id="closeSlipBtn">&times;</button>
+        </div>
+        <div class="myslip-content">
+            <div class="empty-slip-msg">
+                <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 18H4V4h16v16z"/><path d="M6 7h12v2H6V7zm0 4h12v2H6v-2zm0 4h8v2H6v-2z"/></svg>
+                Your bet slip is empty.<br>Please select odds to place a bet.
+            </div>
+        </div>
+        <div class="myslip-footer">
+            <button class="bet-now-btn">BET NOW</button>
+        </div>
+    </div>
+
+    <!-- ===== BOTTOM NAVIGATION ===== -->
+    <nav class="bottom-nav" aria-label="Main Navigation" id="mainBottomNav">
+        <!-- Home -->
+        <a href="dashboard.html" class="nav-item" data-page="dashboard" aria-label="Home">
+            <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+            <span>Home</span>
+        </a>
+        <!-- Games -->
+        <a href="game.html" class="nav-item" data-page="game" aria-label="Games">
+            <svg viewBox="0 0 24 24"><path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm4 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+            <span>Games</span>
+        </a>
+        <!-- My Slip (trade-btn-container) -->
+        <a href="myslip.html" class="trade-btn-container" id="mySlipNavBtn" data-page="myslip" aria-label="My Slip">
+            <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 18H4V4h16v16z"/><path d="M6 7h12v2H6V7zm0 4h12v2H6v-2zm0 4h8v2H6v-2z"/></svg>
+            <span>Myslip</span>
+        </a>
+        <!-- My Bet (Akungi) -->
+        <a href="mybet.html" class="nav-item" data-page="akungi" aria-label="Akungi">
+            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg>
+            <span>Akungi</span>
+        </a>
+        <!-- Profile / Me -->
+        <a href="account.html" class="nav-item" data-page="account" aria-label="Account">
+            <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+            <span>Me</span>
+        </a>
+    </nav>
+
+    <!-- ===== JAVASCRIPT (Logic unchanged) ===== -->
+    <script nonce="tidye265SecureNonce">
+        document.addEventListener("DOMContentLoaded", () => {
+            // Bottom Nav active state
+            const navElements = document.querySelectorAll("#mainBottomNav .nav-item, #mainBottomNav .trade-btn-container");
+            const currentFileName = window.location.pathname.split("/").pop() || "dashboard.html";
+            navElements.forEach(el => {
+                const dataPage = el.getAttribute("data-page");
+                if (dataPage && currentFileName.includes(dataPage) && dataPage !== 'myslip') {
+                    el.classList.add("active");
+                } else {
+                    el.classList.remove("active");
+                }
+            });
+            if (!document.querySelector("#mainBottomNav .active") && (currentFileName === "" || currentFileName === "index.html")) {
+                const home = document.querySelector('[data-page="dashboard"]');
+                if (home) home.classList.add("active");
+            }
+
+            // Click effects & active visual for nav items
+            const allButtons = document.querySelectorAll("#mainBottomNav .nav-item, #mainBottomNav .trade-btn-container");
+            const applyActive = (el) => {
+                if (el.id !== 'mySlipNavBtn') {
+                    allButtons.forEach(btn => btn.classList.remove("active"));
+                    el.classList.add("active");
+                }
+            };
+            allButtons.forEach(btn => {
+                btn.addEventListener("mousedown", () => applyActive(btn));
+                btn.addEventListener("touchstart", () => applyActive(btn));
+            });
+
+            // Slip overlay logic
+            const slipBanner = document.getElementById('slipBannerTrigger');
+            const slipNavBtn = document.getElementById('mySlipNavBtn');
+            const overlay = document.getElementById('mySlipOverlay');
+            const closeBtn = document.getElementById('closeSlipBtn');
+            const openSlip = (e) => { e?.preventDefault(); overlay.classList.add('open'); slipBanner.classList.add('open'); };
+            const closeSlip = () => { overlay.classList.remove('open'); slipBanner.classList.remove('open'); };
+            slipBanner?.addEventListener('click', openSlip);
+            slipNavBtn?.addEventListener('click', openSlip);
+            closeBtn?.addEventListener('click', closeSlip);
+        });
+    </script>
+</body>
+</html>
