@@ -825,7 +825,7 @@
         // ========== FOOTER INJECTION ==========
         async function injectFooterComponent() {
             try {
-                const response = await fetch('footer2.html');
+                const response = await fetch('footer.html');
                 if (response.ok) {
                     const rawHtml = await response.text();
                     const placeholder = document.getElementById('footer-placeholder');
