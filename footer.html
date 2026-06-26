@@ -772,7 +772,7 @@
         //    Exactly the same bar on all guest pages
         // ─────────────────────────────────────────────
         const path = window.location.pathname.split('/').pop().toLowerCase();
-        const guestPages = ['index.html', 'login.html', 'register.html', ''];
+        const guestPages = ['index', 'login', 'register', ''];
         const isGuestPage = guestPages.includes(path) || path === '';
         const navContainer = document.getElementById('mainBottomNav');
 
