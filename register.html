@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <!-- SEO & Google Search Console -->
+    <meta name="description" content="Create your tiDye265 account in seconds. Join the most trusted gaming and betting platform in Malawi. Bet from MK 20, enjoy up to 1500% bonus, and play premium casino & sports games.">
+    <meta name="keywords" content="Tidye265 register, create Tidye265 account, Malawi gaming signup, join Tidye265, betting registration Malawi">
+    <meta name="author" content="tiDye265">
+    <meta name="theme-color" content="#121212">
+    <link rel="canonical" href="https://www.tidye265.com/register.html">
+
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="logo.jpg">
+
+    <meta property="og:title" content="Create Account - tiDye265">
+    <meta property="og:description" content="Join tiDye265 today. Bet from MK 20, enjoy up to 1500% bonus, and play premium casino & sports games.">
+    <meta property="og:image" content="https://www.tidye265.com/logo.jpg">
+    <meta property="og:url" content="https://www.tidye265.com/register.html">
+    <meta property="og:type" content="website">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Create Account - tiDye265">
+    <meta name="twitter:description" content="Join tiDye265 today. Bet from MK 20, enjoy up to 1500% bonus, and play premium casino & sports games.">
+    <meta name="twitter:image" content="https://www.tidye265.com/logo.jpg">
+
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; font-src https://fonts.gstatic.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; img-src 'self' https: data: blob:; connect-src 'self' https://*.supabase.co; frame-src https://challenges.cloudflare.com;">
+
+    <title>Create Account – tiDye265</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
+    <style>
+        :root {
+            --bg: #F4F6F8;
+            --primary: #FFD700;
+            --card-bg: #FFFFFF;
+            --text-light: #1a1d21;
+            --text-dim: #6b7280;
+            --success: #10b981;
+            --border: #eef2f6;
+            --danger: #ff4757;
+            --header-bg: #29282b;
+            --sub-header-bg: #29282b;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+        body {
+            background:var(--bg);
+            color:var(--text-light);
+            font-family:system-ui,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+            min-height:100vh;
+            display:flex;
+            flex-direction:column;
+            overflow-x:hidden;
+        }
+
+        /* ── Header (exactly like login.html) ── */
+        .sticky-nav-holder {
+            position:sticky;
+            top:0;
+            z-index:1000;
+            background:var(--header-bg);
+            box-shadow:0 4px 12px rgba(0,0,0,0.3);
+        }
+        header {
+            padding:0 15px;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            border-bottom:1px solid #3a3a3a;
+            height:70px;
+            position:relative;
+            background:var(--header-bg);
+        }
+        .logo-container img {
+            height:46px;
+            border-radius:5px;
+            object-fit:contain;
+        }
+        .header-controls {
+            display:flex;
+            align-items:center;
+            gap:8px;
+            z-index:10;
+        }
+        .age-badge {
+            width:30px;
+            height:30px;
+            object-fit:contain;
+            border-radius:4px;
+        }
+        .login-header-btn {
+            text-decoration:none;
+            background:var(--primary);
+            color:#1a1d21;
+            padding:8px 16px;
+            border-radius:10px;
+            font-size:12px;
+            font-weight:700;
+            font-family:inherit;
+            transition:0.2s;
+        }
+        .login-header-btn:active { transform:scale(0.96); }
+
+        /* ── Sub‑header ── */
+        .sub-header {
+            display:flex;
+            overflow-x:auto;
+            white-space:nowrap;
+            padding:10px 12px;
+            gap:16px;
+            background:var(--sub-header-bg);
+            border-bottom:1px solid #1a1a1a;
+            scrollbar-width:none;
+            align-items:center;
+        }
+        .sub-header::-webkit-scrollbar { display:none; }
+        .sub-item {
+            font-family:inherit;
+            font-size:11px;
+            font-weight:600;
+            color:#b0b0b0;
+            text-decoration:none;
+            display:inline-flex;
+            flex-direction:column;
+            align-items:center;
+            gap:4px;
+            position:relative;
+            transition:0.25s ease;
+            cursor:pointer;
+            background:none;
+            border:none;
+            flex-shrink:0;
+            padding:4px 6px 2px;
+        }
+        .sub-item:hover { color:#fff; }
+        .sub-item .category-icon {
+            width:20px;
+            height:20px;
+            object-fit:contain;
+            filter:brightness(0) invert(1);
+        }
+        .live-badge {
+            position:absolute; top:-2px; right:-4px; background:#ff4757; color:#fff;
+            font-size:8px; font-weight:800; padding:1px 5px; border-radius:4px;
+            line-height:1; letter-spacing:0.5px; text-transform:uppercase; pointer-events:none;
+        }
+        .virtual-badge {
+            position:absolute; top:-1px; right:-6px; background:#ff4757; color:#fff;
+            font-size:6px; font-weight:800; padding:1px 4px; border-radius:3px;
+            line-height:1; letter-spacing:0.3px; text-transform:uppercase; pointer-events:none;
+        }
+        .more-btn {
+            color:#b0b0b0; font-size:9px; font-weight:600; text-transform:uppercase; cursor:pointer;
+            display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px;
+            letter-spacing:0.3px; opacity:0.85; transition:0.25s;
+        }
+        .more-btn i { font-size:18px; color:#b0b0b0; transition:0.2s; }
+        .more-btn:hover i, .more-btn:hover { color:#FFD700; opacity:1; }
+        .more-items { display:none; }
+        .sub-header.show-more .more-items { display:inline-flex; gap:16px; }
+
+        /* ── Main Content ── */
+        .register-wrapper {
+            flex:1;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            padding:25px 12px 50px;
+        }
+        .register-card {
+            background:var(--card-bg);
+            border-radius:24px;
+            padding:35px 25px;
+            width:100%;
+            max-width:500px;
+            border:1px solid var(--border);
+            box-shadow:0 4px 20px rgba(0,0,0,0.04);
+        }
+
+        .title {
+            text-align:center;
+            margin-bottom:28px;
+        }
+        .title h1 {
+            font-family:'Lexend',sans-serif;
+            font-weight:800;
+            font-size:24px;
+            color:var(--text-light);
+            letter-spacing:-0.3px;
+        }
+        .title p {
+            color:var(--text-dim);
+            font-size:14px;
+            margin-top:6px;
+        }
+
+        .register-form { display:flex; flex-direction:column; gap:16px; }
+        .input-box { position:relative; }
+        .input-box input {
+            width:100%;
+            height:54px;
+            border:1.5px solid var(--border);
+            outline:none;
+            background:#f9fafb;
+            border-radius:14px;
+            padding:0 16px;
+            font-size:15px;
+            font-family:inherit;
+            transition:0.25s ease;
+            color:var(--text-light);
+        }
+        .input-box input:focus {
+            background:#fff;
+            border-color:var(--primary);
+            box-shadow:0 0 0 3px rgba(255,215,0,0.1);
+        }
+        .input-box input::placeholder { color:#9ca3af; }
+
+        .phone-box input { padding-left:56px; }
+        .phone-flag {
+            position:absolute; left:16px; top:50%; transform:translateY(-50%);
+            width:28px; height:20px; object-fit:cover; border-radius:3px; z-index:2;
+        }
+
+        .pin-box i {
+            position:absolute; right:16px; top:50%; transform:translateY(-50%);
+            color:#9ca3af; cursor:pointer; font-size:18px; transition:color 0.2s;
+        }
+        .pin-box i:hover { color:var(--text-light); }
+
+        .legal {
+            display:flex; align-items:flex-start; gap:10px;
+        }
+        .legal input {
+            margin-top:3px; width:18px; height:18px; accent-color:var(--primary);
+        }
+        .legal p { font-size:13px; color:var(--text-dim); line-height:1.5; }
+
+        .turnstile-wrapper {
+            display:flex; justify-content:center; margin:4px 0; min-height:65px;
+        }
+
+        .submit-btn {
+            width:100%; height:45px; border:none; border-radius:8px;
+            background:var(--primary); color:#1a1d21;
+            font-family:'Lexend',sans-serif; font-size:13px; font-weight:400;
+            cursor:pointer; transition:0.2s ease; letter-spacing:0.3px;
+            display:flex; align-items:center; justify-content:center; gap:10px;
+        }
+        .submit-btn:active { transform:scale(0.97); }
+        .submit-btn.loading {
+            background:#e5e7eb !important; color:#9ca3af !important;
+            pointer-events:none; cursor:not-allowed; box-shadow:none;
+        }
+
+        .double-ring { position:relative; width:24px; height:24px; }
+        .double-ring::before, .double-ring::after {
+            content:''; position:absolute; top:50%; left:50%;
+            width:22px; height:22px; border-radius:50%;
+            border:3px solid transparent; border-top-color:var(--primary);
+            transform:translate(-50%,-50%);
+        }
+        .double-ring::before { animation:spinClock 0.8s linear infinite; }
+        .double-ring::after {
+            width:16px; height:16px; animation:spinAnti 0.6s linear infinite; border-top-color:#1a1d21;
+        }
+        @keyframes spinClock { to { transform:translate(-50%,-50%) rotate(360deg); } }
+        @keyframes spinAnti { to { transform:translate(-50%,-50%) rotate(-360deg); } }
+
+        .alert {
+            padding:14px 16px; border-radius:12px; font-size:13px; font-weight:500;
+            display:none; margin-bottom:16px; word-break:break-word;
+        }
+        .alert.error { background:#fef2f2; color:#991b1b; border:1px solid #fecaca; }
+        .alert.success { background:#ecfdf5; color:#065f46; border:1px solid #a7f3d0; }
+        .alert.info { background:#eff6ff; color:#1e40af; border:1px solid #bfdbfe; }
+
+        .finish-screen {
+            display:none; text-align:center; padding:60px 20px;
+        }
+        .finish-icon {
+            width:90px; height:90px; border-radius:50%; background:#ecfdf5;
+            color:var(--success); display:flex; align-items:center; justify-content:center;
+            font-size:40px; margin:0 auto 25px;
+        }
+        .finish-screen h2 { font-family:'Lexend'; margin-bottom:10px; font-size:28px; }
+        .finish-screen p { color:var(--text-dim); line-height:1.6; font-size:14px; }
+
+        .bottom-text {
+            margin-top:24px; text-align:center; color:var(--text-dim); font-size:14px;
+        }
+        .bottom-text a {
+            color:var(--text-light); font-weight:700; text-decoration:none; transition:color 0.2s;
+        }
+        .bottom-text a:hover { color:var(--primary); }
+
+        #footer-placeholder { margin-top:auto; }
+
+        .network-modal {
+            position:fixed; top:0; left:0; width:100%; height:100%;
+            background:rgba(0,0,0,0.34); backdrop-filter:blur(3px);
+            display:flex; align-items:center; justify-content:center;
+            z-index:10005; opacity:0; pointer-events:none; transition:opacity 0.3s; padding:20px;
+        }
+        .network-modal.show { opacity:1; pointer-events:auto; }
+        .network-modal-content {
+            background:#fff; padding:24px 20px; border-radius:20px;
+            max-width:310px; width:100%; text-align:center;
+            transform:scale(0.9); transition:0.3s cubic-bezier(0.34,1.56,0.64,1);
+        }
+        .network-modal.show .network-modal-content { transform:scale(1); }
+        .network-modal-icon {
+            width:50px; height:50px; background:#FFF9E6; color:#FFB800;
+            border-radius:50%; display:flex; align-items:center; justify-content:center;
+            font-size:20px; margin:0 auto 14px;
+        }
+
+        @media (max-width:480px) {
+            .register-card { padding:28px 20px; }
+            .title h1 { font-size:22px; }
+        }
+
+        .honeypot-layer { opacity:0; position:absolute; top:0; left:0; height:0; width:0; z-index:-1; }
+    </style>
+</head>
+<body>
+
+    <!-- OFFLINE MODAL -->
+    <div id="slowNetModal" class="network-modal">
+        <div class="network-modal-content">
+            <div class="network-modal-icon"><i class="bi bi-wifi-off"></i></div>
+            <div class="network-modal-title">No Internet Connection</div>
+            <div class="network-modal-text">You appear to be offline. Please check your connection and try again.</div>
+            <button class="network-modal-btn" style="background:#FFD700; border:none; padding:10px; border-radius:12px; width:100%;" onclick="location.reload()">Retry</button>
+        </div>
+    </div>
+
+    <!-- STICKY HEADER & SUB‑HEADER -->
+    <div class="sticky-nav-holder">
+        <header id="mainHeader">
+            <div class="logo-container">
+                <a href="index.html" style="text-decoration:none;display:flex;align-items:center;">
+                    <img src="logoo.jpg" alt="Tidye265">
+                </a>
+            </div>
+            <div class="header-controls">
+                <img src="18+.png" alt="18+" class="age-badge" onerror="this.style.display='none';">
+                <a href="login.html" class="login-header-btn">LOGIN</a>
+            </div>
+        </header>
+
+        <nav class="sub-header" id="categoryNav">
+            <a href="live.html" class="sub-item"><img src="live.svg" class="category-icon"><span>Live</span><span class="live-badge">LIVE</span></a>
+            <a href="matches.html" class="sub-item"><img src="matches.svg" class="category-icon"><span>Sports</span></a>
+            <a href="casino.html" class="sub-item"><img src="casino.svg" class="category-icon"><span>Casino</span></a>
+            <a href="aviator.html" class="sub-item"><img src="aviator.png" class="category-icon"><span>Aviator</span></a>
+            <a href="virtual.html" class="sub-item"><img src="vi.png" class="category-icon"><span>Virtual</span><span class="virtual-badge">VIRTUAL</span></a>
+            <div class="sub-item more-btn" id="seeMoreSubBtn"><i class="bi bi-three-dots"></i><span>See More</span></div>
+            <div class="more-items" id="moreCategories">
+                <a href="games.html" class="sub-item"><img src="games.svg" class="category-icon"><span>Games</span></a>
+                <a href="esports.html" class="sub-item"><img src="games.svg" class="category-icon"><span>eSports</span></a>
+            </div>
+        </nav>
+    </div>
+
+    <!-- MAIN REGISTRATION -->
+    <div class="register-wrapper" id="registerSection">
+        <div class="register-card">
+            <div class="title">
+                <h1>Create Account</h1>
+                <p>Join tiDye265 and start playing Malawi’s best games.</p>
+            </div>
+
+            <div id="alertBox" class="alert"></div>
+
+            <form class="register-form" id="registerForm">
+                <!-- Honeypot -->
+                <input type="text" name="b_firstname" id="botCheck" class="honeypot-layer" tabindex="-1" autocomplete="off">
+
+                <div class="input-box phone-box">
+                    <img src="https://flagcdn.com/w40/mw.png" alt="Malawi" class="phone-flag" onerror="this.style.display='none';">
+                    <input type="tel" id="phone" placeholder="Phone Number" required>
+                </div>
+
+                <div class="input-box pin-box">
+                    <input type="password" id="pin" maxlength="6" inputmode="numeric" placeholder="Secret PIN" required>
+                    <i class="bi bi-eye" id="togglePin"></i>
+                </div>
+
+                <label class="legal">
+                    <input type="checkbox" id="ageConfirm" required>
+                    <p>I confirm that I am <b>18 years or older</b> and I agree to the Terms of Service.</p>
+                </label>
+
+                <div class="turnstile-wrapper">
+                    <div class="cf-turnstile" data-sitekey="0x4AAAAAADQhPHJB5viRCO84"></div>
+                </div>
+
+                <button type="submit" class="submit-btn" id="submitBtn">REGISTER NOW</button>
+            </form>
+
+            <p class="bottom-text">
+                Already have an account? 
+                <a href="login.html">Log in here</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- SUCCESS SCREEN -->
+    <div class="finish-screen" id="finishScreen">
+        <div class="finish-icon"><i class="bi bi-check-lg"></i></div>
+        <h2>Registration Successful</h2>
+        <p>Your tiDye265 account has been created.<br>Redirecting to login...</p>
+    </div>
+
+    <!-- FOOTER PLACEHOLDER -->
+    <div id="footer-placeholder"></div>
+
+    <!-- PRE‑FETCH FOOTER (immediate) -->
+    <script>
+        const footerPromise = fetch('footer.html')
+            .then(response => response.ok ? response.text() : '')
+            .catch(() => '');
+    </script>
+
+    <script src="supabase.js"></script>
+    <script>
+        // ── LOGGER ──
+        const Logger = {
+            info: (msg, data = {}) => console.log(`[INFO] ${new Date().toISOString()} - ${msg}`, data),
+            warn: (msg, data = {}) => console.warn(`[WARN] ${new Date().toISOString()} - ${msg}`, data),
+            error: (msg, data = {}) => console.error(`[ERROR] ${new Date().toISOString()} - ${msg}`, data)
+        };
+
+        // ── SESSION TOKEN HELPER ──
+        function getCleanSessionToken() {
+            let raw = localStorage.getItem('tidye_session_token');
+            if (!raw || raw === 'null' || raw === 'undefined') return null;
+            try {
+                let p = JSON.parse(raw);
+                if (p?.access_token) return p.access_token;
+                if (typeof p === 'string') return p;
+            } catch(e) {}
+            return raw.replace(/^["']|["']$/g, '').trim();
+        }
+
+        // ── API LOCK CHECK ──
+        async function checkApiLock() {
+            try {
+                const response = await fetch(`${window.SUPABASE_URL}/functions/v1/api-lock`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${window.SUPABASE_ANON_KEY}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                if (!response.ok) return;
+                const result = await response.json();
+                if (result.locked) window.location.replace('updating.html');
+            } catch (e) {
+                console.warn('API lock check failed:', e);
+            }
+        }
+
+        // ── SESSION CHECK (redirect if already logged in) ──
+        async function checkExistingSession() {
+            const token = getCleanSessionToken();
+            if (!token) return;
+            try {
+                const res = await fetch(`${window.SUPABASE_URL}/functions/v1/wallet-api`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (res.ok) window.location.href = 'dashboard.html';
+            } catch(e) {}
+        }
+
+        // ── DOM ELEMENTS ──
+        const form = document.getElementById('registerForm');
+        const btn = document.getElementById('submitBtn');
+        const alertBox = document.getElementById('alertBox');
+        const registerSection = document.getElementById('registerSection');
+        const finishScreen = document.getElementById('finishScreen');
+        const togglePin = document.getElementById('togglePin');
+        const pinInput = document.getElementById('pin');
+
+        togglePin.addEventListener('click', () => {
+            const type = pinInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            pinInput.setAttribute('type', type);
+            if (type === 'text') {
+                togglePin.classList.remove('bi-eye');
+                togglePin.classList.add('bi-eye-slash');
+            } else {
+                togglePin.classList.remove('bi-eye-slash');
+                togglePin.classList.add('bi-eye');
+            }
+        });
+
+        // ── RATE LIMITER ──
+        function checkRateLimit() {
+            const now = Date.now();
+            let attempts = JSON.parse(localStorage.getItem('reg_rate_limit') || '[]');
+            attempts = attempts.filter(time => now - time < 5 * 60 * 1000);
+            if (attempts.length >= 5) return false;
+            attempts.push(now);
+            localStorage.setItem('reg_rate_limit', JSON.stringify(attempts));
+            return true;
+        }
+
+        // ── FORM SUBMIT ──
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            // Honeypot
+            if (document.getElementById('botCheck').value !== '') return;
+
+            // Turnstile
+            const turnstileResponse = document.querySelector('[name="cf-turnstile-response"]')?.value;
+            if (!turnstileResponse) {
+                showAlert('Please complete the security verification.', 'error');
+                return;
+            }
+
+            // Rate limit
+            if (!checkRateLimit()) {
+                showAlert('Too many attempts. Please wait 5 minutes.', 'error');
+                return;
+            }
+
+            let rawPhone = document.getElementById('phone').value.trim().replace(/\s+/g, '');
+            const pin = document.getElementById('pin').value.trim();
+
+            if (pin.length < 4) {
+                showAlert('PIN must be at least 4 digits.', 'error');
+                return;
+            }
+
+            // Normalize phone
+            if (rawPhone.startsWith('+265')) rawPhone = '0' + rawPhone.slice(4);
+            else if (rawPhone.startsWith('265')) rawPhone = '0' + rawPhone.slice(3);
+            else if (rawPhone.length === 9 && /^[8934]/.test(rawPhone)) rawPhone = '0' + rawPhone;
+
+            const malawiRegex = /^0(88|99|98|89|97|31|41)\d{7}$/;
+            if (!malawiRegex.test(rawPhone)) {
+                showAlert('Enter a valid Malawi phone number (e.g. 088xxxxxxx)', 'error');
+                return;
+            }
+
+            // Loading
+            btn.classList.add('loading');
+            btn.innerHTML = '<div class="double-ring"></div> Processing...';
+
+            try {
+                const response = await fetch(`${SUPABASE_URL}/functions/v1/register_265`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+                    },
+                    body: JSON.stringify({
+                        phone_number: rawPhone,
+                        pin: pin,
+                        turnstileToken: turnstileResponse
+                    })
+                });
+
+                let result = null;
+                try { result = await response.json(); } catch(e) {}
+
+                if (!response.ok) {
+                    const errorMsg = result?.error || `Server error: ${response.status}`;
+                    if (response.status === 409 || errorMsg === 'DUPLICATE_PHONE') {
+                        throw new Error('DUPLICATE_PHONE');
+                    }
+                    throw new Error(errorMsg);
+                }
+
+                // Store session token exactly like login page
+                const sessionToken = result?.sessionToken || result?.token || result?.data?.sessionToken || result?.data?.token;
+                if (sessionToken) {
+                    localStorage.setItem('tidye_session_token', sessionToken);
+                }
+
+                // Success
+                registerSection.style.display = 'none';
+                finishScreen.style.display = 'block';
+                setTimeout(() => {
+                    window.location.replace('login.html');
+                }, 2500);
+
+            } catch (error) {
+                Logger.error('Registration failed', error);
+                if (error.message === 'DUPLICATE_PHONE') {
+                    showAlert('This phone number is already registered.', 'error');
+                } else if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
+                    showAlert('Network error. Please check your connection and try again.', 'error');
+                } else {
+                    showAlert(`Error: ${error.message}`, 'error');
+                }
+                btn.classList.remove('loading');
+                btn.innerHTML = 'REGISTER NOW';
+                if (typeof turnstile !== 'undefined') turnstile.reset();
+            }
+        });
+
+        function showAlert(msg, type) {
+            alertBox.style.display = 'block';
+            alertBox.className = 'alert ' + type;
+            alertBox.innerText = msg;
+            setTimeout(() => { alertBox.style.display = 'none'; }, 6000);
+        }
+
+        // ── OFFLINE DETECTION ──
+        function checkOffline() {
+            const modal = document.getElementById('slowNetModal');
+            if (!navigator.onLine) modal.classList.add('show');
+            else modal.classList.remove('show');
+        }
+
+        // ── FOOTER INJECTION ──
+        async function injectFooter() {
+            const placeholder = document.getElementById('footer-placeholder');
+            if (!placeholder) return;
+            const html = await footerPromise;
+            if (html) {
+                placeholder.innerHTML = html;
+                const scripts = placeholder.querySelectorAll('script');
+                scripts.forEach(oldScript => {
+                    const newScript = document.createElement('script');
+                    newScript.textContent = oldScript.textContent;
+                    document.body.appendChild(newScript).remove();
+                });
+            }
+        }
+
+        // ── SEE MORE TOGGLE ──
+        function setupSeeMore() {
+            const moreBtn = document.getElementById('seeMoreSubBtn');
+            const subHeader = document.getElementById('categoryNav');
+            if (moreBtn && subHeader) {
+                moreBtn.addEventListener('click', e => {
+                    e.preventDefault();
+                    subHeader.classList.toggle('show-more');
+                    moreBtn.querySelector('span').textContent = subHeader.classList.contains('show-more') ? 'Less' : 'See More';
+                });
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            checkOffline();
+            await checkApiLock();
+            await checkExistingSession();
+            setupSeeMore();
+            injectFooter();
+            window.addEventListener('offline', checkOffline);
+            window.addEventListener('online', () => { checkOffline(); });
+        });
+    </script>
+</body>
+</html>
