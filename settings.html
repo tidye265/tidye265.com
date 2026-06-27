@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Tidye265 | Settings</title>
+    <meta name="theme-color" content="#121212">
+    <meta name="robots" content="noindex, nofollow">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://*.supabase.co https://cdn.jsdelivr.net https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; img-src 'self' https: data: blob:; connect-src 'self' https://*.supabase.co https://challenges.cloudflare.com; frame-src 'self' https://challenges.cloudflare.com;">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --bg: #F4F6F8;
+            --primary: #FFD700;
+            --card-bg: #FFFFFF;
+            --text-light: #1a1d21;
+            --text-dim: #6b7280;
+            --success: #10b981;
+            --border: #eef2f6;
+            --danger: #ff4757;
+            --header-bg: #29282b;
+            --sub-header-bg: #29282b;
+            --dark-skeleton-base: #363538;
+            --dark-skeleton-shine: #29282b;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+        body { background:var(--bg); color:var(--text-light); font-family:system-ui,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif; padding-bottom:20px; overflow-x:hidden; }
+        .sticky-nav-holder { position:sticky; top:0; z-index:1000; background:var(--header-bg); box-shadow:0 4px 12px rgba(0,0,0,0.3); }
+
+        .skeleton { background: var(--dark-skeleton-base); background: linear-gradient(90deg, var(--dark-skeleton-base) 25%, var(--dark-skeleton-shine) 50%, var(--dark-skeleton-base) 75%); background-size:200% 100%; animation:skeleton-loading 1.5s infinite; }
+        @keyframes skeleton-loading { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+        .bal-skeleton { width:80px; height:16px; border-radius:4px; display:inline-block; }
+        .skeleton-badge { width:16px; height:16px; border-radius:50%; display:inline-block; background: linear-gradient(90deg, var(--dark-skeleton-base) 25%, var(--dark-skeleton-shine) 50%, var(--dark-skeleton-base) 75%); background-size:200% 100%; animation:skeleton-loading 1.5s infinite; }
+
+        .balance-skeleton { width:80px; height:16px; display:inline-block; }
+        .balance-real { display:none; }
+        .balance-loaded .balance-skeleton { display:none; }
+        .balance-loaded .balance-real { display:flex; align-items:center; }
+
+        header { padding:0 15px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #3a3a3a; height:70px; position:relative; background:var(--header-bg); }
+        .logo-container img { height:46px; border-radius:5px; object-fit:contain; }
+        .header-controls { display:flex; align-items:center; gap:8px; z-index:10; }
+        .age-badge { width:30px; height:30px; object-fit:contain; border-radius:4px; }
+        .header-balance-container { display:flex; align-items:center; gap:3px; background:#3a3a3a; padding:5px 5px 5px 12px; border-radius:10px; border:1px solid #4a4a4a; cursor:pointer; transition:0.2s; text-decoration:none; color:#f0f0f0; min-width:110px; box-shadow:0 2px 8px rgba(0,0,0,0.3); }
+        .header-balance-container:active { transform:scale(0.96); }
+        .bal-label { font-size:8px; font-weight:800; color:#bbb; text-transform:uppercase; display:block; line-height:1.1; font-family:inherit; }
+        .bal-amount { font-size:13px; font-weight:800; display:flex; align-items:center; font-family:inherit; color:#fff; }
+        .bal-cents { opacity:0.5; font-size:13px; margin-left:1px; }
+        .header-dep-btn { background:var(--primary); color:#1a1d21; width:34px; height:32px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:17px; border:none; font-weight:800; margin-left:auto; font-family:inherit; }
+
+        /* SUB-HEADER */
+        .sub-header { display:flex; overflow-x:auto; white-space:nowrap; padding:10px 12px; gap:16px; background:var(--sub-header-bg); border-bottom:1px solid #1a1a1a; scrollbar-width:none; align-items:center; }
+        .sub-header::-webkit-scrollbar { display:none; }
+        .sub-item { font-family:inherit; font-size:11px; font-weight:600; color:#b0b0b0; text-decoration:none; display:inline-flex; flex-direction:column; align-items:center; gap:4px; position:relative; transition:0.25s; cursor:pointer; background:none; border:none; flex-shrink:0; padding:4px 6px 2px; }
+        .sub-item.active { color:#FFD700 !important; border-bottom:2px solid var(--primary); padding-bottom:0; }
+        .sub-item:hover { color:#fff; }
+        .sub-item .category-icon { width:20px; height:20px; object-fit:contain; filter:brightness(0) invert(1); }
+        .sub-item.active .category-icon { filter:brightness(0) invert(1); }
+        .live-badge { position:absolute; top:-2px; right:-4px; background:#ff4757; color:#fff; font-size:8px; font-weight:800; padding:1px 5px; border-radius:4px; line-height:1; letter-spacing:0.5px; text-transform:uppercase; pointer-events:none; }
+        .virtual-badge { position:absolute; top:-1px; right:-6px; background:#ff4757; color:#fff; font-size:6px; font-weight:800; padding:1px 4px; border-radius:3px; line-height:1; letter-spacing:0.3px; text-transform:uppercase; pointer-events:none; }
+        .casino-count-badge { position:absolute; top:-2px; right:-8px; background:#FFD700; color:#1a1d21; font-size:8px; font-weight:800; width:16px; height:16px; border-radius:50%; display:flex; align-items:center; justify-content:center; line-height:1; pointer-events:none; }
+        .more-btn { color:#b0b0b0; font-size:9px; font-weight:600; text-transform:uppercase; cursor:pointer; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px; letter-spacing:0.3px; opacity:0.85; transition:0.25s; }
+        .more-btn i { font-size:18px; color:#b0b0b0; transition:0.2s; }
+        .more-btn:hover i, .more-btn:hover { color:#FFD700; opacity:1; }
+        .more-items { display:none; }
+        .sub-header.show-more .more-items { display:inline-flex; gap:16px; }
+
+        /* SETTINGS CONTENT */
+        .settings-container { padding:20px 15px; }
+        .form-card { background:#fff; border-radius:20px; padding:20px; border:1px solid var(--border); box-shadow:0 2px 8px rgba(0,0,0,0.015); margin-bottom:20px; }
+        .form-title { font-weight:700; font-size:16px; margin-bottom:16px; display:flex; align-items:center; gap:8px; }
+        .form-group { margin-bottom:14px; }
+        .form-label { font-size:12px; font-weight:600; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:6px; display:block; }
+        .form-input { width:100%; padding:12px 16px; border:2px solid var(--border); border-radius:14px; font-size:15px; font-family:inherit; color:var(--text-light); background:#fff; outline:none; transition:border-color 0.2s; }
+        .form-input:focus { border-color:var(--primary); }
+        .btn-save { width:100%; padding:14px; background:var(--primary); color:#1a1d21; border:none; border-radius:14px; font-weight:700; font-size:15px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; transition:0.2s; font-family:inherit; }
+        .btn-save:active { transform:scale(0.97); }
+        .btn-save:disabled { opacity:0.6; cursor:not-allowed; }
+        .message { margin-top:12px; padding:10px; border-radius:12px; font-size:13px; font-weight:500; display:none; }
+        .message.success { background:rgba(16,185,129,0.12); color:var(--success); border:1px solid rgba(16,185,129,0.3); }
+        .message.error { background:rgba(255,71,87,0.12); color:var(--danger); border:1px solid rgba(255,71,87,0.3); }
+        .logout-link { display:block; text-align:center; margin-top:30px; color:var(--danger); font-weight:600; text-decoration:none; font-size:14px; }
+        .skeleton-field { height:44px; border-radius:14px; margin-bottom:14px; }
+        #footer-placeholder { margin-top:30px; }
+    </style>
+</head>
+<body>
+    <!-- Sticky header + sub-header -->
+    <div class="sticky-nav-holder">
+        <header id="mainHeader">
+            <div class="logo-container"><img src="logoo.jpg" alt="Tidye265" id="mainLogo"></div>
+            <div class="header-controls">
+                <img src="18+.png" alt="18+" class="age-badge" onerror="this.style.display='none';">
+                <a href="deposit.html" class="header-balance-container" id="walletTrigger">
+                    <div id="balanceWrapper">
+                        <span class="bal-label">BALANCE</span>
+                        <span class="bal-amount">
+                            <span class="balance-skeleton skeleton skeleton-inline-block"></span>
+                            <span class="balance-real" id="balanceDisplay">MWK 0<span class="bal-cents">.00</span></span>
+                        </span>
+                    </div>
+                    <div class="header-dep-btn"><i class="bi bi-plus-lg"></i></div>
+                </a>
+            </div>
+        </header>
+        <nav class="sub-header" id="categoryNav">
+            <a href="live.html" class="sub-item"><img src="live.svg" class="category-icon"><span>Live</span><span class="live-badge">LIVE</span></a>
+            <a href="matches.html" class="sub-item"><img src="matches.svg" class="category-icon"><span>Sports</span></a>
+            <a href="casino.html" class="sub-item"><img src="casino.svg" class="category-icon"><span>Casino</span><span class="casino-count-badge" id="casinoCountBadge"><span class="skeleton-badge"></span></span></a>
+            <a href="casino.html" class="sub-item"><img src="aviator.png" class="category-icon"><span>Aviator</span></a>
+            <a href="virtual.html" class="sub-item"><img src="vi.png" class="category-icon"><span>Virtual</span><span class="virtual-badge">VIRTUAL</span></a>
+            <div class="sub-item more-btn" id="seeMoreSubBtn"><i class="bi bi-three-dots"></i><span>See More</span></div>
+            <div class="more-items" id="moreCategories">
+                <a href="games.html" class="sub-item"><img src="games.svg" class="category-icon"><span>Games</span></a>
+                <a href="esports.html" class="sub-item"><img src="games.svg" class="category-icon"><span>eSports</span></a>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Main content -->
+    <div class="settings-container">
+        <div class="form-card" id="formCard">
+            <!-- skeleton loading for form -->
+            <div class="form-title"><i class="bi bi-person-gear"></i> Account Settings</div>
+            <div class="form-group">
+                <label class="form-label">Full Name</label>
+                <div class="skeleton skeleton-field" id="nameSkeleton"></div>
+                <input type="text" id="fullName" class="form-input" placeholder="Enter your full name" style="display:none;">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Phone Number</label>
+                <div class="skeleton skeleton-field" id="phoneSkeleton"></div>
+                <input type="text" id="phoneNumber" class="form-input" placeholder="e.g. 0881234567" style="display:none;">
+            </div>
+            <button class="btn-save" id="saveBtn">
+                <i class="bi bi-check2-circle"></i> Save Changes
+            </button>
+            <div id="messageBox" class="message"></div>
+        </div>
+        <a href="logout.html" class="logout-link"><i class="bi bi-box-arrow-right"></i> Log Out</a>
+    </div>
+
+    <div id="footer-placeholder"></div>
+
+    <!-- Pre-fetch footer -->
+    <script>
+        const footerPromise = fetch('footer.html')
+            .then(response => response.ok ? response.text() : '')
+            .catch(() => '');
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase.js"></script>
+    <script>
+        (function() {
+            // ========== CACHE HELPERS ==========
+            const CACHE_KEYS = { BALANCE: 'tidye_balance_cache' };
+            const CACHE_TTL = 5 * 60 * 1000;
+            function getCachedBalance() {
+                try {
+                    const cached = localStorage.getItem(CACHE_KEYS.BALANCE);
+                    if (!cached) return null;
+                    const { balance, timestamp } = JSON.parse(cached);
+                    if (Date.now() - timestamp < CACHE_TTL) return balance;
+                } catch(e) {}
+                return null;
+            }
+            function cacheBalance(balance) {
+                try { localStorage.setItem(CACHE_KEYS.BALANCE, JSON.stringify({ balance, timestamp: Date.now() })); } catch(e) {}
+            }
+
+            function getCleanSessionToken() {
+                let raw = localStorage.getItem('tidye_session_token');
+                if (!raw || raw === 'null' || raw === 'undefined') return null;
+                try { let p = JSON.parse(raw); if (p?.access_token) return p.access_token; if (typeof p === 'string') return p; } catch(e) {}
+                return raw.replace(/^["']|["']$/g, '').trim();
+            }
+
+            // 🔒 Session guard
+            function enforceSession() {
+                if (!getCleanSessionToken()) {
+                    window.location.replace('login.html');
+                    return false;
+                }
+                return true;
+            }
+
+            async function checkApiLock() {
+                try {
+                    const res = await fetch(`${window.SUPABASE_URL}/functions/v1/api-lock`, {
+                        headers: { 'Authorization': `Bearer ${window.SUPABASE_ANON_KEY}` }
+                    });
+                    if (res.ok) {
+                        const d = await res.json();
+                        if (d.locked) window.location.replace('updating.html');
+                    }
+                } catch(e) {}
+            }
+
+            // ========== BALANCE WITH SKELETON ==========
+            const balanceDisplay = document.getElementById('balanceDisplay');
+            function updateBalanceUI(balance) {
+                const formatted = balance.toFixed(2);
+                const [main, cents] = formatted.split('.');
+                balanceDisplay.innerHTML = `MWK ${parseInt(main).toLocaleString()}<span class="bal-cents">.${cents}</span>`;
+                document.getElementById('balanceWrapper').classList.add('balance-loaded');
+            }
+            function showBalanceSkeleton() {
+                document.getElementById('balanceWrapper').classList.remove('balance-loaded');
+            }
+            async function fetchBalance(forceRefresh = false) {
+                if (!forceRefresh) {
+                    const cached = getCachedBalance();
+                    if (cached !== null) updateBalanceUI(cached);
+                    else showBalanceSkeleton();
+                } else showBalanceSkeleton();
+                const tok = getCleanSessionToken();
+                if (!tok) { updateBalanceUI(0); return; }
+                try {
+                    const res = await fetch(`${window.SUPABASE_URL}/functions/v1/wallet-api`, {
+                        headers: { 'Authorization': `Bearer ${tok}` }
+                    });
+                    if (res.ok) {
+                        const data = await res.json();
+                        const balance = Number(data.balance);
+                        cacheBalance(balance);
+                        updateBalanceUI(balance);
+                    } else if (res.status === 401) {
+                        window.location.replace('login.html');
+                    } else updateBalanceUI(0);
+                } catch(e) {
+                    if (!getCachedBalance()) showBalanceSkeleton();
+                }
+            }
+
+            // ========== PROFILE FORM ==========
+            const fullNameInput = document.getElementById('fullName');
+            const phoneNumberInput = document.getElementById('phoneNumber');
+            const saveBtn = document.getElementById('saveBtn');
+            const messageBox = document.getElementById('messageBox');
+
+            function showMessage(text, type) {
+                messageBox.textContent = text;
+                messageBox.className = `message ${type}`;
+                messageBox.style.display = 'block';
+                setTimeout(() => { messageBox.style.display = 'none'; }, 5000);
+            }
+
+            async function loadProfile() {
+                const tok = getCleanSessionToken();
+                if (!tok) return;
+                try {
+                    const res = await fetch(`${window.SUPABASE_URL}/functions/v1/settings-api`, {
+                        headers: { 'Authorization': `Bearer ${tok}` }
+                    });
+                    if (res.ok) {
+                        const data = await res.json();
+                        fullNameInput.value = data.full_name || '';
+                        phoneNumberInput.value = data.phone_number || '';
+                        // Hide skeletons
+                        document.getElementById('nameSkeleton').style.display = 'none';
+                        document.getElementById('phoneSkeleton').style.display = 'none';
+                        fullNameInput.style.display = 'block';
+                        phoneNumberInput.style.display = 'block';
+                    } else if (res.status === 401) {
+                        window.location.replace('login.html');
+                    }
+                } catch(e) {
+                    console.error('Profile fetch error', e);
+                }
+            }
+
+            saveBtn.addEventListener('click', async () => {
+                const fullName = fullNameInput.value.trim();
+                const phoneNumber = phoneNumberInput.value.trim();
+                if (!fullName) { showMessage('Full name is required.', 'error'); return; }
+
+                saveBtn.disabled = true;
+                saveBtn.innerHTML = '<i class="bi bi-arrow-repeat spin-icon" style="animation:spin 1.2s linear infinite;"></i> Saving...';
+
+                const tok = getCleanSessionToken();
+                if (!tok) { window.location.replace('login.html'); return; }
+
+                try {
+                    const res = await fetch(`${window.SUPABASE_URL}/functions/v1/settings-api`, {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${tok}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ full_name: fullName, phone_number: phoneNumber })
+                    });
+                    if (res.ok) {
+                        showMessage('Profile updated successfully!', 'success');
+                    } else {
+                        showMessage('Failed to update profile. Please try again.', 'error');
+                    }
+                } catch(e) {
+                    showMessage('Network error. Check your connection.', 'error');
+                }
+
+                saveBtn.disabled = false;
+                saveBtn.innerHTML = '<i class="bi bi-check2-circle"></i> Save Changes';
+            });
+
+            // ========== CASINO COUNT (for badge consistency) ==========
+            async function fetchCasinoCount() {
+                const tok = getCleanSessionToken();
+                if (!tok) return;
+                try {
+                    const res = await fetch(`${window.SUPABASE_URL}/functions/v1/api-get-games`, {
+                        method: 'POST', headers: { 'Content-Type':'application/json', 'Authorization': `Bearer ${tok}` }
+                    });
+                    const data = await res.json();
+                    if (data.code === 0 && data.data?.categories) {
+                        let total = 0;
+                        for (let c in data.data.categories) total += data.data.categories[c].length;
+                        const badge = document.getElementById('casinoCountBadge');
+                        if (badge && total > 0) badge.textContent = total;
+                        else if (badge) badge.innerHTML = '<span class="skeleton-badge"></span>';
+                    }
+                } catch(e) {}
+            }
+
+            // ========== FOOTER INJECTION ==========
+            async function injectFooter() {
+                const placeholder = document.getElementById('footer-placeholder');
+                if (!placeholder) return;
+                const html = await footerPromise;
+                if (html) {
+                    placeholder.innerHTML = html;
+                    placeholder.querySelectorAll('script').forEach(s => {
+                        const ns = document.createElement('script');
+                        ns.textContent = s.textContent;
+                        document.body.appendChild(ns).remove();
+                    });
+                }
+            }
+
+            // ========== INIT ==========
+            document.addEventListener('DOMContentLoaded', async () => {
+                if (!enforceSession()) return;
+                await checkApiLock();
+                fetchBalance();                  // instant cache or skeleton
+                fetchCasinoCount();            // for badge
+                await loadProfile();           // fills form, hides skeletons
+                await injectFooter();          // footer injection
+
+                // See More toggle
+                const moreBtn = document.getElementById('seeMoreSubBtn');
+                const subHeader = document.getElementById('categoryNav');
+                if (moreBtn && subHeader) {
+                    moreBtn.addEventListener('click', e => {
+                        e.preventDefault();
+                        subHeader.classList.toggle('show-more');
+                        moreBtn.querySelector('span').textContent = subHeader.classList.contains('show-more') ? 'Less' : 'See More';
+                    });
+                }
+            });
+        })();
+    </script>
+    <style>
+        @keyframes spin { 0%{transform:rotate(0deg);} 100%{transform:rotate(360deg);} }
+    </style>
+</body>
+</html>
