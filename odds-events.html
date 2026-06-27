@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Tidye265 | Odds & Events</title>
+    <meta name="theme-color" content="#121212">
+    <meta name="robots" content="noindex, nofollow">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://*.supabase.co https://cdn.jsdelivr.net https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; img-src 'self' https: data: blob:; connect-src 'self' https://*.supabase.co https://challenges.cloudflare.com; frame-src 'self' https://challenges.cloudflare.com;">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --bg: #F4F6F8;
+            --primary: #FFD700;
+            --card-bg: #FFFFFF;
+            --text-light: #1a1d21;
+            --text-dim: #6b7280;
+            --success: #10b981;
+            --border: #eef2f6;
+            --danger: #ff4757;
+            --header-bg: #29282b;
+            --sub-header-bg: #29282b;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+        body { background:var(--bg); color:var(--text-light); font-family:system-ui,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif; padding-bottom:20px; overflow-x:hidden; }
+        .sticky-nav-holder { position:sticky; top:0; z-index:1000; background:var(--header-bg); box-shadow:0 4px 12px rgba(0,0,0,0.3); }
+
+        .skeleton { background:#e0e0e0; background:linear-gradient(90deg, #e0e0e0 25%, #f0f0f0 50%, #e0e0e0 75%); background-size:200% 100%; animation:shimmer 1.5s infinite; border-radius:8px; }
+        @keyframes shimmer { 0%{background-position:-200% 0} 100%{background-position:200% 0} }
+        .balance-skeleton { width:80px; height:16px; display:inline-block; }
+        .balance-real { display:none; }
+        .balance-loaded .balance-skeleton { display:none; }
+        .balance-loaded .balance-real { display:flex; align-items:center; }
+
+        header { padding:0 15px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #3a3a3a; height:70px; position:relative; background:var(--header-bg); }
+        .logo-container img { height:46px; border-radius:5px; object-fit:contain; }
+        .header-controls { display:flex; align-items:center; gap:8px; z-index:10; }
+        .age-badge { width:30px; height:30px; object-fit:contain; border-radius:4px; }
+        .header-balance-container { display:flex; align-items:center; gap:3px; background:#3a3a3a; padding:5px 5px 5px 12px; border-radius:10px; border:1px solid #4a4a4a; cursor:pointer; transition:0.2s; text-decoration:none; color:#f0f0f0; min-width:110px; box-shadow:0 2px 8px rgba(0,0,0,0.3); }
+        .header-balance-container:active { transform:scale(0.96); }
+        .bal-label { font-size:8px; font-weight:800; color:#bbb; text-transform:uppercase; display:block; line-height:1.1; }
+        .bal-amount { font-size:13px; font-weight:800; display:flex; align-items:center; color:#fff; }
+        .bal-cents { opacity:0.5; font-size:13px; margin-left:1px; }
+        .header-dep-btn { background:var(--primary); color:#1a1d21; width:34px; height:32px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:17px; border:none; font-weight:800; margin-left:auto; }
+
+        /* SUB-HEADER */
+        .sub-header { display:flex; overflow-x:auto; white-space:nowrap; padding:10px 12px; gap:16px; background:var(--sub-header-bg); border-bottom:1px solid #1a1a1a; scrollbar-width:none; align-items:center; }
+        .sub-header::-webkit-scrollbar { display:none; }
+        .sub-item { font-size:11px; font-weight:600; color:#b0b0b0; text-decoration:none; display:inline-flex; flex-direction:column; align-items:center; gap:4px; position:relative; transition:0.25s; cursor:pointer; background:none; border:none; flex-shrink:0; padding:4px 6px 2px; }
+        .sub-item.active { color:#FFD700 !important; border-bottom:2px solid var(--primary); padding-bottom:0; }
+        .sub-item:hover { color:#fff; }
+        .sub-item .category-icon { width:20px; height:20px; object-fit:contain; filter:brightness(0) invert(1); }
+        .sub-item.active .category-icon { filter:brightness(0) invert(1); }
+        .live-badge, .virtual-badge, .casino-count-badge { /* keeping but not needed here */ }
+        .more-btn { color:#b0b0b0; font-size:9px; font-weight:600; text-transform:uppercase; cursor:pointer; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px; letter-spacing:0.3px; opacity:0.85; transition:0.25s; }
+        .more-btn i { font-size:18px; color:#b0b0b0; }
+        .more-btn:hover i, .more-btn:hover { color:#FFD700; opacity:1; }
+        .more-items { display:none; }
+        .sub-header.show-more .more-items { display:inline-flex; gap:16px; }
+
+        /* ODDS EVENT CONTENT */
+        .container { padding:15px; }
+        .match-header-card { background:#fff; border-radius:16px; padding:16px; margin-bottom:20px; border:1px solid var(--border); box-shadow:0 2px 8px rgba(0,0,0,0.015); }
+        .match-header-card .teams { font-size:18px; font-weight:800; color:#1a1d21; margin-bottom:6px; }
+        .match-header-card .league { font-size:13px; color:var(--text-dim); margin-bottom:4px; }
+        .match-header-card .info-line { display:flex; gap:15px; font-size:12px; color:var(--text-dim); }
+        .market-tabs { display:flex; overflow-x:auto; gap:8px; margin-bottom:15px; }
+        .market-tab { background:#fff; border:1px solid var(--border); border-radius:20px; padding:8px 16px; font-size:13px; font-weight:600; color:var(--text-dim); white-space:nowrap; cursor:pointer; transition:0.2s; }
+        .market-tab.active { background:var(--primary); color:#1a1d21; border-color:var(--primary); }
+        .bookie-list { display:flex; flex-direction:column; gap:10px; }
+        .bookie-row { background:#fff; border-radius:14px; padding:14px; display:flex; align-items:center; border:1px solid var(--border); box-shadow:0 1px 3px rgba(0,0,0,0.02); }
+        .bookie-logo { width:36px; height:36px; border-radius:50%; background:#f0f2f5; display:flex; align-items:center; justify-content:center; font-size:18px; margin-right:12px; }
+        .bookie-name { flex:1; font-weight:600; font-size:14px; }
+        .odds-cells { display:flex; gap:6px; }
+        .odds-cell { width:55px; height:38px; border-radius:10px; background:#f4f6f8; border:1px solid #e5e7eb; display:flex; flex-direction:column; align-items:center; justify-content:center; cursor:pointer; transition:0.15s; }
+        .odds-cell.selected { background:var(--primary); border-color:var(--primary); color:#1a1d21; }
+        .odds-cell .label { font-size:9px; font-weight:800; color:#9ca3af; }
+        .odds-cell.selected .label { color:#1a1d21; }
+        .odds-cell .value { font-size:13px; font-weight:800; color:#1a1d21; }
+        .odds-cell.selected .value { color:#1a1d21; }
+        .btn-back { display:inline-block; margin-bottom:15px; color:var(--text-dim); font-size:14px; font-weight:600; text-decoration:none; }
+        .empty-state { text-align:center; padding:30px; color:var(--text-dim); }
+        #footer-placeholder { margin-top:30px; }
+    </style>
+</head>
+<body>
+    <div class="sticky-nav-holder">
+        <header id="mainHeader">
+            <div class="logo-container"><img src="logoo.jpg" alt="Tidye265"></div>
+            <div class="header-controls">
+                <img src="18+.png" alt="18+" class="age-badge" onerror="this.style.display='none';">
+                <a href="deposit.html" class="header-balance-container" id="walletTrigger">
+                    <div id="balanceWrapper">
+                        <span class="bal-label">BALANCE</span>
+                        <span class="bal-amount">
+                            <span class="balance-skeleton skeleton skeleton-inline-block"></span>
+                            <span class="balance-real" id="balanceDisplay">MWK 0<span class="bal-cents">.00</span></span>
+                        </span>
+                    </div>
+                    <div class="header-dep-btn"><i class="bi bi-plus-lg"></i></div>
+                </a>
+            </div>
+        </header>
+        <nav class="sub-header" id="categoryNav">
+            <a href="live.html" class="sub-item"><img src="live.svg" class="category-icon"><span>Live</span><span class="live-badge">LIVE</span></a>
+            <a href="matches.html" class="sub-item active"><img src="matches.svg" class="category-icon"><span>Sports</span></a>
+            <a href="casino.html" class="sub-item"><img src="casino.svg" class="category-icon"><span>Casino</span></a>
+            <a href="casino.html" class="sub-item"><img src="aviator.png" class="category-icon"><span>Aviator</span></a>
+            <a href="virtual.html" class="sub-item"><img src="vi.png" class="category-icon"><span>Virtual</span><span class="virtual-badge">VIRTUAL</span></a>
+            <div class="sub-item more-btn" id="seeMoreSubBtn"><i class="bi bi-three-dots"></i><span>See More</span></div>
+            <div class="more-items" id="moreCategories">
+                <a href="games.html" class="sub-item"><img src="games.svg" class="category-icon"><span>Games</span></a>
+                <a href="esports.html" class="sub-item"><img src="games.svg" class="category-icon"><span>eSports</span></a>
+            </div>
+        </nav>
+    </div>
+
+    <main role="main" id="mainContent">
+        <div class="container" id="oddsContainer">
+            <!-- skeleton loading -->
+            <div class="skeleton" style="height:80px; border-radius:14px; margin-bottom:15px;"></div>
+            <div class="skeleton" style="height:36px; border-radius:20px; margin-bottom:15px;"></div>
+            <div class="bookie-list">
+                <div class="skeleton" style="height:60px; border-radius:14px;"></div>
+                <div class="skeleton" style="height:60px; border-radius:14px;"></div>
+                <div class="skeleton" style="height:60px; border-radius:14px;"></div>
+                <div class="skeleton" style="height:60px; border-radius:14px;"></div>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <script>
+        const footerPromise = fetch('footer.html')
+            .then(response => response.ok ? response.text() : '')
+            .catch(() => '');
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase.js"></script>
+    <script>
+        (function() {
+            // ========== CACHE & SESSION ==========
+            const CACHE_KEYS = { BALANCE: 'tidye_balance_cache' };
+            const CACHE_TTL = 5 * 60 * 1000;
+            function getCachedBalance() {
+                try {
+                    const cached = localStorage.getItem(CACHE_KEYS.BALANCE);
+                    if (!cached) return null;
+                    const { balance, timestamp } = JSON.parse(cached);
+                    if (Date.now() - timestamp < CACHE_TTL) return balance;
+                } catch(e) {}
+                return null;
+            }
+            function cacheBalance(balance) {
+                try { localStorage.setItem(CACHE_KEYS.BALANCE, JSON.stringify({ balance, timestamp: Date.now() })); } catch(e) {}
+            }
+            function getCleanSessionToken() {
+                let raw = localStorage.getItem('tidye_session_token');
+                if (!raw || raw === 'null' || raw === 'undefined') return null;
+                try { let p = JSON.parse(raw); if (p?.access_token) return p.access_token; if (typeof p === 'string') return p; } catch(e) {}
+                return raw.replace(/^["']|["']$/g, '').trim();
+            }
+            function enforceSession() {
+                if (!getCleanSessionToken()) {
+                    window.location.replace('login.html');
+                    return false;
+                }
+                return true;
+            }
+
+            // ========== BALANCE ==========
+            const balanceDisplay = document.getElementById('balanceDisplay');
+            function updateBalanceUI(balance) {
+                const formatted = balance.toFixed(2);
+                const [main, cents] = formatted.split('.');
+                balanceDisplay.innerHTML = `MWK ${parseInt(main).toLocaleString()}<span class="bal-cents">.${cents}</span>`;
+                document.getElementById('balanceWrapper').classList.add('balance-loaded');
+            }
+            function showBalanceSkeleton() {
+                document.getElementById('balanceWrapper').classList.remove('balance-loaded');
+            }
+            async function fetchBalance(forceRefresh = false) {
+                if (!forceRefresh) {
+                    const cached = getCachedBalance();
+                    if (cached !== null) updateBalanceUI(cached);
+                    else showBalanceSkeleton();
+                } else showBalanceSkeleton();
+                const tok = getCleanSessionToken();
+                if (!tok) { updateBalanceUI(0); return; }
+                try {
+                    const res = await fetch(`${window.SUPABASE_URL}/functions/v1/wallet-api`, {
+                        headers: { 'Authorization': `Bearer ${tok}` }
+                    });
+                    if (res.ok) {
+                        const data = await res.json();
+                        const balance = Number(data.balance);
+                        cacheBalance(balance);
+                        updateBalanceUI(balance);
+                    } else if (res.status === 401) {
+                        window.location.replace('login.html');
+                    } else updateBalanceUI(0);
+                } catch(e) {
+                    if (!getCachedBalance()) showBalanceSkeleton();
+                }
+            }
+
+            // ========== BOOKMAKER MAPPING ==========
+            const BOOKIE_NAMES = {
+                1:'Macauslot', 3:'Crown', 4:'Ladbrokes', 7:'SNAI', 8:'Bet365',
+                9:'William Hill', 12:'Easybets', 14:'Vcbet', 17:'Mansion88',
+                19:'Interwetten', 22:'10BET', 24:'12bet', 31:'Sbobet',
+                35:'Wewbet', 42:'18bet', 48:'HK Jockey Club'
+            };
+
+            // ========== URL PARAMS ==========
+            const params = new URLSearchParams(window.location.search);
+            const matchId = params.get('matchId') || '';
+            const selectedMarket = params.get('selection') || '1'; // 1, X, 2
+
+            if (!matchId) {
+                document.getElementById('oddsContainer').innerHTML = `<div class="empty-state"><i class="bi bi-exclamation-circle"></i> No match specified.</div>`;
+            }
+
+            // ========== FETCH MATCH DETAILS & ODDS ==========
+            async function fetchMatchDetails() {
+                if (!matchId) return;
+                const tok = getCleanSessionToken();
+                if (!tok) return;
+                try {
+                    // get match info from livescores API (single match)
+                    const res = await fetch(`${window.SUPABASE_URL}/functions/v1/get-sport-api`, {
+                        headers: { 'Authorization': `Bearer ${tok}` }
+                    });
+                    if (!res.ok) throw new Error('Failed');
+                    const data = await res.json();
+                    if (data.code === 0 && data.data) {
+                        const match = data.data.find(m => m.matchId === matchId);
+                        if (match) {
+                            renderMatchHeader(match);
+                        }
+                    }
+                } catch(e) {
+                    console.warn('Match details fetch failed', e);
+                }
+            }
+
+            function renderMatchHeader(match) {
+                const homeName = match.homeName || 'Home';
+                const awayName = match.awayName || 'Away';
+                const league = match.leagueName || 'League';
+                const time = match.matchTime ? new Date(match.matchTime * 1000).toLocaleString('en-GB', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' }) : '';
+                const headerHTML = `
+                    <div class="match-header-card">
+                        <div class="teams">${homeName} vs ${awayName}</div>
+                        <div class="league">${league}</div>
+                        <div class="info-line"><span>${time}</span><span>${match.status > 0 ? 'LIVE' : 'Upcoming'}</span></div>
+                    </div>`;
+                // prepend to container (keeping skeleton or existing content)
+                const container = document.getElementById('oddsContainer');
+                container.innerHTML = headerHTML + container.innerHTML;
+            }
+
+            // ========== FETCH ODDS ==========
+            async function fetchOdds() {
+                const container = document.getElementById('oddsContainer');
+                const tok = getCleanSessionToken();
+                if (!tok) return;
+
+                try {
+                    const res = await fetch(`${window.SUPABASE_URL}/functions/v1/get-odds-api?matchId=${matchId}`, {
+                        headers: { 'Authorization': `Bearer ${tok}` }
+                    });
+                    const data = await res.json();
+                    if (data.code === 0 && data.data) {
+                        renderOdds(data.data);
+                    } else {
+                        container.innerHTML += `<div class="empty-state"><i class="bi bi-exclamation-circle"></i> Odds not available.</div>`;
+                    }
+                } catch(e) {
+                    container.innerHTML += `<div class="empty-state"><i class="bi bi-wifi-off"></i> Failed to load odds.</div>`;
+                }
+            }
+
+            function renderOdds(oddsData) {
+                const container = document.getElementById('oddsContainer');
+                // Remove skeleton (we already have header maybe)
+                // We'll clear the container and rebuild with header + odds, but careful not to lose header
+                // Better: identify skeleton rows and replace them, or just rebuild the entire container with header info preserved
+                // For simplicity, we'll keep the existing content (which may include the header if we already rendered it) and append the bookie list.
+                // But initially we have skeletons. We'll just wipe the whole container and re-render everything including header (if not yet done).
+                // Since fetchMatchDetails runs first and may have already inserted header, we could directly query the container and append the bookie list.
+                // However, to keep it clean: we'll clear everything and build fresh, calling renderMatchHeader again (which is idempotent). We'll store match data globally.
+
+                // Get the match data again? We can store it in a global variable after the first fetch.
+                if (!window.currentMatch) {
+                    // If not set, that's okay, we'll just skip header.
+                }
+
+                // Build odds list
+                const europeOdds = oddsData.europeOdds || [];
+                if (europeOdds.length === 0) {
+                    container.innerHTML += `<div class="empty-state"><i class="bi bi-inbox"></i> No 1X2 odds available.</div>`;
+                    return;
+                }
+
+                // We'll create the market tabs (only 1X2 for now)
+                const marketTabsHTML = `
+                    <div class="market-tabs">
+                        <div class="market-tab active">1X2</div>
+                    </div>`;
+
+                // Parse bookie odds
+                const bookieRows = [];
+                const processed = new Set();
+                europeOdds.forEach(entry => {
+                    const parts = entry.split(',');
+                    const matchIdParts = parts[0];
+                    const companyId = parts[1];
+                    const instantHome = parseFloat(parts[5]).toFixed(2);
+                    const instantDraw = parseFloat(parts[6]).toFixed(2);
+                    const instantAway = parseFloat(parts[7]).toFixed(2);
+                    if (!processed.has(companyId)) {
+                        processed.add(companyId);
+                        bookieRows.push({
+                            companyId,
+                            name: BOOKIE_NAMES[companyId] || `Bookie ${companyId}`,
+                            home: instantHome,
+                            draw: instantDraw,
+                            away: instantAway
+                        });
+                    }
+                });
+
+                // Build HTML for each bookie
+                let bookieHTML = '<div class="bookie-list">';
+                bookieRows.forEach(row => {
+                    const homeSelected = selectedMarket === '1' ? 'selected' : '';
+                    const drawSelected = selectedMarket === 'X' ? 'selected' : '';
+                    const awaySelected = selectedMarket === '2' ? 'selected' : '';
+                    bookieHTML += `
+                    <div class="bookie-row">
+                        <div class="bookie-logo"><i class="bi bi-building"></i></div>
+                        <div class="bookie-name">${row.name}</div>
+                        <div class="odds-cells">
+                            <div class="odds-cell ${homeSelected}" onclick="addBet('${matchId}', '1', '${row.home}', '${row.name}')">
+                                <span class="label">1</span>
+                                <span class="value">${row.home}</span>
+                            </div>
+                            <div class="odds-cell ${drawSelected}" onclick="addBet('${matchId}', 'X', '${row.draw}', '${row.name}')">
+                                <span class="label">X</span>
+                                <span class="value">${row.draw}</span>
+                            </div>
+                            <div class="odds-cell ${awaySelected}" onclick="addBet('${matchId}', '2', '${row.away}', '${row.name}')">
+                                <span class="label">2</span>
+                                <span class="value">${row.away}</span>
+                            </div>
+                        </div>
+                    </div>`;
+                });
+                bookieHTML += '</div>';
+
+                // Insert into container (after the match header, before footer)
+                // We'll find the existing content and replace the skeleton part with the actual odds
+                // We'll empty the container and rebuild with header (if we have it) + odds
+                const headerCard = document.querySelector('.match-header-card');
+                const headerHTML = headerCard ? headerCard.outerHTML : '';
+                container.innerHTML = headerHTML + marketTabsHTML + bookieHTML;
+            }
+
+            // ========== ADD TO BETSLIP ==========
+            window.addBet = function(matchId, selection, odds, bookie) {
+                const currentSlip = JSON.parse(localStorage.getItem('tidye_bet_slip') || '[]');
+                // Remove existing bet for same match+selection (replace)
+                const existingIndex = currentSlip.findIndex(b => b.matchId === matchId && b.selection === selection);
+                if (existingIndex > -1) {
+                    currentSlip.splice(existingIndex, 1);
+                }
+                currentSlip.push({
+                    matchId,
+                    selection,
+                    odds: parseFloat(odds),
+                    bookie,
+                    homeTeam: document.querySelector('.match-header-card .teams')?.textContent?.split(' vs ')[0] || '',
+                    awayTeam: document.querySelector('.match-header-card .teams')?.textContent?.split(' vs ')[1] || '',
+                    league: document.querySelector('.match-header-card .league')?.textContent || '',
+                    date: new Date().toISOString()
+                });
+                localStorage.setItem('tidye_bet_slip', JSON.stringify(currentSlip));
+                alert(`Added to betslip: ${bookie} - ${selection} @ ${odds}`);
+            };
+
+            // ========== FOOTER INJECTION ==========
+            async function injectFooter() {
+                const placeholder = document.getElementById('footer-placeholder');
+                if (!placeholder) return;
+                const html = await footerPromise;
+                if (html) {
+                    placeholder.innerHTML = html;
+                    placeholder.querySelectorAll('script').forEach(s => {
+                        const ns = document.createElement('script');
+                        ns.textContent = s.textContent;
+                        document.body.appendChild(ns).remove();
+                    });
+                }
+            }
+
+            // ========== INIT ==========
+            document.addEventListener('DOMContentLoaded', async () => {
+                if (!enforceSession()) return;
+                fetchBalance();
+                await Promise.all([fetchMatchDetails(), fetchOdds()]);
+                await injectFooter();
+
+                // See More toggle
+                const moreBtn = document.getElementById('seeMoreSubBtn');
+                const subHeader = document.getElementById('categoryNav');
+                if (moreBtn && subHeader) {
+                    moreBtn.addEventListener('click', e => {
+                        e.preventDefault();
+                        subHeader.classList.toggle('show-more');
+                        moreBtn.querySelector('span').textContent = subHeader.classList.contains('show-more') ? 'Less' : 'See More';
+                    });
+                }
+            });
+        })();
+    </script>
+</body>
+</html>
