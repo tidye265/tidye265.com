@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Tidye265 | View Ticket</title>
+    <meta name="theme-color" content="#121212">
+    <meta name="robots" content="noindex, nofollow">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://*.supabase.co https://cdn.jsdelivr.net https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; img-src 'self' https: data: blob:; connect-src 'self' https://*.supabase.co https://challenges.cloudflare.com; frame-src 'self' https://challenges.cloudflare.com;">
+    <style>
+        :root {
+            --bg: #F4F6F8;
+            --primary: #FFD700;
+            --card-bg: #FFFFFF;
+            --text-light: #1a1d21;
+            --text-dim: #6b7280;
+            --win-ring: #4CBB17;
+            --pending-ring: #9ca3af;
+            --border: #eef2f6;
+            --danger: #ff4757;
+            --header-bg: #29282b;
+            --sub-header-bg: #29282b;
+            --dark-skeleton-base: #363538;
+            --dark-skeleton-shine: #29282b;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+        body { background:var(--bg); color:var(--text-light); font-family:system-ui,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif; padding-bottom:20px; overflow-x:hidden; }
+        .sticky-nav-holder { position:sticky; top:0; z-index:1000; background:var(--header-bg); box-shadow:0 4px 12px rgba(0,0,0,0.3); }
+
+        .skeleton { background: var(--dark-skeleton-base); background: linear-gradient(90deg, var(--dark-skeleton-base) 25%, var(--dark-skeleton-shine) 50%, var(--dark-skeleton-base) 75%); background-size:200% 100%; animation:skeleton-loading 1.5s infinite; }
+        @keyframes skeleton-loading { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+        .bal-skeleton { width:80px; height:16px; border-radius:4px; display:inline-block; }
+        .skeleton-badge { width:16px; height:16px; border-radius:50%; display:inline-block; background: linear-gradient(90deg, var(--dark-skeleton-base) 25%, var(--dark-skeleton-shine) 50%, var(--dark-skeleton-base) 75%); background-size:200% 100%; animation:skeleton-loading 1.5s infinite; }
+
+        .balance-skeleton { width:80px; height:16px; display:inline-block; }
+        .balance-real { display:none; }
+        .balance-loaded .balance-skeleton { display:none; }
+        .balance-loaded .balance-real { display:flex; align-items:center; }
+
+        header { padding:0 15px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #3a3a3a; height:70px; position:relative; background:var(--header-bg); }
+        .logo-container img { height:46px; border-radius:5px; object-fit:contain; }
+        .search-wrapper { position:absolute; left:0; top:0; width:100%; height:100%; background:var(--header-bg); display:flex; align-items:center; padding:0 15px; gap:12px; transform:translateY(-100%); opacity:0; pointer-events:none; transition:0.35s cubic-bezier(0.4,0,0.2,1); z-index:20; }
+        .search-wrapper.active { transform:translateY(0); opacity:1; pointer-events:auto; }
+        .search-inner-box { flex:1; background:#3a3a3a; height:44px; border-radius:12px; display:flex; align-items:center; padding:0 15px; }
+        .search-inner-box input { background:transparent; border:none; outline:none; width:100%; font-size:15px; font-family:inherit; margin-left:10px; color:#f0f0f0; }
+        .search-inner-box input::placeholder { color:#aaa; }
+        .search-inner-box i { color:#ccc; }
+        .search-close-btn { background:none; border:none; font-size:20px; color:#e0e0e0; cursor:pointer; display:flex; align-items:center; padding:5px; }
+        .header-controls { display:flex; align-items:center; gap:8px; z-index:10; }
+        .age-badge { width:30px; height:30px; object-fit:contain; border-radius:4px; }
+        .header-balance-container { display:flex; align-items:center; gap:3px; background:#3a3a3a; padding:5px 5px 5px 12px; border-radius:10px; border:1px solid #4a4a4a; cursor:pointer; transition:0.2s; text-decoration:none; color:#f0f0f0; min-width:110px; box-shadow:0 2px 8px rgba(0,0,0,0.3); }
+        .header-balance-container:active { transform:scale(0.96); }
+        .bal-label { font-size:8px; font-weight:800; color:#bbb; text-transform:uppercase; display:block; line-height:1.1; font-family:inherit; }
+        .bal-amount { font-size:13px; font-weight:800; display:flex; align-items:center; font-family:inherit; color:#fff; }
+        .bal-cents { opacity:0.5; font-size:13px; margin-left:1px; }
+        .header-dep-btn { background:var(--primary); color:#1a1d21; width:34px; height:32px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:17px; border:none; font-weight:800; margin-left:auto; font-family:inherit; }
+
+        /* SUB-HEADER */
+        .sub-header { display:flex; overflow-x:auto; white-space:nowrap; padding:10px 12px; gap:16px; background:var(--sub-header-bg); border-bottom:1px solid #1a1a1a; scrollbar-width:none; align-items:center; }
+        .sub-header::-webkit-scrollbar { display:none; }
+        .sub-item { font-family:inherit; font-size:11px; font-weight:600; color:#b0b0b0; text-decoration:none; display:inline-flex; flex-direction:column; align-items:center; gap:4px; position:relative; transition:0.25s; cursor:pointer; background:none; border:none; flex-shrink:0; padding:4px 6px 2px; }
+        .sub-item.active { color:#FFD700 !important; border-bottom:2px solid var(--primary); padding-bottom:0; }
+        .sub-item:hover { color:#fff; }
+        .sub-item .category-icon { width:20px; height:20px; object-fit:contain; filter:brightness(0) invert(1); }
+        .sub-item.active .category-icon { filter:brightness(0) invert(1); }
+        .live-badge { position:absolute; top:-2px; right:-4px; background:#ff4757; color:#fff; font-size:8px; font-weight:800; padding:1px 5px; border-radius:4px; line-height:1; letter-spacing:0.5px; text-transform:uppercase; pointer-events:none; }
+        .virtual-badge { position:absolute; top:-1px; right:-6px; background:#ff4757; color:#fff; font-size:6px; font-weight:800; padding:1px 4px; border-radius:3px; line-height:1; letter-spacing:0.3px; text-transform:uppercase; pointer-events:none; }
+        .casino-count-badge { position:absolute; top:-2px; right:-8px; background:#FFD700; color:#1a1d21; font-size:8px; font-weight:800; width:16px; height:16px; border-radius:50%; display:flex; align-items:center; justify-content:center; line-height:1; pointer-events:none; }
+        .more-btn { color:#b0b0b0; font-size:9px; font-weight:600; text-transform:uppercase; cursor:pointer; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px; letter-spacing:0.3px; opacity:0.85; transition:0.25s; }
+        .more-btn i { font-size:18px; color:#b0b0b0; transition:0.2s; }
+        .more-btn:hover i, .more-btn:hover { color:#FFD700; opacity:1; }
+        .more-items { display:none; }
+        .sub-header.show-more .more-items { display:inline-flex; gap:16px; }
+
+        /* ── VIEW TICKET CONTENT ── */
+        .view-ticket-container {
+            padding: 10px 12px; /* less padding to fit edges */
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Big Container – fills almost whole screen */
+        .big-container {
+            background: #fff;
+            border-radius: 20px;
+            padding: 16px 14px 20px;
+            border: 1px solid var(--border);
+            box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* BET ID – outside the inner containers, on top */
+        .bet-id-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .bet-id {
+            font-size: 15px;
+            font-weight: 800;
+            color: #1a1d21;
+        }
+        .bet-id .code {
+            font-weight: 600;
+            color: #6b7280;
+            margin-left: 6px;
+        }
+        .back-btn {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+        .back-btn:hover { opacity: 0.7; }
+
+        /* ── YELLOW CONTAINER ── */
+        .yellow-container {
+            background: #FFD700;
+            border-radius: 14px;
+            padding: 14px 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(255,215,0,0.2);
+        }
+        .yellow-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 3px 0;
+            border-bottom: 1px solid rgba(0,0,0,0.06);
+        }
+        .yellow-row:last-child { border-bottom: none; }
+        .yellow-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #4a4a4a;
+        }
+        .yellow-value {
+            font-size: 14px;
+            font-weight: 800;
+            color: #1a1d21;
+        }
+        .yellow-value.green { color: #4CBB17; }
+        .yellow-value.red { color: #ff4757; }
+
+        /* ── R-CASH OUT BUTTON ── */
+        .cashout-btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background: #4CBB17;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 700;
+            border: none;
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.1s;
+            letter-spacing: 0.5px;
+            margin-top: 8px;
+        }
+        .cashout-btn:active { transform: scale(0.97); }
+        .cashout-btn:disabled { opacity: 0.6; pointer-events: none; }
+
+        /* ── SELECTIONS ── */
+        .selections-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 12px 0 8px;
+        }
+        .selection-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #f3f4f6;
+        }
+        .selection-item:last-child { border-bottom: none; }
+        .sel-left {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .sel-teams {
+            font-size: 13px;
+            font-weight: 600;
+            color: #1a1d21;
+        }
+        .sel-league {
+            font-size: 11px;
+            color: #6b7280;
+        }
+        .sel-right {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 4px;
+        }
+        .sel-option {
+            font-size: 12px;
+            font-weight: 600;
+            color: #1a1d21;
+        }
+        .sel-status-box {
+            display: inline-block;
+            padding: 2px 12px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 700;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            min-width: 30px;
+            text-align: center;
+        }
+        .sel-status-box.won { background: #4CBB17; }
+        .sel-status-box.lost { background: #ff4757; }
+        .sel-status-box.pending { background: #9ca3af; }
+        .sel-status-box.void { background: #1a1d21; }
+
+        .empty-state {
+            text-align: center;
+            color: var(--text-dim);
+            padding: 40px 20px;
+            background: #fff;
+            border-radius: 16px;
+            border: 1px dashed #ccc;
+            margin: 0 20px;
+        }
+        .empty-state p { font-size: 15px; font-weight: 500; }
+
+        #footer-placeholder { margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <!-- Sticky header + sub-header -->
+    <div class="sticky-nav-holder">
+        <header id="mainHeader">
+            <div class="logo-container"><img src="logoo.jpg" alt="Tidye265" id="mainLogo"></div>
+            <div class="search-wrapper" id="searchBar">
+                <div class="search-inner-box"><span style="color:#ccc; font-size:18px;">&#128269;</span><input type="text" placeholder="Search tickets..." id="searchInput"></div>
+                <button class="search-close-btn" id="searchClose"><span style="font-size:24px;">&times;</span></button>
+            </div>
+            <div class="header-controls">
+                <img src="18+.png" alt="18+" class="age-badge" onerror="this.style.display='none';">
+                <a href="deposit.html" class="header-balance-container" id="walletTrigger">
+                    <div id="balanceWrapper">
+                        <span class="bal-label">BALANCE</span>
+                        <span class="bal-amount">
+                            <span class="balance-skeleton skeleton skeleton-inline-block"></span>
+                            <span class="balance-real" id="balanceDisplay">MWK 0<span class="bal-cents">.00</span></span>
+                        </span>
+                    </div>
+                    <div class="header-dep-btn"><span style="font-size:20px;">+</span></div>
+                </a>
+            </div>
+        </header>
+        <nav class="sub-header" id="categoryNav">
+            <a href="live.html" class="sub-item"><img src="live.svg" class="category-icon"><span>Live</span><span class="live-badge">LIVE</span></a>
+            <a href="matches.html" class="sub-item"><img src="matches.svg" class="category-icon"><span>Sports</span></a>
+            <a href="casino.html" class="sub-item"><img src="casino.svg" class="category-icon"><span>Casino</span><span class="casino-count-badge" id="casinoCountBadge"><span class="skeleton-badge"></span></span></a>
+            <a href="casino.html" class="sub-item"><img src="aviator.png" class="category-icon"><span>Aviator</span></a>
+            <a href="virtual.html" class="sub-item"><img src="vi.png" class="category-icon"><span>Virtual</span><span class="virtual-badge">VIRTUAL</span></a>
+            <div class="sub-item more-btn" id="seeMoreSubBtn"><span style="font-size:18px;">&#8942;</span><span>See More</span></div>
+            <div class="more-items" id="moreCategories">
+                <a href="games.html" class="sub-item"><img src="games.svg" class="category-icon"><span>Games</span></a>
+                <a href="esports.html" class="sub-item"><img src="games.svg" class="category-icon"><span>eSports</span></a>
+            </div>
+        </nav>
+    </div>
+
+    <!-- ── VIEW TICKET CONTENT ── -->
+    <div class="view-ticket-container" id="ticketContent">
+        <!-- Skeleton Ticket (hidden when loaded) -->
+        <div id="skeletonTicket">
+            <div class="big-container">
+                <div class="bet-id-header">
+                    <div class="skeleton" style="width:120px; height:16px;"></div>
+                    <div class="skeleton" style="width:30px; height:20px;"></div>
+                </div>
+                <div class="yellow-container">
+                    <div class="skeleton" style="width:100%; height:60px;"></div>
+                </div>
+                <div class="cashout-btn skeleton" style="height:44px; border-radius:12px;"></div>
+                <div class="selections-title"><div class="skeleton" style="width:80px; height:12px;"></div></div>
+                <div class="selection-item"><div class="skeleton" style="width:80%; height:14px;"></div></div>
+                <div class="selection-item"><div class="skeleton" style="width:80%; height:14px;"></div></div>
+            </div>
+        </div>
+
+        <!-- Real Ticket Display (hidden initially) -->
+        <div id="ticketDisplay" style="display:none;">
+            <div class="big-container">
+                <!-- BET ID (outside the yellow container) -->
+                <div class="bet-id-header">
+                    <div class="bet-id">BET ID <span class="code" id="betIdDisplay">---</span></div>
+                    <a href="mybet.html" class="back-btn">&#8249;</a>
+                </div>
+
+                <!-- Yellow Container: Odds, Stake, Bonus, P-Win -->
+                <div class="yellow-container" id="yellowContainer">
+                    <div class="yellow-row">
+                        <span class="yellow-label">ODDS:</span>
+                        <span class="yellow-value" id="oddsDisplay">0.00</span>
+                    </div>
+                    <div class="yellow-row">
+                        <span class="yellow-label">STAKE:</span>
+                        <span class="yellow-value" id="stakeDisplay">MWK 0.00</span>
+                    </div>
+                    <div class="yellow-row">
+                        <span class="yellow-label">BONUS:</span>
+                        <span class="yellow-value" id="bonusDisplay">MWK 0.00</span>
+                    </div>
+                    <div class="yellow-row">
+                        <span class="yellow-label">P-WIN:</span>
+                        <span class="yellow-value" id="pwinDisplay">MWK 0.00</span>
+                    </div>
+                </div>
+
+                <!-- R-CASH OUT Button -->
+                <button class="cashout-btn" id="cashoutBtn">R-CASH OUT</button>
+
+                <!-- Selections -->
+                <div class="selections-title">Games</div>
+                <div id="selectionsContainer"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer placeholder -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Pre-fetch footer promise -->
+    <script>
+        const footerPromise = fetch('footer.html')
+            .then(response => response.ok ? response.text() : '')
+            .catch(() => '');
+    </script>
+
+    <script src="supabase.js"></script>
+    <script>
+        (function() {
+            // ========== CACHE HELPERS ==========
+            const CACHE_KEYS = { BALANCE: 'tidye_balance_cache' };
+            const CACHE_TTL = 5 * 60 * 1000;
+            function getCachedBalance() {
+                try {
+                    const cached = localStorage.getItem(CACHE_KEYS.BALANCE);
+                    if (!cached) return null;
+                    const { balance, timestamp } = JSON.parse(cached);
+                    if (Date.now() - timestamp < CACHE_TTL) return balance;
+                } catch(e) {}
+                return null;
+            }
+            function cacheBalance(balance) {
+                try { localStorage.setItem(CACHE_KEYS.BALANCE, JSON.stringify({ balance, timestamp: Date.now() })); } catch(e) {}
+            }
+
+            // ========== GLOBALS ==========
+            function getCleanSessionToken() {
+                let raw = localStorage.getItem('tidye_session_token');
+                if (!raw || raw === 'null' || raw === 'undefined') return null;
+                try { let p = JSON.parse(raw); if (p?.access_token) return p.access_token; if (typeof p === 'string') return p; } catch(e) {}
+                return raw.replace(/^["']|["']$/g, '').trim();
+            }
+
+            function enforceSession() {
+                if (!getCleanSessionToken()) {
+                    window.location.replace('login.html');
+                    return false;
+                }
+                return true;
+            }
+
+            async function checkApiLock() {
+                try {
+                    const res = await fetch(`${window.SUPABASE_URL}/functions/v1/api-lock`, {
+                        headers: { 'Authorization': `Bearer ${window.SUPABASE_ANON_KEY}` }
+                    });
+                    if (res.ok) {
+                        const d = await res.json();
+                        if (d.locked) window.location.replace('updating.html');
+                    }
+                } catch(e) {}
+            }
+
+            // ========== BALANCE ==========
+            const balanceDisplay = document.getElementById('balanceDisplay');
+            function updateBalanceUI(balance) {
+                const formatted = balance.toFixed(2);
+                const [main, cents] = formatted.split('.');
+                balanceDisplay.innerHTML = `MWK ${parseInt(main).toLocaleString()}<span class="bal-cents">.${cents}</span>`;
+                document.getElementById('balanceWrapper').classList.add('balance-loaded');
+            }
+            function showBalanceSkeleton() {
+                document.getElementById('balanceWrapper').classList.remove('balance-loaded');
+            }
+            async function fetchBalance(forceRefresh = false) {
+                if (!forceRefresh) {
+                    const cached = getCachedBalance();
+                    if (cached !== null) updateBalanceUI(cached);
+                    else showBalanceSkeleton();
+                } else showBalanceSkeleton();
+                const tok = getCleanSessionToken();
+                if (!tok) { updateBalanceUI(0); return; }
+                try {
+                    const res = await fetch(`${window.SUPABASE_URL}/functions/v1/wallet-api`, {
+                        headers: { 'Authorization': `Bearer ${tok}` }
+                    });
+                    if (res.ok) {
+                        const data = await res.json();
+                        const balance = Number(data.balance);
+                        cacheBalance(balance);
+                        updateBalanceUI(balance);
+                    } else if (res.status === 401) {
+                        window.location.replace('login.html');
+                    } else updateBalanceUI(0);
+                } catch(e) {
+                    if (!getCachedBalance()) showBalanceSkeleton();
+                }
+            }
+
+            // ========== VIEW TICKET LOGIC ==========
+            // Cache to store ticket data for 1 second (fast load)
+            let ticketCache = null;
+            let lastFetchTime = 0;
+            const CACHE_DURATION = 1000; // 1 second
+
+            async function fetchTicket() {
+                const urlParams = new URLSearchParams(window.location.search);
+                const betCode = urlParams.get('code');
+
+                if (!betCode) {
+                    console.error('No bet code provided');
+                    document.getElementById('skeletonTicket').style.display = 'none';
+                    document.getElementById('ticketDisplay').style.display = 'block';
+                    document.getElementById('betIdDisplay').textContent = '---';
+                    return;
+                }
+
+                const tok = getCleanSessionToken();
+                if (!tok) {
+                    document.getElementById('skeletonTicket').style.display = 'none';
+                    document.getElementById('ticketDisplay').style.display = 'block';
+                    document.getElementById('betIdDisplay').textContent = '---';
+                    return;
+                }
+
+                // Check cache (1 second)
+                const now = Date.now();
+                if (ticketCache && (now - lastFetchTime < CACHE_DURATION) && ticketCache.betCode === betCode) {
+                    // Use cached ticket
+                    console.log('Using cached ticket');
+                    renderTicket(ticketCache.ticket);
+                    document.getElementById('skeletonTicket').style.display = 'none';
+                    document.getElementById('ticketDisplay').style.display = 'block';
+                    return;
+                }
+
+                try {
+                    console.log(`Fetching ticket for code: ${betCode}`);
+                    const url = `${window.SUPABASE_URL}/functions/v1/get-ticket?code=${encodeURIComponent(betCode)}`;
+                    const res = await fetch(url, {
+                        headers: { 'Authorization': `Bearer ${tok}` }
+                    });
+
+                    const data = await res.json();
+
+                    if (res.ok && data.success) {
+                        // Cache the ticket
+                        ticketCache = { ticket: data.ticket, betCode: betCode };
+                        lastFetchTime = Date.now();
+
+                        renderTicket(data.ticket);
+                        document.getElementById('skeletonTicket').style.display = 'none';
+                        document.getElementById('ticketDisplay').style.display = 'block';
+                    } else {
+                        const errorMsg = data.error || 'Unknown error occurred.';
+                        document.getElementById('skeletonTicket').style.display = 'none';
+                        document.getElementById('ticketDisplay').style.display = 'block';
+                        document.getElementById('betIdDisplay').textContent = betCode;
+                        // Show error inside yellow container
+                        document.getElementById('yellowContainer').innerHTML = `
+                            <div style="text-align:center; padding:10px; color:#ef4444; font-weight:600;">
+                                Error: ${errorMsg}
+                            </div>
+                        `;
+                        console.error('Ticket fetch failed:', errorMsg);
+                    }
+                } catch (e) {
+                    console.error('Fetch error:', e);
+                    document.getElementById('skeletonTicket').style.display = 'none';
+                    document.getElementById('ticketDisplay').style.display = 'block';
+                    document.getElementById('betIdDisplay').textContent = betCode;
+                    document.getElementById('yellowContainer').innerHTML = `
+                        <div style="text-align:center; padding:10px; color:#ef4444; font-weight:600;">
+                            Network error: ${e.message || 'Please check your connection.'}
+                        </div>
+                    `;
+                }
+            }
+
+            function renderTicket(ticket) {
+                // BET ID
+                document.getElementById('betIdDisplay').textContent = ticket.bet_code;
+
+                // Yellow Container
+                document.getElementById('oddsDisplay').textContent = Number(ticket.total_odds).toFixed(2);
+                document.getElementById('stakeDisplay').textContent = `MWK ${ticket.stake.toLocaleString()}`;
+                document.getElementById('bonusDisplay').textContent = `MWK ${Number(ticket.bonus || 0).toFixed(2)}`;
+
+                let pwinDisplay = '';
+                let pwinClass = '';
+                if (ticket.status === 'won') {
+                    const wonAmount = (ticket.stake * ticket.total_odds).toFixed(2);
+                    pwinDisplay = `MWK ${Number(wonAmount).toLocaleString()}`;
+                    pwinClass = 'green';
+                } else if (ticket.status === 'lost') {
+                    pwinDisplay = 'MWK 0.00';
+                    pwinClass = 'red';
+                } else {
+                    pwinDisplay = `MWK ${Number(ticket.potential_payout).toLocaleString()}`;
+                    pwinClass = '';
+                }
+                const pwinEl = document.getElementById('pwinDisplay');
+                pwinEl.textContent = pwinDisplay;
+                pwinEl.className = `yellow-value ${pwinClass}`;
+
+                // Cashout button – enable only if pending
+                const cashoutBtn = document.getElementById('cashoutBtn');
+                if (ticket.status === 'pending') {
+                    cashoutBtn.disabled = false;
+                    cashoutBtn.style.opacity = '1';
+                } else {
+                    cashoutBtn.disabled = true;
+                    cashoutBtn.style.opacity = '0.6';
+                }
+
+                // Selections
+                const selections = ticket.selections || [];
+                const container = document.getElementById('selectionsContainer');
+                if (!selections.length) {
+                    container.innerHTML = `<div style="text-align:center; padding:20px; color:#6b7280; font-size:13px;">No games found in this ticket.</div>`;
+                    return;
+                }
+
+                let html = '';
+                selections.forEach(sel => {
+                    const home = sel.homeTeam || 'Home';
+                    const away = sel.awayTeam || 'Away';
+                    const teams = `${home} vs ${away}`;
+                    const league = sel.league || '';
+
+                    let selLabel = sel.selection || '';
+                    if (selLabel === '1') selLabel = 'Home';
+                    else if (selLabel === 'X') selLabel = 'Draw';
+                    else if (selLabel === '2') selLabel = 'Away';
+                    const optionDisplay = `FULL-TIME 1 X 2 : ${selLabel}`;
+
+                    const selStatus = sel.status || 'pending';
+                    let statusClass = 'pending';
+                    if (selStatus === 'won') statusClass = 'won';
+                    else if (selStatus === 'lost') statusClass = 'lost';
+                    else if (selStatus === 'void') statusClass = 'void';
+                    else statusClass = 'pending';
+
+                    html += `
+                        <div class="selection-item">
+                            <div class="sel-left">
+                                <div class="sel-teams">${teams}</div>
+                                <div class="sel-league">${league}</div>
+                            </div>
+                            <div class="sel-right">
+                                <div class="sel-option">${optionDisplay}</div>
+                                <div class="sel-status-box ${statusClass}"></div>
+                            </div>
+                        </div>
+                    `;
+                });
+                container.innerHTML = html;
+            }
+
+            // ========== FOOTER INJECTION ==========
+            async function injectFooter() {
+                const placeholder = document.getElementById('footer-placeholder');
+                if (!placeholder) return;
+                const html = await footerPromise;
+                if (html) {
+                    placeholder.innerHTML = html;
+                    placeholder.querySelectorAll('script').forEach(s => {
+                        const ns = document.createElement('script');
+                        ns.textContent = s.textContent;
+                        document.body.appendChild(ns).remove();
+                    });
+                }
+            }
+
+            // ========== INIT ==========
+            document.addEventListener('DOMContentLoaded', async () => {
+                if (!enforceSession()) return;
+
+                await checkApiLock();
+                fetchBalance();
+                fetchTicket(); // fast load with 1s cache
+                await injectFooter();
+
+                // Search bar (just for UI)
+                const searchBar = document.getElementById('searchBar');
+                const searchInput = document.getElementById('searchInput');
+                document.getElementById('searchClose').addEventListener('click', () => {
+                    searchBar.classList.remove('active');
+                    searchInput.value = '';
+                });
+
+                // See More toggle
+                const moreBtn = document.getElementById('seeMoreSubBtn');
+                const subHeader = document.getElementById('categoryNav');
+                if (moreBtn && subHeader) {
+                    moreBtn.addEventListener('click', e => {
+                        e.preventDefault();
+                        subHeader.classList.toggle('show-more');
+                        moreBtn.querySelector('span').textContent = subHeader.classList.contains('show-more') ? 'Less' : 'See More';
+                    });
+                }
+
+                // Cashout button (placeholder action)
+                document.getElementById('cashoutBtn').addEventListener('click', () => {
+                    alert('R-CASH OUT requested! (Feature coming soon)');
+                });
+            });
+        })();
+    </script>
+</body>
+</html>
