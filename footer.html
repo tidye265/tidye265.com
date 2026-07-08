@@ -1,0 +1,1766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>tiDye265 — Premium Footer</title>
+
+    <!-- Inter Font (Modern Sans-Serif) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet" />
+
+    <style nonce="tidye265FooterFinal">
+        /* ═══════════════════════════════════════════════════════════════
+                   RESET & BASE
+                   ═══════════════════════════════════════════════════════════════ */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #121212;
+            color: #EAECEE;
+            min-height: 100vh;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════
+                   FOOTER – PREMIUM DARK MODE
+                   ═══════════════════════════════════════════════════════════════ */
+        .site-footer {
+            background: #121212;
+            color: #EAECEE;
+            padding: 60px 24px 40px;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            position: relative;
+            z-index: 10;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            /* subtle glow */
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
+        }
+
+        .footer-inner {
+            max-width: 1320px;
+            margin: 0 auto;
+        }
+
+        /* ── Top Row: Logo + Tagline + Badges ── */
+        .footer-top-row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 28px 40px;
+            margin-bottom: 48px;
+        }
+        .footer-brand {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex: 1 1 260px;
+        }
+        .footer-logo {
+            height: 36px;
+            width: auto;
+            border-radius: 4px;
+            display: block;
+        }
+        .footer-tagline {
+            font-size: 0.8rem;
+            color: #A0A5AC;
+            line-height: 1.6;
+            max-width: 480px;
+            margin: 0;
+            font-weight: 400;
+            letter-spacing: 0.01em;
+        }
+        .footer-badges {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            flex-wrap: wrap;
+            flex: 0 0 auto;
+        }
+        .badge-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #9BA1A8;
+            transition: color 0.2s;
+        }
+        .badge-icon:hover {
+            color: #FFC800;
+        }
+        .badge-icon svg {
+            width: 20px;
+            height: 20px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+        .age-limit-img {
+            height: 26px;
+            width: auto;
+            vertical-align: middle;
+            border-radius: 4px;
+            filter: brightness(0.9);
+            transition: filter 0.2s;
+        }
+        .age-limit-img:hover {
+            filter: brightness(1.1);
+        }
+
+        /* ── Clock ── */
+        .malawi-clock {
+            font-size: 0.7rem;
+            color: #A0A5AC;
+            font-weight: 400;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 4px;
+            letter-spacing: 0.02em;
+        }
+        .malawi-clock svg {
+            width: 14px;
+            height: 14px;
+            stroke: #FFC800;
+            stroke-width: 2;
+            fill: none;
+            flex-shrink: 0;
+        }
+
+        /* ── 4-Column Grid ── */
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem 3rem;
+            margin-bottom: 44px;
+        }
+
+        .footer-col h5 {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #FFC800;
+            margin: 0 0 14px 0;
+            padding: 0;
+            position: relative;
+            display: inline-block;
+        }
+        .footer-col h5::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -4px;
+            width: 28px;
+            height: 2px;
+            background: #FFC800;
+            border-radius: 2px;
+            opacity: 0.5;
+        }
+        .footer-col ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .footer-col li {
+            margin-bottom: 10px;
+        }
+        .footer-col a {
+            display: inline-block;
+            color: #B0B0B0;
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 400;
+            line-height: 1.6;
+            transition: color 0.2s ease;
+            letter-spacing: 0.01em;
+            position: relative;
+        }
+        .footer-col a:hover {
+            color: #FFFFFF;
+        }
+        /* subtle underline on hover */
+        .footer-col a::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -1px;
+            width: 0;
+            height: 1px;
+            background: #FFC800;
+            transition: width 0.25s ease;
+        }
+        .footer-col a:hover::after {
+            width: 100%;
+        }
+
+        /* ── Contact / Help – COMPRESSED GLASSMORPHISM ROW ── */
+        .help-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 12px;
+            margin-top: 4px;
+        }
+        .help-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #FFFFFF;
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.25s ease;
+            text-decoration: none;
+            font-family: 'Inter', sans-serif;
+            letter-spacing: 0.02em;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        .help-btn svg {
+            width: 16px;
+            height: 16px;
+            fill: none;
+            stroke: #FFC800;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            flex-shrink: 0;
+            transition: stroke 0.25s;
+        }
+        .help-btn:hover {
+            background: rgba(255, 200, 0, 0.15);
+            border-color: rgba(255, 200, 0, 0.25);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(255, 200, 0, 0.08);
+        }
+        .help-btn:hover svg {
+            stroke: #FFFFFF;
+        }
+        .help-btn .btn-label {
+            color: #B0B0B0;
+            font-weight: 400;
+            font-size: 0.7rem;
+            margin-right: 2px;
+        }
+        .help-btn .btn-value {
+            color: #FFFFFF;
+            font-weight: 700;
+        }
+        .help-btn .btn-value:hover {
+            color: #FFC800;
+        }
+
+        /* ── Social Icons – Modern Rounded Squares ── */
+        .social-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 14px;
+            flex-wrap: wrap;
+        }
+        .social-row a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: #222222;
+            border-radius: 10px;
+            color: #FFFFFF;
+            transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            text-decoration: none;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+        }
+        .social-row a svg {
+            width: 18px;
+            height: 18px;
+            fill: none;
+            stroke: #FFFFFF;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            transition: stroke 0.25s;
+        }
+        .social-row a:hover {
+            background: #FFC800;
+            transform: translateY(-2px) scale(1.04);
+            border-color: #FFC800;
+            box-shadow: 0 6px 20px rgba(255, 200, 0, 0.18);
+        }
+        .social-row a:hover svg {
+            stroke: #121212;
+        }
+
+        /* ── Provider Partners (Monochrome) ── */
+        .provider-section {
+            margin-top: 4px;
+        }
+        .provider-section h5 {
+            font-size: 0.6rem;
+            color: #6B6F76;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+        .provider-logos {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px 28px;
+            align-items: center;
+        }
+        .provider-logos img {
+            height: 28px;
+            width: auto;
+            max-width: 100px;
+            object-fit: contain;
+            opacity: 0.6;
+            transition: all 0.3s ease;
+            filter: grayscale(1) brightness(1.2);
+        }
+        .provider-logos img:hover {
+            opacity: 1;
+            filter: grayscale(0) brightness(1);
+            transform: translateY(-2px);
+        }
+
+        /* ── Regulatory & Payment ── */
+        .regulatory-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 24px 40px;
+            margin-top: 28px;
+        }
+        .regulatory-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .regulatory-item .circle-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.06);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            transition: all 0.2s;
+            overflow: hidden;
+            padding: 4px;
+        }
+        .regulatory-item .circle-icon img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            border-radius: 50%;
+        }
+        .regulatory-item .circle-icon:hover {
+            background: rgba(255, 200, 0, 0.08);
+            border-color: rgba(255, 200, 0, 0.2);
+        }
+        .regulatory-item .reg-label {
+            font-size: 0.7rem;
+            color: #A0A5AC;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+        }
+        .regulatory-item .flag-wrap {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .regulatory-item .flag-wrap img {
+            height: 20px;
+            width: auto;
+            border-radius: 2px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .payment-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 16px 24px;
+            margin-top: 16px;
+        }
+        .payment-row .pay-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+        .payment-row .pay-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.06);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            transition: all 0.2s;
+            overflow: hidden;
+            padding: 4px;
+        }
+        .payment-row .pay-circle img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 50%;
+            filter: grayscale(1) brightness(1.3);
+            transition: filter 0.3s;
+        }
+        .payment-row .pay-circle:hover img {
+            filter: grayscale(0) brightness(1);
+        }
+        .payment-row .pay-label {
+            font-size: 0.6rem;
+            color: #6B6F76;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+        }
+
+        /* ── Bottom Bar ── */
+        .footer-bottom-bar {
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            padding-top: 20px;
+            margin-top: 16px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px 24px;
+        }
+        .footer-bottom-bar .legal-text {
+            font-size: 0.7rem;
+            color: #6B6F76;
+            font-weight: 400;
+            line-height: 1.6;
+            letter-spacing: 0.01em;
+        }
+        .footer-bottom-bar .legal-text strong {
+            color: #A0A5AC;
+            font-weight: 600;
+        }
+        .footer-bottom-bar .bottom-icons {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 14px 20px;
+        }
+        .footer-bottom-bar .bottom-icons img {
+            height: 22px;
+            width: auto;
+            max-width: 70px;
+            object-fit: contain;
+            opacity: 0.4;
+            transition: opacity 0.25s;
+            filter: grayscale(1) brightness(1.5);
+        }
+        .footer-bottom-bar .bottom-icons img:hover {
+            opacity: 0.8;
+            filter: grayscale(0) brightness(1);
+        }
+
+        /* ── BACK TO TOP ── */
+        .back-to-top {
+            position: fixed;
+            bottom: 100px;
+            right: 24px;
+            z-index: 999;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: #FFC800;
+            color: #121212;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 20px rgba(255, 200, 0, 0.25);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px) scale(0.9);
+            pointer-events: none;
+            text-decoration: none;
+            outline: none;
+        }
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0) scale(1);
+            pointer-events: auto;
+        }
+        .back-to-top:hover {
+            transform: translateY(-4px) scale(1.06);
+            box-shadow: 0 8px 32px rgba(255, 200, 0, 0.35);
+            background: #ffd633;
+        }
+        .back-to-top:active {
+            transform: scale(0.92);
+        }
+        .back-to-top svg {
+            width: 22px;
+            height: 22px;
+            fill: none;
+            stroke: #121212;
+            stroke-width: 2.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            transition: transform 0.3s;
+        }
+        .back-to-top:hover svg {
+            transform: translateY(-2px);
+        }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 1024px) {
+            .footer-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 2rem 2.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .site-footer {
+                padding: 44px 16px 32px;
+            }
+            .footer-top-row {
+                flex-direction: column;
+                gap: 16px;
+            }
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            .footer-col h5 {
+                font-size: 0.75rem;
+            }
+            .help-row {
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+            .help-btn {
+                padding: 8px 16px;
+                font-size: 0.75rem;
+            }
+            .help-btn svg {
+                width: 14px;
+                height: 14px;
+            }
+            .social-row a {
+                width: 36px;
+                height: 36px;
+            }
+            .social-row a svg {
+                width: 16px;
+                height: 16px;
+            }
+            .footer-bottom-bar {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            .footer-bottom-bar .bottom-icons {
+                gap: 10px 16px;
+            }
+            .footer-bottom-bar .bottom-icons img {
+                height: 18px;
+            }
+            .back-to-top {
+                bottom: 80px;
+                right: 16px;
+                width: 44px;
+                height: 44px;
+            }
+            .back-to-top svg {
+                width: 20px;
+                height: 20px;
+            }
+            .regulatory-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+            .payment-row {
+                gap: 12px 16px;
+            }
+            .provider-logos {
+                gap: 14px 18px;
+            }
+            .provider-logos img {
+                height: 22px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .footer-grid {
+                gap: 1.5rem;
+            }
+            .help-btn {
+                padding: 6px 14px;
+                font-size: 0.7rem;
+                gap: 4px;
+            }
+            .help-btn svg {
+                width: 12px;
+                height: 12px;
+            }
+            .footer-col a {
+                font-size: 0.75rem;
+            }
+            .footer-tagline {
+                font-size: 0.75rem;
+            }
+        }
+
+        /* ── Utilities ── */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            border: 0;
+        }
+
+        /* ── Bottom Nav (preserved from original but with "Sports" fix) ── */
+        /* We keep the original bottom nav styles but patch the Games → Sports */
+        .bottom-nav-wrapper {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            z-index: 9999;
+            font-family: 'Inter', sans-serif;
+            user-select: none;
+            transform: translate3d(0, 0, 0);
+            -webkit-transform: translate3d(0, 0, 0);
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            will-change: transform;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .second-footer-bar {
+            background: linear-gradient(135deg, #FFD700 0%, #FFB800 100%);
+            color: #1a1d21;
+            padding: 4px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+            border-top: none;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            height: 32px;
+            min-height: 32px;
+            letter-spacing: 0.5px;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            box-shadow: 0 -2px 12px rgba(255, 215, 0, 0.25);
+            border-radius: 10px 10px 0 0;
+            margin: 0 4px;
+            background-clip: padding-box;
+        }
+        .second-footer-bar .bar-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(0, 0, 0, 0.06);
+            padding: 0 10px;
+            border-radius: 20px;
+            height: 22px;
+            backdrop-filter: blur(2px);
+        }
+        .second-footer-bar .bar-item .label {
+            color: #4a4a4a;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            font-weight: 800;
+        }
+        .second-footer-bar .bar-item .value {
+            color: #1a1d21;
+            font-weight: 800;
+            font-size: 0.85rem;
+        }
+        .second-footer-bar.hidden {
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(12px);
+        }
+
+        .bottom-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #121212;
+            height: calc(60px + env(safe-area-inset-bottom, 0px));
+            padding-bottom: env(safe-area-inset-bottom, 0px);
+            padding-left: 5px;
+            padding-right: 5px;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        .nav-item,
+        .trade-btn-container {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #A2A9B0;
+            text-decoration: none;
+            font-size: 0.7rem;
+            font-weight: 500;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.15s;
+            cursor: pointer;
+            border: none;
+            background: none;
+            flex: 1;
+            height: 100%;
+            -webkit-tap-highlight-color: transparent;
+            gap: 2px;
+        }
+        .nav-svg {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .nav-svg svg {
+            width: 22px;
+            height: 22px;
+            fill: none;
+            stroke: #A2A9B0;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            transition: stroke 0.15s, transform 0.15s;
+        }
+        .nav-item.active,
+        .trade-btn-container.active {
+            color: #FFC800 !important;
+            font-weight: 700;
+        }
+        .nav-item.active .nav-svg svg,
+        .trade-btn-container.active .nav-svg svg {
+            stroke: #FFC800 !important;
+            transform: translateY(-2px);
+        }
+        .nav-item:active,
+        .trade-btn-container:active {
+            transform: scale(1.12);
+        }
+
+        .slip-count-badge {
+            position: absolute;
+            top: -2px;
+            right: 2px;
+            background: #FFC800;
+            color: #121212;
+            font-size: 10px;
+            font-weight: 800;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #121212;
+            box-shadow: 0 0 0 2px #FFC800;
+            z-index: 10;
+            pointer-events: none;
+            transition: transform 0.2s;
+        }
+        .mybet-count-box {
+            position: absolute;
+            top: -2px;
+            right: 2px;
+            background: #FFC800;
+            color: #121212;
+            font-size: 10px;
+            font-weight: 800;
+            padding: 0 6px;
+            height: 18px;
+            line-height: 18px;
+            border-radius: 4px;
+            border: 2px solid #121212;
+            z-index: 10;
+            pointer-events: none;
+            transition: transform 0.2s;
+            min-width: 18px;
+            text-align: center;
+        }
+
+        /* ── Bet Slip Overlay (preserved) ── */
+        .myslip-overlay {
+            position: fixed;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            height: calc(100% - (60px + env(safe-area-inset-bottom, 0px)));
+            background-color: #f8f9fa;
+            z-index: 9997;
+            transition: top 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            font-family: 'Inter', sans-serif;
+            border-top-left-radius: 24px;
+            border-top-right-radius: 24px;
+            overflow: hidden;
+        }
+        .myslip-overlay.open {
+            top: 0;
+            height: 100% !important;
+            z-index: 99999 !important;
+            border-radius: 0;
+        }
+        .slip-open .bottom-nav-wrapper {
+            display: none !important;
+        }
+        .myslip-header {
+            background: #121212;
+            color: #ffffff;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #FFC800;
+        }
+        .myslip-header h2 {
+            margin: 0;
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: #FFC800;
+            letter-spacing: -0.3px;
+        }
+        .myslip-header .header-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .myslip-header .slip-balance {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #FFC800;
+            background: rgba(255, 200, 0, 0.1);
+            padding: 4px 12px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 200, 0, 0.2);
+            min-width: 70px;
+            text-align: center;
+        }
+        .close-slip-btn {
+            background: none;
+            border: none;
+            color: #ffffff;
+            font-size: 28px;
+            cursor: pointer;
+            line-height: 1;
+            padding: 0 5px;
+            transition: color 0.2s;
+        }
+        .close-slip-btn:hover {
+            color: #FFC800;
+        }
+        .myslip-content {
+            flex: 1;
+            padding: 20px 20px 0 20px;
+            overflow-y: auto;
+            color: #333;
+            background: #f8f9fa;
+            display: flex;
+            flex-direction: column;
+            padding-bottom: 280px;
+        }
+        .bet-slip-empty-box {
+            background: #ffffff;
+            border: 2px dashed #FFC800;
+            border-radius: 16px;
+            padding: 30px 20px;
+            text-align: center;
+            color: #4b5563;
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            margin-top: 20px;
+        }
+        .bet-slip-empty-box .empty-svg svg {
+            width: 48px;
+            height: 48px;
+            stroke: #FFC800;
+            stroke-width: 1.8;
+        }
+        .bet-slip-success-box {
+            background: #ffffff;
+            border: 2px solid #10b981;
+            border-radius: 16px;
+            padding: 30px 20px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            margin-top: 20px;
+        }
+        .bet-slip-success-box .success-svg svg {
+            width: 48px;
+            height: 48px;
+        }
+        .bet-slip-success-box .view-btn {
+            display: inline-block;
+            margin-top: 6px;
+            background: #FFC800;
+            color: #121212;
+            padding: 10px 28px;
+            border-radius: 8px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: background 0.2s, transform 0.1s;
+            font-size: 0.9rem;
+        }
+        .bet-slip-success-box .view-btn:hover {
+            background: #e6b800;
+            transform: scale(1.02);
+        }
+        .bet-slip-success-box .view-btn:active {
+            transform: scale(0.95);
+        }
+        #slipItemsContainer {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+        .bet-item {
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 10px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+            position: relative;
+        }
+        .bet-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            flex: 1;
+        }
+        .bet-match-name {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #1a1d21;
+            line-height: 1.2;
+        }
+        .bet-selection {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #6b7280;
+            margin-top: 2px;
+        }
+        .bet-selection strong {
+            color: #1a1d21;
+            background: #f3f4f6;
+            padding: 1px 8px;
+            border-radius: 4px;
+            margin: 0 4px;
+        }
+        .bet-odds-display {
+            font-size: 0.9rem;
+            font-weight: 800;
+            color: #FFC800;
+            background: #121212;
+            padding: 2px 10px;
+            border-radius: 6px;
+        }
+        .bet-remove {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: #ff4757;
+            color: #fff;
+            border: none;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 10px;
+            transition: background 0.2s, transform 0.1s;
+            flex-shrink: 0;
+        }
+        .bet-remove:hover {
+            background: #d63031;
+            transform: scale(1.05);
+        }
+        .myslip-footer-area {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: #ffffff;
+            border-top: 1px solid #e5e7eb;
+            padding: 10px 20px 20px 20px;
+            z-index: 10;
+            box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.05);
+        }
+        .slip-summary-bar {
+            background: #FFC800;
+            padding: 8px 12px;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            font-family: 'Inter', sans-serif;
+            margin-bottom: 10px;
+        }
+        .slip-summary-bar .summary-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #4a4a4a;
+        }
+        .slip-summary-bar .summary-row .label {
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+        .slip-summary-bar .summary-row .value {
+            color: #1a1d21;
+            font-weight: 800;
+            font-size: 0.85rem;
+        }
+        .slip-summary-bar .summary-row .value.gold {
+            color: #000;
+            font-size: 0.9rem;
+        }
+        .bet-slip-stake-area {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .stake-input-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #1a1d21;
+            white-space: nowrap;
+        }
+        .stake-input-wrapper {
+            display: flex;
+            align-items: center;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 0 12px;
+            flex: 1;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .stake-input-wrapper:focus-within {
+            border-color: #FFC800;
+            box-shadow: 0 0 0 4px rgba(255, 200, 0, 0.2);
+        }
+        .stake-input-wrapper span {
+            font-weight: 700;
+            color: #1a1d21;
+            margin-right: 6px;
+        }
+        .stake-input-wrapper input {
+            border: none;
+            outline: none;
+            flex: 1;
+            padding: 10px 0;
+            font-size: 0.95rem;
+            font-weight: 600;
+            background: transparent;
+            width: 100%;
+        }
+        .bet-now-btn {
+            width: 100%;
+            padding: 14px;
+            background: #FFC800;
+            color: #121212;
+            border: none;
+            border-radius: 12px;
+            font-weight: 800;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+            margin-top: 10px;
+            box-shadow: 0 4px 12px rgba(255, 200, 0, 0.3);
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .bet-now-btn:active {
+            transform: scale(0.97);
+            background: #e6b800;
+        }
+        .bet-now-btn:disabled {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+        .booking-area {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        .booking-input {
+            width: 280px;
+            max-width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            text-align: center;
+            background: #fafafa;
+        }
+        .booking-input:focus {
+            border-color: #FFC800;
+            box-shadow: 0 0 0 4px rgba(255, 200, 0, 0.2);
+        }
+        .booking-btn {
+            background: #FFC800;
+            color: #121212;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+        }
+        .booking-btn:active {
+            transform: scale(0.95);
+            background: #e6b800;
+        }
+        .booking-btn.secondary {
+            background: #e5e7eb;
+            color: #1a1d21;
+        }
+        .booking-btn.secondary:active {
+            background: #d1d5db;
+        }
+        .input-error {
+            border-color: #ef4444 !important;
+            box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.2) !important;
+        }
+        .error-text {
+            color: #ef4444;
+            font-size: 0.7rem;
+            margin-top: 4px;
+            display: none;
+        }
+        #myBetContainer {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 0 16px;
+        }
+        #myBetContainer .bet-item {
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 12px 16px;
+            margin-bottom: 12px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ════════════════════════════════════════════ -->
+    <!--  PREMIUM FOOTER – FULLY REDESIGNED         -->
+    <!-- ════════════════════════════════════════════ -->
+    <footer class="site-footer" id="mainFooter">
+        <div class="footer-inner">
+
+            <!-- ── Top Row: Brand + Clock + Badges ── -->
+            <div class="footer-top-row">
+                <div class="footer-brand">
+                    <img src="logo2.jpg" alt="tiDye265" class="footer-logo" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22120%22 height=%2236%22 viewBox=%220 0 120 36%22%3E%3Crect width=%22120%22 height=%2236%22 fill=%22%23FFC800%22 rx=%224%22/%3E%3Ctext x=%2260%22 y=%2224%22 font-family=%22Inter,sans-serif%22 font-size=%2216%22 fill=%22%23121212%22 text-anchor=%22middle%22 font-weight=%22800%22%3EtiDye265%3C/text%3E%3C/svg%3E' " />
+                    <p class="footer-tagline">
+                        Premium gaming &amp; rewards — fair play, fast payouts, instant digital experiences in Malawi.
+                    </p>
+                    <div class="malawi-clock">
+                        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                        <span id="malawiTime">--:--:-- • -- ---- (Malawi)</span>
+                    </div>
+                </div>
+                <div class="footer-badges">
+                    <img src="18+.png" alt="18+" class="age-limit-img" onerror="this.style.display='none';" />
+                    <span class="badge-icon" title="Secure Platform">
+                        <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+                    </span>
+                    <span class="badge-icon" title="SSL Encrypted">
+                        <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                    </span>
+                    <span class="badge-icon" title="Fast Payouts">
+                        <svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                    </span>
+                </div>
+            </div>
+
+            <!-- ── 4-Column Grid ── -->
+            <div class="footer-grid">
+
+                <!-- COL 1: Sports & Betting -->
+                <div class="footer-col">
+                    <h5>Sports &amp; Betting</h5>
+                    <ul>
+                        <li><a href="#">Live Betting</a></li>
+                        <li><a href="#">Upcoming Matches</a></li>
+                        <li><a href="#">Virtual Sports</a></li>
+                        <li><a href="#">Jackpots</a></li>
+                        <li><a href="#">Check Bet Slip</a></li>
+                    </ul>
+                </div>
+
+                <!-- COL 2: Company & Rules -->
+                <div class="footer-col">
+                    <h5>Company &amp; Rules</h5>
+                    <ul>
+                        <li><a href="terms.html">Terms &amp; Conditions</a></li>
+                        <li><a href="privacy.html">Privacy Policy</a></li>
+                        <li><a href="#">Responsible Gaming</a></li>
+                        <li><a href="faq.html">Help &amp; FAQ</a></li>
+                        <li><a href="#">Betting Rules</a></li>
+                    </ul>
+                </div>
+
+                <!-- COL 3: Help & Social -->
+                <div class="footer-col">
+                    <h5>Need Help?</h5>
+                    <!-- COMPRESSED GLASSMORPHISM ROW -->
+                    <div class="help-row">
+                        <a href="tel:+265885699967" class="help-btn">
+                            <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                            <span class="btn-value">088 569 9967</span>
+                        </a>
+                        <a href="https://wa.me/265885699967" target="_blank" rel="noopener noreferrer" class="help-btn">
+                            <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/><path d="M16 13.5c-.3-.2-1.8-.9-2-.9s-.5-.1-.7.3c-.2.4-.8 1-.9 1.1s-.4.1-.7-.1c-.4-.2-1.5-.6-2.8-1.7-1-.9-1.7-2-1.9-2.3-.2-.3 0-.5.1-.6.2-.1.3-.4.5-.6s.2-.4.3-.6c.1-.2 0-.4-.1-.6-.1-.2-.6-1.5-.9-2.1-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.3-.3.3-1.1 1-1.1 2.5s1.1 2.9 1.3 3.1c.1.2 2.1 3.3 5.2 4.5 1.9.8 2.3.8 3.1.7.8-.1 2.5-1 2.8-2 .3-1 .3-1.9.2-2.1-.1-.2-.3-.3-.6-.4z"/></svg>
+                            <span class="btn-value">WhatsApp</span>
+                        </a>
+                    </div>
+
+                    <!-- Social Icons – Modern Rounded Squares -->
+                    <div class="social-row">
+                        <a href="#" aria-label="Facebook"><svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+                        <a href="#" aria-label="Twitter"><svg viewBox="0 0 24 24"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2-1.8-.2-3.6-1.3-4.5-3 .8.3 2 .3 2.8 0C3.9 13.7 3 11 3.5 8.6c.8 2 3.7 3.7 6 3.3C8.4 8.7 9 6.3 11 5c-4.4.2-7.1 4.4-7 8.4-.6-.6-1-2.5-1-4.4 0-3.5 2.8-6.2 6.3-6.2h.8C13.6 2 18 4.6 18 8v.5c1.5-1 3-2 4-4.5z"/></svg></a>
+                        <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5"/></svg></a>
+                        <a href="#" aria-label="Telegram"><svg viewBox="0 0 24 24"><path d="M21.5 2L2.5 11.3c-.8.3-.8 1.5.1 1.7l4.9 1.5 1.9 5.9c.2.6 1 .7 1.3.2l2.6-2.3 5 3.7c.5.4 1.3.1 1.5-.5l3.2-17.5c.2-.8-.8-1.4-1.5-1z"/><path d="M8 13l8-6-5 7 5 5-8-6z"/></svg></a>
+                    </div>
+                </div>
+
+                <!-- COL 4: Provider Partners (monochrome) -->
+                <div class="footer-col">
+                    <h5>Provider Partners</h5>
+                    <div class="provider-section">
+                        <div class="provider-logos">
+                            <img src="p1.png" alt="Pragmatic" onerror="this.style.display='none';" />
+                            <img src="p2.png" alt="Evolution" onerror="this.style.display='none';" />
+                            <img src="p3.png" alt="SPRIBE" onerror="this.style.display='none';" />
+                            <img src="p4.png" alt="Provider" onerror="this.style.display='none';" />
+                            <img src="p5.png" alt="Provider" onerror="this.style.display='none';" />
+                        </div>
+                    </div>
+
+                    <!-- Regulatory & Payment (inline) -->
+                    <div class="regulatory-row">
+                        <div class="regulatory-item">
+                            <span class="circle-icon">
+                                <img src="magra.png" alt="MAGLA" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2240%22 height=%2240%22 viewBox=%220 0 40 40%22%3E%3Crect width=%2240%22 height=%2240%22 fill=%22%23FFC800%22 rx=%2220%22/%3E%3Ctext x=%2220%22 y=%2226%22 font-family=%22Inter,sans-serif%22 font-size=%2214%22 fill=%22%23121212%22 text-anchor=%22middle%22 font-weight=%22800%22%3EM%3C/text%3E%3C/svg%3E' " />
+                            </span>
+                            <span class="reg-label">Licensed &amp; Regulated</span>
+                        </div>
+                        <div class="regulatory-item">
+                            <span class="flag-wrap">
+                                <img src="flag.png" alt="Malawi" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2232%22 height=%2220%22 viewBox=%220 0 32 20%22%3E%3Crect width=%2232%22 height=%2220%22 fill=%22%23333%22/%3E%3Ctext x=%2216%22 y=%2214%22 font-family=%22Inter,sans-serif%22 font-size=%2210%22 fill=%22%23FFC800%22 text-anchor=%22middle%22 font-weight=%22700%22%3EMW%3C/text%3E%3C/svg%3E' " />
+                            </span>
+                            <span class="reg-label">Malawi</span>
+                        </div>
+                    </div>
+
+                    <!-- Payment Methods -->
+                    <div class="payment-row">
+                        <div class="pay-item">
+                            <span class="pay-circle">
+                                <img src="airtel.jpg" alt="Airtel Money" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2240%22 height=%2240%22 viewBox=%220 0 40 40%22%3E%3Crect width=%2240%22 height=%2240%22 fill=%22%23FFC800%22 rx=%2220%22/%3E%3Ctext x=%2220%22 y=%2226%22 font-family=%22Inter,sans-serif%22 font-size=%2210%22 fill=%22%23121212%22 text-anchor=%22middle%22 font-weight=%22800%22%3EAirtel%3C/text%3E%3C/svg%3E' " />
+                            </span>
+                            <span class="pay-label">Airtel Money</span>
+                        </div>
+                        <div class="pay-item">
+                            <span class="pay-circle">
+                                <img src="tnm.jpg" alt="TNM Mpamba" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2240%22 height=%2240%22 viewBox=%220 0 40 40%22%3E%3Crect width=%2240%22 height=%2240%22 fill=%22%23FFC800%22 rx=%2220%22/%3E%3Ctext x=%2220%22 y=%2226%22 font-family=%22Inter,sans-serif%22 font-size=%2210%22 fill=%22%23121212%22 text-anchor=%22middle%22 font-weight=%22800%22%3ETNM%3C/text%3E%3C/svg%3E' " />
+                            </span>
+                            <span class="pay-label">TNM Mpamba</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── Bottom Bar: Legal + Payment Icons ── -->
+            <div class="footer-bottom-bar">
+                <div class="legal-text">
+                    &copy; 2026 <strong>tiDye265</strong>. Licensed by <strong>MAGLA</strong>, Malawi.
+                </div>
+                <div class="bottom-icons">
+                    <!-- Payment & Provider icons – monochrome white/transparent SVGs -->
+                    <img src="airtel.jpg" alt="Airtel Money" onerror="this.style.display='none';" />
+                    <img src="tnm.jpg" alt="TNM Mpamba" onerror="this.style.display='none';" />
+                    <img src="p1.png" alt="Pragmatic" onerror="this.style.display='none';" />
+                    <img src="p2.png" alt="Evolution" onerror="this.style.display='none';" />
+                    <img src="p3.png" alt="SPRIBE" onerror="this.style.display='none';" />
+                </div>
+            </div>
+
+        </div>
+    </footer>
+
+    <!-- ── BACK TO TOP BUTTON ── -->
+    <button class="back-to-top" id="backToTopBtn" aria-label="Back to top">
+        <svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>
+    </button>
+
+    <!-- ════════════════════════════════════════════ -->
+    <!--  BOTTOM NAV (with "Sports" instead of "Games") -->
+    <!-- ════════════════════════════════════════════ -->
+    <div class="bottom-nav-wrapper">
+        <div class="second-footer-bar hidden" id="secondFooterBar">
+            <div class="bar-item">
+                <span class="label">Odds:</span>
+                <span class="value" id="barTotalOdds">1.00</span>
+            </div>
+            <div class="bar-item">
+                <span class="label">P-Win:</span>
+                <span class="value" id="barPotentialWin">MWK 0.00</span>
+            </div>
+        </div>
+
+        <nav class="bottom-nav" id="mainBottomNav" aria-label="Main Navigation">
+            <a href="dashboard.html" class="nav-item" data-page="dashboard" aria-label="Home">
+                <span class="nav-svg">
+                    <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                </span>
+                <span>Home</span>
+            </a>
+            <!-- ★ CHANGED "Games" → "Sports" per user request -->
+            <a href="sports.html" class="nav-item" data-page="sports" aria-label="Sports">
+                <span class="nav-svg">
+                    <svg viewBox="0 0 24 24"><line x1="6" y1="11" x2="10" y2="11"/><line x1="8" y1="9" x2="8" y2="13"/><line x1="15" y1="12" x2="15.01" y2="12"/><line x1="18" y1="10" x2="18.01" y2="10"/><path d="M17.32 5H6.68a4 4 0 0 0-3.978 3.59C2.34 11.148 2 14 2 16.5 2 19 4 21 6.5 21c1.86 0 3.22-1 4.5-2.5C12.28 19 13.64 21 15.5 21 18 21 20 19 20 16.5c0-2.5-.34-5.352-.702-7.91A4 4 0 0 0 15.32 5z"/></svg>
+                </span>
+                <span>Sports</span>
+            </a>
+            <a href="#" class="trade-btn-container" id="mySlipNavBtn" data-page="myslip" aria-label="Betslip">
+                <span class="nav-svg">
+                    <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                </span>
+                <span>Betslip</span>
+                <span class="slip-count-badge" id="slipCountBadge">0</span>
+            </a>
+            <a href="mybet.html" class="nav-item" data-page="mybet" aria-label="MyBet">
+                <span class="nav-svg">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 2h16v20H4z"/><path d="M4 2l4 4H4z"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="16" y2="14"/><line x1="8" y1="18" x2="12" y2="18"/>
+                    </svg>
+                </span>
+                <span>MyBet</span>
+                <span class="mybet-count-box" id="mybetCountBadge">0</span>
+            </a>
+            <a href="account.html" class="nav-item" data-page="account" aria-label="Profile">
+                <span class="nav-svg">
+                    <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                </span>
+                <span>Profile</span>
+            </a>
+        </nav>
+    </div>
+
+    <!-- ════════════════════════════════════════════ -->
+    <!--  BET SLIP OVERLAY (preserved)              -->
+    <!-- ════════════════════════════════════════════ -->
+    <div class="myslip-overlay" id="mySlipOverlay">
+        <div class="myslip-header">
+            <h2>YOUR BETSLIP</h2>
+            <div class="header-right">
+                <span class="slip-balance" id="slipBalance"><span style="opacity:0.5;">MWK 0.00</span></span>
+                <button class="close-slip-btn" id="closeSlipBtn">&times;</button>
+            </div>
+        </div>
+        <div class="myslip-content">
+            <div class="booking-area">
+                <div style="position:relative; width:280px; max-width:100%;">
+                    <input type="text" class="booking-input" id="bookingCodeInput" placeholder="Enter Booking Code" />
+                    <div id="bookingError" class="error-text">Please enter a booking code.</div>
+                </div>
+                <button class="booking-btn" id="loadBookingBtn">Load</button>
+                <button class="booking-btn secondary" id="createBookingBtn">Create Booking</button>
+            </div>
+            <div id="slipItemsContainer"></div>
+            <div class="bet-slip-empty-box" id="betSlipEmptyBox" style="display: none;">
+                <span class="empty-svg">
+                    <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="#FFC800" stroke-width="1.8">
+                        <path d="M4 4h16v16H4z"/><line x1="8" y1="8" x2="16" y2="8"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="16" x2="12" y2="16"/>
+                    </svg>
+                </span>
+                <p style="margin:0;">Your bet slip is empty</p>
+                <p style="margin:0; font-size:0.8rem; color:#6b7280;">Tap on any match or game to add selections</p>
+            </div>
+            <div class="bet-slip-success-box" id="betSlipSuccessBox" style="display: none;">
+                <span class="success-svg">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
+                        <circle cx="12" cy="12" r="11" fill="#10b981" stroke="#10b981" stroke-width="2"/>
+                        <path d="M8 12l2 2 4-4" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </span>
+                <p style="margin:0; font-weight:700; color:#1a1d21; font-size:1rem;">Bet Placed Successfully!</p>
+                <a href="mybet.html" class="view-btn">View My Bets</a>
+            </div>
+        </div>
+        <div class="myslip-footer-area">
+            <div class="slip-summary-bar" id="slipSummaryBar" style="display: none;">
+                <div class="summary-row">
+                    <span class="label">Odds:</span>
+                    <span class="value" id="totalOddsDisplay">1.00</span>
+                </div>
+                <div class="summary-row">
+                    <span class="label">Games:</span>
+                    <span class="value" id="selectionCount">0</span>
+                </div>
+                <div class="summary-row">
+                    <span class="label">Bonus:</span>
+                    <span class="value" id="bonusDisplay">MWK 0.00</span>
+                </div>
+                <div class="summary-row">
+                    <span class="label">Potential Win:</span>
+                    <span class="value gold" id="potentialPayout">MWK 0.00</span>
+                </div>
+            </div>
+            <div class="bet-slip-stake-area">
+                <span class="stake-input-label">Stake (MWK)</span>
+                <div style="flex:1; display:flex; flex-direction:column;">
+                    <div class="stake-input-wrapper" id="stakeInputWrapper">
+                        <span>MWK</span>
+                        <input type="number" placeholder="0.00" min="0" step="any" id="slipStakeInput" />
+                    </div>
+                    <div id="stakeError" class="error-text">Please enter a valid stake amount greater than 0.</div>
+                </div>
+            </div>
+            <button class="bet-now-btn" id="betNowBtn">BET NOW</button>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════ -->
+    <!--  SCRIPTS: Clock + Back-to-Top + Slip Logic -->
+    <!-- ════════════════════════════════════════════ -->
+    <script nonce="tidye265FooterFinal">
+        (function() {
+            'use strict';
+
+            // ── 1. Malawi Clock ──
+            function updateMalawiTime() {
+                const el = document.getElementById('malawiTime');
+                if (!el) return;
+                try {
+                    const now = new Date();
+                    const timeOpts = { timeZone: 'Africa/Blantyre', hour: '2-digit', minute: '2-digit', second: '2-digit',
+                        hour12: true };
+                    const dateOpts = { timeZone: 'Africa/Blantyre', day: '2-digit', month: 'short', year: 'numeric' };
+                    const timeStr = now.toLocaleTimeString('en-US', timeOpts);
+                    const dateStr = now.toLocaleDateString('en-US', dateOpts);
+                    el.textContent = timeStr + '  •  ' + dateStr + ' (Malawi)';
+                } catch (_) {
+                    el.textContent = new Date().toLocaleString() + ' (Malawi)';
+                }
+            }
+            updateMalawiTime();
+            setInterval(updateMalawiTime, 1000);
+
+            // ── 2. Back to Top ──
+            const backBtn = document.getElementById('backToTopBtn');
+            if (backBtn) {
+                let lastScroll = 0;
+                const threshold = 400;
+
+                function toggleBackToTop() {
+                    const scrollY = window.scrollY || window.pageYOffset;
+                    if (scrollY > threshold) {
+                        backBtn.classList.add('visible');
+                    } else {
+                        backBtn.classList.remove('visible');
+                    }
+                }
+
+                window.addEventListener('scroll', toggleBackToTop, { passive: true });
+                window.addEventListener('load', toggleBackToTop);
+
+                backBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
+            }
+
+            // ── 3. Slip overlay (minimal) ──
+            const overlay = document.getElementById('mySlipOverlay');
+            const slipNavBtn = document.getElementById('mySlipNavBtn');
+            const closeBtn = document.getElementById('closeSlipBtn');
+            const slipBadge = document.getElementById('slipCountBadge');
+
+            function openSlip(e) {
+                if (e) e.preventDefault();
+                document.body.classList.add('slip-open');
+                overlay.classList.add('open');
+                renderBetSlip();
+            }
+
+            function closeSlip() {
+                document.body.classList.remove('slip-open');
+                overlay.classList.remove('open');
+            }
+            if (slipNavBtn) slipNavBtn.addEventListener('click', openSlip);
+            if (closeBtn) closeBtn.addEventListener('click', closeSlip);
+            overlay?.addEventListener('click', function(e) {
+                if (e.target === overlay) closeSlip();
+            });
+
+            // ── 4. Slip render (stub) ──
+            function renderBetSlip() {
+                const container = document.getElementById('slipItemsContainer');
+                const emptyBox = document.getElementById('betSlipEmptyBox');
+                const successBox = document.getElementById('betSlipSuccessBox');
+                const summaryBar = document.getElementById('slipSummaryBar');
+                const selCount = document.getElementById('selectionCount');
+                const totalOddsDisplay = document.getElementById('totalOddsDisplay');
+                const bonusDisplay = document.getElementById('bonusDisplay');
+                const payoutDisplay = document.getElementById('potentialPayout');
+
+                let slip = JSON.parse(localStorage.getItem('tidye_bet_slip') || '[]');
+                const count = slip.length;
+
+                if (slipBadge) {
+                    slipBadge.textContent = count;
+                    slipBadge.style.transform = count > 0 ? 'scale(1)' : 'scale(0.9)';
+                }
+
+                const secondBar = document.getElementById('secondFooterBar');
+                const barOdds = document.getElementById('barTotalOdds');
+                const barPWin = document.getElementById('barPotentialWin');
+
+                let totalOdds = 1.0;
+                let payout = 0;
+                if (count > 0) {
+                    slip.forEach(b => totalOdds *= parseFloat(b.odds) || 1.0);
+                    const stake = parseFloat(document.getElementById('slipStakeInput')?.value) || 0;
+                    payout = stake * totalOdds;
+                    if (secondBar) {
+                        secondBar.classList.remove('hidden');
+                        if (barOdds) barOdds.textContent = totalOdds.toFixed(2);
+                        if (barPWin) barPWin.textContent = 'MWK ' + payout.toFixed(2);
+                    }
+                } else {
+                    if (secondBar) {
+                        secondBar.classList.add('hidden');
+                        if (barOdds) barOdds.textContent = '1.00';
+                        if (barPWin) barPWin.textContent = 'MWK 0.00';
+                    }
+                }
+
+                container.innerHTML = '';
+                if (successBox) successBox.style.display = 'none';
+
+                if (!slip || slip.length === 0) {
+                    if (emptyBox) emptyBox.style.display = 'flex';
+                    if (summaryBar) summaryBar.style.display = 'none';
+                    return;
+                }
+
+                if (emptyBox) emptyBox.style.display = 'none';
+                if (summaryBar) summaryBar.style.display = 'flex';
+
+                let html = '';
+                slip.forEach((bet, idx) => {
+                    const oddsVal = parseFloat(bet.odds) || 0;
+                    let selLabel = bet.selection || '—';
+                    if (selLabel === '1') selLabel = 'Home';
+                    else if (selLabel === 'X') selLabel = 'X';
+                    else if (selLabel === '2') selLabel = 'Away';
+
+                    const home = bet.homeTeam || 'Home';
+                    const away = bet.awayTeam || 'Away';
+
+                    html += `
+                                <div class="bet-item">
+                                    <div class="bet-info">
+                                        <div class="bet-match-name">${escapeHTML(home)} vs ${escapeHTML(away)}</div>
+                                        <div class="bet-selection">Full‑time 1 X 2 • <strong>${selLabel}</strong></div>
+                                    </div>
+                                    <div style="display:flex; align-items:center;">
+                                        <span class="bet-odds-display">${oddsVal.toFixed(2)}</span>
+                                        <button class="bet-remove" onclick="window.removeBet('${bet.matchId || ''}', '${bet.selection || ''}')" aria-label="Remove bet">
+                                            <span style="font-weight:bold;font-size:18px;">&times;</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            `;
+                });
+                container.innerHTML = html;
+
+                if (selCount) selCount.textContent = count;
+                if (totalOddsDisplay) totalOddsDisplay.textContent = totalOdds.toFixed(2);
+                if (payoutDisplay) payoutDisplay.textContent = 'MWK ' + payout.toFixed(2);
+
+                let bonus = 0;
+                if (count >= 3 && totalOdds > 2.0) {
+                    bonus = payout * 0.05;
+                }
+                if (bonusDisplay) bonusDisplay.textContent = 'MWK ' + bonus.toFixed(2);
+            }
+
+            window.removeBet = function(matchId, selection) {
+                let slip = JSON.parse(localStorage.getItem('tidye_bet_slip') || '[]');
+                slip = slip.filter(b => !(b.matchId === matchId && b.selection === selection));
+                localStorage.setItem('tidye_bet_slip', JSON.stringify(slip));
+                renderBetSlip();
+                document.querySelectorAll('.odds-cell').forEach(cell => {
+                    const onclick = cell.getAttribute('onclick') || '';
+                    if (onclick.includes(`'${matchId}'`) && onclick.includes(`'${selection}'`)) {
+                        cell.classList.remove('selected');
+                    }
+                });
+            };
+
+            // Stake input → update
+            const stakeInput = document.getElementById('slipStakeInput');
+            if (stakeInput) {
+                stakeInput.addEventListener('input', renderBetSlip);
+            }
+
+            // ── 5. Booking & Bet Now (stubs) ──
+            document.getElementById('createBookingBtn')?.addEventListener('click', function() {
+                const slip = JSON.parse(localStorage.getItem('tidye_bet_slip') || '[]');
+                if (slip.length === 0) {
+                    alert('Please add some matches first.');
+                    return;
+                }
+                alert('Booking created! (demo)');
+            });
+
+            document.getElementById('loadBookingBtn')?.addEventListener('click', function() {
+                const code = document.getElementById('bookingCodeInput')?.value.trim();
+                if (!code) {
+                    alert('Please enter a booking code.');
+                    return;
+                }
+                alert('Booking loaded! (demo)');
+            });
+
+            document.getElementById('betNowBtn')?.addEventListener('click', function() {
+                const slip = JSON.parse(localStorage.getItem('tidye_bet_slip') || '[]');
+                if (slip.length === 0) {
+                    alert('Your bet slip is empty.');
+                    return;
+                }
+                const stake = parseFloat(document.getElementById('slipStakeInput')?.value) || 0;
+                if (stake <= 0) {
+                    alert('Please enter a valid stake.');
+                    return;
+                }
+                alert('Bet placed! (demo)');
+                localStorage.removeItem('tidye_bet_slip');
+                renderBetSlip();
+                document.querySelectorAll('.odds-cell').forEach(cell => cell.classList.remove('selected'));
+                const emptyBox = document.getElementById('betSlipEmptyBox');
+                const successBox = document.getElementById('betSlipSuccessBox');
+                const summaryBar = document.getElementById('slipSummaryBar');
+                const container = document.getElementById('slipItemsContainer');
+                if (emptyBox) emptyBox.style.display = 'none';
+                if (summaryBar) summaryBar.style.display = 'none';
+                if (container) container.innerHTML = '';
+                if (successBox) successBox.style.display = 'flex';
+                if (slipBadge) { slipBadge.textContent = 0;
+                    slipBadge.style.transform = 'scale(0.9)'; }
+                const secondBar = document.getElementById('secondFooterBar');
+                if (secondBar) secondBar.classList.add('hidden');
+            });
+
+            // ── 6. Helpers ──
+            function escapeHTML(str) {
+                if (!str) return '';
+                const div = document.createElement('div');
+                div.textContent = str;
+                return div.innerHTML;
+            }
+
+            // ── 7. Bottom nav active state ──
+            const path = window.location.pathname.split('/').pop().toLowerCase() || 'dashboard.html';
+            const navItems = document.querySelectorAll('#mainBottomNav .nav-item, #mainBottomNav .trade-btn-container');
+            navItems.forEach(el => {
+                const dp = el.getAttribute('data-page');
+                if (dp && path.includes(dp) && dp !== 'myslip') {
+                    el.classList.add('active');
+                } else {
+                    el.classList.remove('active');
+                }
+            });
+            if (!document.querySelector('#mainBottomNav .active') && (path === '' || path === 'index.html')) {
+                const home = document.querySelector('[data-page="dashboard"]') || document.querySelector('[data-page="home"]');
+                if (home) home.classList.add('active');
+            }
+            navItems.forEach(btn => {
+                btn.addEventListener('mousedown', function() {
+                    if (this.id !== 'mySlipNavBtn') {
+                        navItems.forEach(b => b.classList.remove('active'));
+                        this.classList.add('active');
+                    }
+                });
+                btn.addEventListener('touchstart', function() {
+                    if (this.id !== 'mySlipNavBtn') {
+                        navItems.forEach(b => b.classList.remove('active'));
+                        this.classList.add('active');
+                    }
+                }, { passive: true });
+            });
+
+            // Initial render
+            renderBetSlip();
+
+        })();
+    </script>
+
+</body>
+</html>
