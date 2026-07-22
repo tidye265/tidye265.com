@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Tidye265 | Account</title>
+    <meta name="theme-color" content="#121212">
+    <meta name="robots" content="noindex, nofollow">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://*.supabase.co https://cdn.jsdelivr.net https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; img-src 'self' https: data: blob:; connect-src 'self' https://*.supabase.co https://challenges.cloudflare.com; frame-src 'self' https://challenges.cloudflare.com;">
+    <!-- 🔥 Prefetch footer & scripts for instant loading -->
+    <link rel="prefetch" href="footer.html">
+    <link rel="prefetch" href="supabase.js">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --bg: #F4F6F8;
+            --primary: #FFD700;
+            --card-bg: #FFFFFF;
+            --text-light: #1a1d21;
+            --text-dim: #6b7280;
+            --success: #10b981;
+            --border: #eef2f6;
+            --danger: #ff4757;
+            --header-bg: #29282b;
+            --sub-header-bg: #29282b;
+            --dark-skeleton-base: #363538;
+            --dark-skeleton-shine: #29282b;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+        html { scroll-behavior: smooth; }
+        body { background:var(--bg); color:var(--text-light); font-family:system-ui,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif; padding-bottom:20px; overflow-x:hidden; }
+        .sticky-nav-holder { position:sticky; top:0; z-index:1000; background:var(--header-bg); box-shadow:0 4px 12px rgba(0,0,0,0.3); }
+
+        .skeleton { background:var(--dark-skeleton-base); background:linear-gradient(90deg, var(--dark-skeleton-base) 25%, var(--dark-skeleton-shine) 50%, var(--dark-skeleton-base) 75%); background-size:200% 100%; animation:skeleton-loading 1.5s infinite; }
+        @keyframes skeleton-loading { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+        .skeleton-text { height:14px; width:60%; border-radius:4px; margin:6px 0; }
+        .skeleton-avatar { width:60px; height:60px; border-radius:50%; }
+
+        /* Header balance skeleton */
+        .balance-skeleton { width:80px; height:16px; display:inline-block; }
+        .balance-real { display:none; align-items:center; }
+        .balance-loaded .balance-skeleton { display:none; }
+        .balance-loaded .balance-real { display:flex; }
+
+        header { padding:0 15px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #3a3a3a; height:70px; position:relative; background:var(--header-bg); }
+        .logo-container img { height:46px; border-radius:5px; object-fit:contain; }
+        .search-wrapper { position:absolute; left:0; top:0; width:100%; height:100%; background:var(--header-bg); display:flex; align-items:center; padding:0 15px; gap:12px; transform:translateY(-100%); opacity:0; pointer-events:none; transition:0.35s cubic-bezier(0.4,0,0.2,1); z-index:20; }
+        .search-wrapper.active { transform:translateY(0); opacity:1; pointer-events:auto; }
+        .search-inner-box { flex:1; background:#2c2d30; height:44px; border-radius:12px; display:flex; align-items:center; padding:0 15px; border:1px solid #3a3b3f; }
+        .search-inner-box input { background:transparent; border:none; outline:none; width:100%; font-size:15px; font-family:inherit; margin-left:10px; color:#f0f0f0; }
+        .search-inner-box input::placeholder { color:#aaa; }
+        .search-inner-box i { color:#9ca3af; }
+        .search-close-btn { background:none; border:none; font-size:20px; color:#e0e0e0; cursor:pointer; display:flex; align-items:center; padding:5px; }
+        .header-controls { display:flex; align-items:center; gap:8px; z-index:10; }
+        .age-badge { width:30px; height:30px; object-fit:contain; border-radius:4px; }
+        .header-balance-container { display:flex; align-items:center; gap:3px; background:#3a3a3a; padding:5px 5px 5px 12px; border-radius:10px; border:1px solid #4a4a4a; cursor:pointer; transition:0.2s; text-decoration:none; color:#f0f0f0; min-width:110px; box-shadow:0 2px 8px rgba(0,0,0,0.3); }
+        .header-balance-container:active { transform:scale(0.96); }
+        .bal-label { font-size:8px; font-weight:800; color:#bbb; text-transform:uppercase; display:block; line-height:1.1; font-family:inherit; }
+        .bal-amount { font-size:13px; font-weight:800; display:flex; align-items:center; font-family:inherit; color:#fff; }
+        .bal-cents { opacity:0.5; font-size:13px; margin-left:1px; }
+        .header-dep-btn { background:var(--primary); color:#1a1d21; width:34px; height:32px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:17px; border:none; font-weight:800; margin-left:auto; font-family:inherit; }
+
+        /* SUB-HEADER */
+        .sub-header { display:flex; overflow-x:auto; white-space:nowrap; padding:10px 12px; gap:16px; background:var(--sub-header-bg); border-bottom:1px solid #1a1a1a; scrollbar-width:none; align-items:center; }
+        .sub-header::-webkit-scrollbar { display:none; }
+        .sub-item { font-family:inherit; font-size:11px; font-weight:600; color:#b0b0b0; text-decoration:none; display:inline-flex; flex-direction:column; align-items:center; gap:4px; position:relative; transition:0.25s; cursor:pointer; background:none; border:none; flex-shrink:0; padding:4px 6px 2px; }
+        .sub-item.active { color:#FFD700 !important; border-bottom:2px solid var(--primary); padding-bottom:0; }
+        .sub-item:hover { color:#fff; }
+        .sub-item .category-icon { width:20px; height:20px; object-fit:contain; filter:brightness(0) invert(1); }
+        .sub-item.active .category-icon { filter:brightness(0) invert(1); }
+        .live-badge { position:absolute; top:-2px; right:-4px; background:#ff4757; color:#fff; font-size:8px; font-weight:800; padding:1px 5px; border-radius:4px; line-height:1; letter-spacing:0.5px; text-transform:uppercase; pointer-events:none; }
+        .virtual-badge { position:absolute; top:-1px; right:-6px; background:#ff4757; color:#fff; font-size:6px; font-weight:800; padding:1px 4px; border-radius:3px; line-height:1; letter-spacing:0.3px; text-transform:uppercase; pointer-events:none; }
+
+        .more-btn { color:#b0b0b0; font-size:9px; font-weight:600; text-transform:uppercase; cursor:pointer; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px; letter-spacing:0.3px; opacity:0.85; transition:0.25s; }
+        .more-btn i { font-size:18px; color:#b0b0b0; transition:0.2s; }
+        .more-btn:hover i, .more-btn:hover { color:#FFD700; opacity:1; }
+        .more-items { display:none; }
+        .sub-header.show-more .more-items { display:inline-flex; gap:16px; }
+
+        /* ACCOUNT CONTENT */
+        .account-container { padding:20px 15px; }
+        .profile-card { background:var(--card-bg); border-radius:20px; padding:20px; display:flex; align-items:center; gap:16px; border:1px solid var(--border); margin-bottom:20px; box-shadow:0 2px 8px rgba(0,0,0,0.015); }
+        .profile-avatar { width:60px; height:60px; border-radius:50%; background:var(--primary); display:flex; align-items:center; justify-content:center; font-size:28px; font-weight:800; color:#1a1d21; flex-shrink:0; cursor:pointer; transition:transform 0.2s; }
+        .profile-avatar img { width:100%; height:100%; border-radius:50%; object-fit:cover; display:block; }
+        .profile-avatar:active { transform:scale(0.95); }
+        .profile-info { flex:1; }
+        .profile-name { font-weight:700; font-size:16px; color:var(--text-light); }
+        .profile-phone { font-size:13px; color:var(--text-dim); margin-top:4px; }
+        .profile-id { font-size:11px; color:#9ca3af; margin-top:2px; }
+        .profile-edit { font-size:12px; color:var(--primary); text-decoration:none; font-weight:600; margin-top:4px; display:inline-block; }
+
+        .balance-card { background:var(--card-bg); border-radius:16px; padding:18px 20px; border:1px solid var(--border); margin-bottom:20px; box-shadow:0 2px 8px rgba(0,0,0,0.015); }
+        .balance-label { font-size:12px; font-weight:600; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:8px; }
+        .balance-amount { font-size:28px; font-weight:800; color:var(--text-light); }
+        .balance-cents { font-size:16px; opacity:0.5; }
+        .bonus-row { margin-top:12px; display:flex; align-items:center; gap:8px; }
+        .bonus-label { font-size:12px; font-weight:600; color:var(--text-dim); }
+        .bonus-value { font-size:18px; font-weight:800; color:var(--primary); }
+
+        .action-buttons { display:flex; gap:12px; margin-bottom:20px; }
+        .action-btn { flex:1; padding:14px; border-radius:14px; font-weight:700; font-size:14px; display:flex; align-items:center; justify-content:center; gap:8px; cursor:pointer; text-decoration:none; border:none; font-family:inherit; transition:0.2s; }
+        .action-btn:active { transform:scale(0.97); }
+        .action-btn.deposit { background:var(--primary); color:#1a1d21; }
+        .action-btn.withdraw { background:#2E2F32; color:#fff; }
+
+        .settings-list { background:var(--card-bg); border-radius:16px; border:1px solid var(--border); overflow:hidden; margin-bottom:20px; box-shadow:0 2px 8px rgba(0,0,0,0.015); }
+        .settings-item { display:flex; align-items:center; justify-content:space-between; padding:16px 20px; border-bottom:1px solid var(--border); text-decoration:none; color:var(--text-light); font-size:14px; font-weight:500; transition:0.2s; }
+        .settings-item:last-child { border-bottom:none; }
+        .settings-item:active { background:#f9fafb; }
+        .settings-item i { font-size:16px; color:var(--text-dim); margin-right:12px; }
+        .settings-item .chevron { color:#9ca3af; font-size:14px; }
+
+        .logout-btn { width:100%; padding:14px; background:var(--danger); color:#fff; border:none; border-radius:14px; font-weight:700; font-size:14px; cursor:pointer; margin-bottom:20px; font-family:inherit; display:flex; align-items:center; justify-content:center; gap:8px; transition:opacity 0.3s; }
+        .logout-btn:active { transform:scale(0.97); }
+        .logout-btn:disabled { opacity:0.6; pointer-events:none; }
+
+        .network-modal { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.34); backdrop-filter:blur(3px); display:flex; align-items:center; justify-content:center; z-index:10005; opacity:0; pointer-events:none; transition:opacity 0.3s; padding:20px; }
+        .network-modal.show { opacity:1; pointer-events:auto; }
+        .network-modal-content { background:#fff; padding:24px 20px; border-radius:20px; max-width:310px; width:100%; text-align:center; transform:scale(0.9); transition:0.3s cubic-bezier(0.34,1.56,0.64,1); }
+        .network-modal.show .network-modal-content { transform:scale(1); }
+        .network-modal-icon { width:50px; height:50px; background:#FFF9E6; color:#FFB800; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:20px; margin:0 auto 14px; }
+
+        .spin-icon { animation: spin 1.2s linear infinite; display:inline-block; }
+        @keyframes spin { 0%{transform:rotate(0deg);} 100%{transform:rotate(360deg);} }
+
+        #footer-placeholder { margin-top:30px; }
+
+        /* 🔥 Back to Top Button (Turbo Drive Enhancement) */
+        #backToTop {
+            position: fixed;
+            bottom: 30px;
+            right: 20px;
+            width: 48px;
+            height: 48px;
+            background: var(--primary);
+            color: #1a1d21;
+            border: none;
+            border-radius: 50%;
+            font-size: 22px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+            z-index: 9999;
+        }
+        #backToTop.visible {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        #backToTop:active {
+            transform: scale(0.92);
+        }
+    </style>
+</head>
+<body>
+    <div id="turnstile-bg-holder" style="display:none;"></div>
+    <div id="slowNetModal" class="network-modal">
+        <div class="network-modal-content">
+            <div class="network-modal-icon"><i class="bi bi-wifi-off"></i></div>
+            <div class="network-modal-title">No Internet Connection</div>
+            <div class="network-modal-text">You appear to be offline. Please check your connection and try again.</div>
+            <button class="network-modal-btn" style="background:#FFD700; border:none; padding:10px; border-radius:12px; width:100%;" onclick="location.reload()">Retry</button>
+        </div>
+    </div>
+
+    <div class="sticky-nav-holder">
+        <header id="mainHeader">
+            <div class="logo-container"><img src="logoo.jpg" alt="Tidye265"></div>
+            <div class="search-wrapper" id="searchBar">
+                <div class="search-inner-box"><i class="bi bi-search"></i><input type="text" placeholder="Search..." id="searchInput"></div>
+                <button class="search-close-btn" id="searchClose"><i class="bi bi-x-lg"></i></button>
+            </div>
+            <div class="header-controls">
+                <img src="18+.png" alt="18+" class="age-badge" onerror="this.style.display='none';">
+                <a href="deposit.html" class="header-balance-container" id="walletTrigger">
+                    <div id="balanceWrapper">
+                        <span class="bal-label">BALANCE</span>
+                        <span class="bal-amount">
+                            <span class="balance-skeleton skeleton skeleton-inline-block"></span>
+                            <span class="balance-real" id="balanceDisplay">MWK 0<span class="bal-cents">.00</span></span>
+                        </span>
+                    </div>
+                    <div class="header-dep-btn"><i class="bi bi-plus-lg"></i></div>
+                </a>
+            </div>
+        </header>
+
+        <nav class="sub-header" id="categoryNav">
+            <a href="live.html" class="sub-item" data-category="live"><img src="live.svg" class="category-icon"><span>Live</span><span class="live-badge">LIVE</span></a>
+            <a href="matches.html" class="sub-item" data-category="matches"><img src="matches.svg" class="category-icon"><span>Sports</span></a>
+            <a href="casino.html" class="sub-item" data-category="casino"><img src="casino.svg" class="category-icon"><span>Casino</span></a>
+            <a href="casino.html" class="sub-item" data-category="aviator"><img src="aviator.png" class="category-icon"><span>Aviator</span></a>
+            <a href="virtual.html" class="sub-item" data-category="virtual"><img src="vi.png" class="category-icon"><span>Virtual</span><span class="virtual-badge">VIRTUAL</span></a>
+            <div class="sub-item more-btn" id="seeMoreSubBtn"><i class="bi bi-three-dots"></i><span>See More</span></div>
+            <div class="more-items" id="moreCategories">
+                <a href="games.html" class="sub-item"><img src="games.svg" class="category-icon"><span>Games</span></a>
+                <a href="esports.html" class="sub-item"><img src="games.svg" class="category-icon"><span>eSports</span></a>
+            </div>
+        </nav>
+    </div>
+
+    <main role="main" id="mainContent">
+        <div class="account-container" id="accountContainer">
+            <!-- Profile card – will be instantly populated -->
+            <div class="profile-card" id="profileCard">
+                <div class="skeleton skeleton-avatar" id="avatarSkeleton"></div>
+                <div style="flex:1;">
+                    <div class="skeleton skeleton-text" id="nameSkeleton"></div>
+                    <div class="skeleton skeleton-text" style="width:40%;" id="phoneSkeleton"></div>
+                    <div class="skeleton skeleton-text" style="width:30%;" id="idSkeleton"></div>
+                </div>
+            </div>
+
+            <!-- Balance card -->
+            <div class="balance-card" id="balanceCard">
+                <div class="balance-label">Current Balance</div>
+                <div class="balance-amount" id="accountBalanceDisplay">
+                    <span class="skeleton" style="display:inline-block; width:120px; height:24px; border-radius:4px;"></span>
+                </div>
+                <div class="bonus-row">
+                    <span class="bonus-label">Bonus</span>
+                    <span class="bonus-value" id="bonusDisplay">MWK 0.00</span>
+                </div>
+            </div>
+
+            <!-- Action Buttons (ALWAYS VISIBLE) -->
+            <div class="action-buttons">
+                <a href="deposit.html" class="action-btn deposit"><i class="bi bi-plus-circle-fill"></i> Deposit</a>
+                <a href="withdraw.html" class="action-btn withdraw"><i class="bi bi-arrow-down-circle-fill"></i> Withdraw</a>
+            </div>
+
+            <!-- Settings list -->
+            <div class="settings-list">
+                <a href="transactions.html" class="settings-item"><i class="bi bi-list-ul"></i> View Transactions <i class="bi bi-chevron-right chevron"></i></a>
+                <a href="settings.html" class="settings-item"><i class="bi bi-gear"></i> Account Settings <i class="bi bi-chevron-right chevron"></i></a>
+                <a href="faq.html" class="settings-item"><i class="bi bi-question-circle"></i> Help & FAQ <i class="bi bi-chevron-right chevron"></i></a>
+                <a href="https://wa.me/265885699967" target="_blank" class="settings-item"><i class="bi bi-whatsapp"></i> Live Support <i class="bi bi-chevron-right chevron"></i></a>
+                <a href="terms.html" class="settings-item"><i class="bi bi-file-text"></i> Terms & Conditions <i class="bi bi-chevron-right chevron"></i></a>
+                <a href="download/Tidye265.apk" class="settings-item" download><i class="bi bi-download"></i> Download APK <i class="bi bi-chevron-right chevron"></i></a>
+            </div>
+
+            <!-- Logout button -->
+            <button class="logout-btn" id="logoutBtn"><i class="bi bi-box-arrow-right"></i> Log Out</button>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <!-- 🔥 Back to Top Button -->
+    <button id="backToTop" aria-label="Back to top"><i class="bi bi-arrow-up"></i></button>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase.js"></script>
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
+    <script>
+        (function() {
+            // ── BETSLIP (unchanged) ──
+            let currentBets = JSON.parse(localStorage.getItem('tidye_bet_slip') || '[]');
+            function saveBets() { localStorage.setItem('tidye_bet_slip', JSON.stringify(currentBets)); }
+            window.removeBet = (i) => { currentBets.splice(i,1); saveBets(); };
+
+            // ── CACHE HELPERS ──
+            const CACHE_KEYS = {
+                BALANCE: 'tidye_balance_cache',
+                BONUS: 'tidye_bonus_cache',
+                PROFILE: 'tidye_profile_cache',
+                FOOTER: 'tidye_footer_cache'
+            };
+            const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+            const BALANCE_FETCH_THROTTLE = 15000; // 15 seconds
+            let lastBalanceFetchTime = 0;
+
+            // ── STANDARD CACHE FUNCTIONS ──
+            function getCachedBalance() {
+                try {
+                    const cached = localStorage.getItem(CACHE_KEYS.BALANCE);
+                    if (!cached) return null;
+                    const { balance, timestamp } = JSON.parse(cached);
+                    if (Date.now() - timestamp < CACHE_TTL) return balance;
+                } catch(e) {}
+                return null;
+            }
+            function cacheBalance(balance) {
+                try {
+                    localStorage.setItem(CACHE_KEYS.BALANCE, JSON.stringify({ balance, timestamp: Date.now() }));
+                } catch(e) {}
+            }
+
+            function getCachedBonus() {
+                try {
+                    const cached = localStorage.getItem(CACHE_KEYS.BONUS);
+                    if (!cached) return null;
+                    const { bonus, timestamp } = JSON.parse(cached);
+                    if (Date.now() - timestamp < CACHE_TTL) return bonus;
+                } catch(e) {}
+                return null;
+            }
+            function cacheBonus(bonus) {
+                try {
+                    localStorage.setItem(CACHE_KEYS.BONUS, JSON.stringify({ bonus, timestamp: Date.now() }));
+                } catch(e) {}
+            }
+
+            function getCachedProfile() {
+                try {
+                    const cached = localStorage.getItem(CACHE_KEYS.PROFILE);
+                    if (!cached) return null;
+                    const { data, timestamp } = JSON.parse(cached);
+                    if (Date.now() - timestamp < CACHE_TTL) return data;
+                } catch(e) {}
+                return null;
+            }
+            function cacheProfile(data) {
+                try {
+                    localStorage.setItem(CACHE_KEYS.PROFILE, JSON.stringify({ data, timestamp: Date.now() }));
+                } catch(e) {}
+            }
+
+            function getCleanSessionToken() {
+                let raw = localStorage.getItem('tidye_session_token');
+                if (!raw || raw === 'null' || raw === 'undefined') return null;
+                try { let p = JSON.parse(raw); if (p?.access_token) return p.access_token; if (typeof p === 'string') return p; } catch(e){}
+                return raw.replace(/^["']|["']$/g, '').trim();
+            }
+
+            function enforceSession() {
+                if (!getCleanSessionToken()) {
+                    window.location.replace('login.html');
+                    return false;
+                }
+                return true;
+            }
+
+            async function checkApiLock() {
+                try {
+                    const res = await fetch(`${window.SUPABASE_URL}/functions/v1/api-lock`, {
+                        headers: { 'Authorization': `Bearer ${window.SUPABASE_ANON_KEY}` }
+                    });
+                    if (!res.ok) return;
+                    const d = await res.json();
+                    if (d.locked) window.location.replace('updating.html');
+                } catch(e){}
+            }
+
+            // ── HEADER & ACCOUNT BALANCE UI ──
+            function updateBalanceUI(balance) {
+                const formatted = balance.toFixed(2);
+                const [main, cents] = formatted.split('.');
+                document.getElementById('balanceDisplay').innerHTML = `MWK ${parseInt(main).toLocaleString()}<span class="bal-cents">.${cents}</span>`;
+                document.getElementById('balanceWrapper').classList.add('balance-loaded');
+
+                const accountBal = document.getElementById('accountBalanceDisplay');
+                if (accountBal) {
+                    accountBal.innerHTML = `MWK ${parseInt(main).toLocaleString()}<span class="bal-cents">.${cents}</span>`;
+                }
+            }
+
+            function updateBonusUI(bonus) {
+                const bonusDisplay = document.getElementById('bonusDisplay');
+                if (bonusDisplay) {
+                    const formatted = Number(bonus || 0).toFixed(2);
+                    bonusDisplay.innerHTML = `MWK ${Number(formatted).toLocaleString()}`;
+                }
+            }
+
+            // ── PROFILE UI ──
+            function updateProfileUI(user) {
+                const name = user.full_name || user.name || 'User';
+                const phone = user.phone_number || 'Not provided';
+                const userId = user.id || localStorage.getItem('tidye_user_code') || '---';
+
+                const nameSkeleton = document.getElementById('nameSkeleton');
+                const phoneSkeleton = document.getElementById('phoneSkeleton');
+                const idSkeleton = document.getElementById('idSkeleton');
+
+                if (nameSkeleton) nameSkeleton.outerHTML = `<div class="profile-name">${name}</div>`;
+                if (phoneSkeleton) phoneSkeleton.outerHTML = `<div class="profile-phone">${phone}</div>`;
+                if (idSkeleton) idSkeleton.outerHTML = `<div class="profile-id">ID: ${userId}</div>`;
+
+                const editLink = document.querySelector('.profile-edit');
+                if (!editLink) {
+                    const infoDiv = document.getElementById('profileCard')?.querySelector('.profile-info');
+                    if (infoDiv) {
+                        infoDiv.insertAdjacentHTML('beforeend', '<a href="settings.html" class="profile-edit"><i class="bi bi-pencil-square"></i> Edit Profile</a>');
+                    }
+                }
+            }
+
+            // ── AVATAR ──
+            function getCurrentAvatar() {
+                const idx = parseInt(localStorage.getItem('tidye_user_avatar_idx') || '6');
+                return `user${idx}.jpeg`;
+            }
+            function cycleAvatar() {
+                let idx = parseInt(localStorage.getItem('tidye_user_avatar_idx') || '6');
+                idx = idx >= 7 ? 1 : idx + 1;
+                localStorage.setItem('tidye_user_avatar_idx', idx);
+                const avatarImg = document.getElementById('avatarImg');
+                if (avatarImg) avatarImg.src = `user${idx}.jpeg`;
+                const profileAvatar = document.querySelector('.profile-avatar');
+                if (profileAvatar && !document.getElementById('avatarImg')) {
+                    profileAvatar.innerHTML = `<img id="avatarImg" src="user${idx}.jpeg" alt="Avatar" onerror="this.style.display='none'; this.parentElement.innerHTML='<span style=font-size:28px;font-weight:800;color:#1a1d21>U</span>';">`;
+                }
+            }
+
+            // ── LOGOUT ──
+            async function logout() {
+                const btn = document.getElementById('logoutBtn');
+                if (!btn) return;
+                btn.disabled = true;
+                btn.innerHTML = '<i class="bi bi-arrow-repeat spin-icon"></i> Logging out...';
+
+                const user_id = (window._userData && window._userData.id) || localStorage.getItem('tidye_user_code');
+                const session_token = getCleanSessionToken();
+
+                if (user_id && session_token) {
+                    try {
+                        await fetch(`${window.SUPABASE_URL}/functions/v1/api-logout`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ user_id, session_token })
+                        });
+                    } catch(e) {}
+                }
+
+                localStorage.removeItem('tidye_session_token');
+                localStorage.removeItem('tidye_user_code');
+                localStorage.removeItem('tidye_balance_cache');
+                localStorage.removeItem('tidye_bonus_cache');
+                localStorage.removeItem('tidye_profile_cache');
+                localStorage.removeItem('tidye_phone_network_cache');
+                sessionStorage.clear();
+                window.location.replace('login.html');
+            }
+
+            // ── TURNSTILE ──
+            const TURNSTILE_SITEKEY = "0x4AAAAAADQhPHJB5viRCO84";
+            function triggerTurnstile() {
+                if (typeof turnstile === 'undefined') { setTimeout(triggerTurnstile, 100); return; }
+                try {
+                    turnstile.render('#turnstile-bg-holder', {
+                        sitekey: TURNSTILE_SITEKEY, action: 'account', size: 'invisible',
+                        callback: token => { window.turnstileToken = token; sessionStorage.setItem('tidye_turnstile_token', token); },
+                        'expired-callback': () => { window.turnstileToken = null; },
+                        'error-callback': () => { window.turnstileToken = null; }
+                    });
+                } catch(e){}
+            }
+
+            // ── FOOTER INSTANT CACHE ──
+            const FOOTER_CACHE_TTL = 24 * 60 * 60 * 1000;
+            function getCachedFooter() {
+                try {
+                    const cached = localStorage.getItem(CACHE_KEYS.FOOTER);
+                    if (!cached) return null;
+                    const { html, timestamp } = JSON.parse(cached);
+                    if (Date.now() - timestamp < FOOTER_CACHE_TTL) return html;
+                } catch (e) {}
+                return null;
+            }
+            function cacheFooter(html) {
+                try { localStorage.setItem(CACHE_KEYS.FOOTER, JSON.stringify({ html, timestamp: Date.now() })); } catch(e) {}
+            }
+            function executeScripts(container) {
+                container.querySelectorAll('script').forEach(s => {
+                    const ns = document.createElement('script');
+                    ns.textContent = s.textContent;
+                    document.body.appendChild(ns).remove();
+                });
+            }
+            async function injectFooter() {
+                const placeholder = document.getElementById('footer-placeholder');
+                if (!placeholder) return;
+                
+                const baseFooter = '<footer style="background:#29282b;color:#888;padding:20px 15px;border-top:1px solid #3a3a3a;text-align:center;font-size:13px;">&copy; 2026 Tidye265. All rights reserved.</footer>';
+                placeholder.innerHTML = baseFooter;
+
+                const cached = getCachedFooter();
+                if (cached) {
+                    placeholder.innerHTML = cached;
+                    executeScripts(placeholder);
+                } else {
+                    try {
+                        const res = await fetch('footer.html');
+                        if (res.ok) {
+                            const html = await res.text();
+                            if (html) {
+                                cacheFooter(html);
+                                placeholder.innerHTML = html;
+                                executeScripts(placeholder);
+                            }
+                        }
+                    } catch(e) { /* silent */ }
+                }
+            }
+
+            // ── BACK TO TOP LOGIC ──
+            function initBackToTop() {
+                const btn = document.getElementById('backToTop');
+                if (!btn) return;
+                window.addEventListener('scroll', () => {
+                    if (window.scrollY > 300) {
+                        btn.classList.add('visible');
+                    } else {
+                        btn.classList.remove('visible');
+                    }
+                }, { passive: true });
+                btn.addEventListener('click', () => {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
+            }
+
+            // ── CORE INIT FUNCTION FOR ACCOUNT PAGE ──
+            function initAccountPage() {
+                // Instant render from Cache
+                const cachedBalance = getCachedBalance();
+                if (cachedBalance !== null) {
+                    updateBalanceUI(cachedBalance);
+                } else {
+                    document.getElementById('balanceWrapper').classList.remove('balance-loaded');
+                }
+
+                const cachedBonus = getCachedBonus();
+                updateBonusUI(cachedBonus !== null ? cachedBonus : 0);
+
+                const cachedProfile = getCachedProfile();
+                if (cachedProfile) {
+                    updateProfileUI(cachedProfile);
+                }
+
+                // Re-run avatar injection (ensures instant avatar)
+                const avatarSkeleton = document.getElementById('avatarSkeleton');
+                if (avatarSkeleton) {
+                    const idx = parseInt(localStorage.getItem('tidye_user_avatar_idx') || '6');
+                    const avatarSrc = `user${idx}.jpeg`;
+                    avatarSkeleton.outerHTML = `
+                        <div class="profile-avatar" onclick="cycleAvatar()">
+                            <img id="avatarImg" src="${avatarSrc}" alt="Avatar" onerror="this.style.display='none'; this.parentElement.innerHTML='<span style=font-size:28px;font-weight:800;color:#1a1d21>U</span>';">
+                        </div>
+                    `;
+                }
+
+                // Setup UI
+                initBackToTop();
+                const moreBtn = document.getElementById('seeMoreSubBtn');
+                const subHeader = document.getElementById('categoryNav');
+                if (moreBtn && subHeader) {
+                    moreBtn.addEventListener('click', e => {
+                        e.preventDefault();
+                        subHeader.classList.toggle('show-more');
+                        moreBtn.querySelector('span').textContent = subHeader.classList.contains('show-more') ? 'Less' : 'See More';
+                    });
+                }
+
+                // Fetch fresh data in background (Stale-While-Revalidate)
+                Promise.all([
+                    fetchBalanceIfNeeded(),
+                    fetchUserProfile(),
+                    checkApiLock()
+                ]);
+
+                if (!window.turnstileToken) triggerTurnstile();
+            }
+            // Expose to global scope for SPA navigation
+            window.initAccountPage = initAccountPage;
+
+            // ── THROTTLED BALANCE FETCH ──
+            async function fetchBalanceIfNeeded() {
+                const now = Date.now();
+                if (now - lastBalanceFetchTime < BALANCE_FETCH_THROTTLE) return;
+                const tok = getCleanSessionToken();
+                if (!tok) return;
+                try {
+                    const res = await fetch(`${window.SUPABASE_URL}/functions/v1/wallet-api`, {
+                        headers: { 'Authorization': `Bearer ${tok}` }
+                    });
+                    if (res.ok) {
+                        const d = await res.json();
+                        const balance = Number(d.balance);
+                        lastBalanceFetchTime = Date.now();
+                        const currentDisplayed = document.getElementById('balanceDisplay').textContent.replace(/[^0-9.-]+/g,"");
+                        if (parseFloat(currentDisplayed) !== balance) {
+                            updateBalanceUI(balance);
+                        }
+                        cacheBalance(balance);
+                        if (typeof d.bonus === 'number') {
+                            cacheBonus(d.bonus);
+                            updateBonusUI(d.bonus);
+                        }
+                    } else if (res.status === 401) {
+                        window.location.replace('login.html');
+                    }
+                } catch(e) {}
+            }
+
+            // ── PROFILE FETCH ──
+            async function fetchUserProfile() {
+                const tok = getCleanSessionToken();
+                if (!tok) return;
+                try {
+                    const res = await fetch(`${window.SUPABASE_URL}/functions/v1/settings-api`, {
+                        headers: { 'Authorization': `Bearer ${tok}` }
+                    });
+                    if (res.ok) {
+                        const d = await res.json();
+                        localStorage.setItem('tidye_user_code', d.id || '');
+                        cacheProfile(d);
+                        window._userData = d;
+                        updateProfileUI(d);
+                        if (typeof d.bonus === 'number') {
+                            cacheBonus(d.bonus);
+                            updateBonusUI(d.bonus);
+                        }
+                    } else if (res.status === 401) {
+                        window.location.replace('login.html');
+                    }
+                } catch(e) { console.warn('Profile fetch error', e); }
+            }
+
+            // ── BACKGROUND PREFETCH (VISIBILITY CHANGE) ──
+            document.addEventListener('visibilitychange', () => {
+                if (document.hidden) {
+                    const token = getCleanSessionToken();
+                    if (!token) return;
+                    // Fire and forget background refresh for account data
+                    Promise.all([
+                        fetch(`${window.SUPABASE_URL}/functions/v1/wallet-api`, {
+                            headers: { 'Authorization': `Bearer ${token}` }
+                        }).then(async res => {
+                            if (!res.ok) return;
+                            const d = await res.json();
+                            if (typeof d.balance === 'number') {
+                                cacheBalance(d.balance);
+                                if (typeof d.bonus === 'number') cacheBonus(d.bonus);
+                            }
+                        }).catch(() => {}),
+                        fetch(`${window.SUPABASE_URL}/functions/v1/settings-api`, {
+                            headers: { 'Authorization': `Bearer ${token}` }
+                        }).then(async res => {
+                            if (!res.ok) return;
+                            const d = await res.json();
+                            cacheProfile(d);
+                        }).catch(() => {})
+                    ]);
+                }
+            });
+
+            // ── TURBO DRIVE / SPA NAVIGATION ENGINE ──
+            function generateSkeletonHTML(count) {
+                let html = '';
+                for (let i = 0; i < count; i++) {
+                    html += `<div class="skeleton-tx-item"><div class="skeleton skeleton-circle"></div><div class="skeleton skeleton-line" style="flex:1;"></div><div class="skeleton skeleton-line short"></div></div>`;
+                }
+                return html;
+            }
+
+            function navigateTo(url, event) {
+                if (event) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+
+                if (url.startsWith('http') || url.startsWith('#') || url.startsWith('mailto:')) return;
+
+                let fullUrl = url;
+                if (!url.startsWith('/')) {
+                    fullUrl = '/' + url;
+                }
+
+                sessionStorage.setItem('scrollPos', window.scrollY);
+                history.pushState({}, '', fullUrl);
+
+                const main = document.querySelector('main');
+                main.innerHTML = `<div class="account-container" id="accountContainer"><div class="profile-card"><div class="skeleton skeleton-avatar"></div><div style="flex:1;"><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text" style="width:40%;"></div><div class="skeleton skeleton-text" style="width:30%;"></div></div></div><div class="balance-card"><div class="balance-label">Current Balance</div><div class="balance-amount"><span class="skeleton" style="display:inline-block; width:120px; height:24px; border-radius:4px;"></span></div><div class="bonus-row"><span class="bonus-label">Bonus</span><span class="bonus-value" style="color:#FFD700;">MWK 0.00</span></div></div><div class="action-buttons"><a href="deposit.html" class="action-btn deposit" style="pointer-events:none;"><i class="bi bi-plus-circle-fill"></i> Deposit</a><a href="withdraw.html" class="action-btn withdraw" style="pointer-events:none;"><i class="bi bi-arrow-down-circle-fill"></i> Withdraw</a></div><div class="settings-list"><div class="settings-item" style="pointer-events:none;"><i class="bi bi-list-ul"></i> View Transactions <i class="bi bi-chevron-right chevron"></i></div><div class="settings-item" style="pointer-events:none;"><i class="bi bi-gear"></i> Account Settings <i class="bi bi-chevron-right chevron"></i></div><div class="settings-item" style="pointer-events:none;"><i class="bi bi-question-circle"></i> Help & FAQ <i class="bi bi-chevron-right chevron"></i></div><div class="settings-item" style="pointer-events:none;"><i class="bi bi-whatsapp"></i> Live Support <i class="bi bi-chevron-right chevron"></i></div><div class="settings-item" style="pointer-events:none;"><i class="bi bi-file-text"></i> Terms & Conditions <i class="bi bi-chevron-right chevron"></i></div><div class="settings-item" style="pointer-events:none;"><i class="bi bi-download"></i> Download APK <i class="bi bi-chevron-right chevron"></i></div></div><button class="logout-btn" style="pointer-events:none; opacity:0.5;"><i class="bi bi-box-arrow-right"></i> Log Out</button></div>`;
+
+                fetch(fullUrl)
+                    .then(res => res.text())
+                    .then(html => {
+                        const parser = new DOMParser();
+                        const doc = parser.parseFromString(html, 'text/html');
+                        const newMain = doc.querySelector('main');
+                        if (newMain) {
+                            main.innerHTML = newMain.innerHTML;
+                            // Dispatch custom page:load event to trigger page init
+                            document.dispatchEvent(new CustomEvent('page:load', { detail: { url: fullUrl } }));
+                            // Restore scroll position
+                            const saved = sessionStorage.getItem('scrollPos');
+                            if (saved) {
+                                setTimeout(() => window.scrollTo(0, parseInt(saved, 10)), 50);
+                                sessionStorage.removeItem('scrollPos');
+                            }
+                        } else {
+                            window.location.href = fullUrl;
+                        }
+                    })
+                    .catch(err => {
+                        console.error('SPA Navigation error:', err);
+                        window.location.href = fullUrl;
+                    });
+            }
+
+            // Intercept all internal link clicks
+            document.addEventListener('click', (e) => {
+                const link = e.target.closest('a');
+                if (!link) return;
+                const href = link.getAttribute('href');
+                if (!href) return;
+                if (!href.startsWith('http') && !href.startsWith('#') && !href.startsWith('mailto:')) {
+                    navigateTo(href, e);
+                }
+            });
+
+            // Handle browser Back/Forward
+            window.addEventListener('popstate', (e) => {
+                const url = window.location.pathname;
+                const main = document.querySelector('main');
+                main.innerHTML = `<div class="account-container" id="accountContainer"><div class="profile-card"><div class="skeleton skeleton-avatar"></div><div style="flex:1;"><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text" style="width:40%;"></div><div class="skeleton skeleton-text" style="width:30%;"></div></div></div><div class="balance-card"><div class="balance-label">Current Balance</div><div class="balance-amount"><span class="skeleton" style="display:inline-block; width:120px; height:24px; border-radius:4px;"></span></div><div class="bonus-row"><span class="bonus-label">Bonus</span><span class="bonus-value" style="color:#FFD700;">MWK 0.00</span></div></div><div class="action-buttons"><a href="deposit.html" class="action-btn deposit" style="pointer-events:none;"><i class="bi bi-plus-circle-fill"></i> Deposit</a><a href="withdraw.html" class="action-btn withdraw" style="pointer-events:none;"><i class="bi bi-arrow-down-circle-fill"></i> Withdraw</a></div><div class="settings-list"><div class="settings-item" style="pointer-events:none;"><i class="bi bi-list-ul"></i> View Transactions <i class="bi bi-chevron-right chevron"></i></div><div class="settings-item" style="pointer-events:none;"><i class="bi bi-gear"></i> Account Settings <i class="bi bi-chevron-right chevron"></i></div><div class="settings-item" style="pointer-events:none;"><i class="bi bi-question-circle"></i> Help & FAQ <i class="bi bi-chevron-right chevron"></i></div><div class="settings-item" style="pointer-events:none;"><i class="bi bi-whatsapp"></i> Live Support <i class="bi bi-chevron-right chevron"></i></div><div class="settings-item" style="pointer-events:none;"><i class="bi bi-file-text"></i> Terms & Conditions <i class="bi bi-chevron-right chevron"></i></div><div class="settings-item" style="pointer-events:none;"><i class="bi bi-download"></i> Download APK <i class="bi bi-chevron-right chevron"></i></div></div><button class="logout-btn" style="pointer-events:none; opacity:0.5;"><i class="bi bi-box-arrow-right"></i> Log Out</button></div>`;
+                fetch(url)
+                    .then(res => res.text())
+                    .then(html => {
+                        const parser = new DOMParser();
+                        const doc = parser.parseFromString(html, 'text/html');
+                        const newMain = doc.querySelector('main');
+                        if (newMain) {
+                            main.innerHTML = newMain.innerHTML;
+                            document.dispatchEvent(new CustomEvent('page:load', { detail: { url: url } }));
+                        }
+                    });
+            });
+
+            // ── PAGE INITIALIZATION LISTENER (Turbo:load replacement) ──
+            function handlePageLoad(e) {
+                if (!enforceSession()) return;
+                const url = e ? e.detail.url : window.location.pathname;
+                if (url.includes('account') || url.endsWith('account.html')) {
+                    if (document.getElementById('accountContainer')) {
+                        initAccountPage();
+                    }
+                }
+            }
+
+            document.addEventListener('DOMContentLoaded', () => {
+                // Trigger initial load
+                handlePageLoad({ detail: { url: window.location.pathname } });
+                // Also listen for future navigations
+                document.addEventListener('page:load', handlePageLoad);
+            });
+
+            // ── OFFLINE MODAL ──
+            function checkOffline() {
+                const modal = document.getElementById('slowNetModal');
+                if (!navigator.onLine) modal.classList.add('show');
+                else modal.classList.remove('show');
+            }
+            window.addEventListener('online', checkOffline);
+            window.addEventListener('offline', checkOffline);
+
+            // Attach logout
+            document.getElementById('logoutBtn').addEventListener('click', logout);
+        })();
+    </script>
+</body>
+</html>
