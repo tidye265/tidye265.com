@@ -353,17 +353,17 @@ const AccountPage = () => {
 
                     {/* Action Buttons */}
                     <div className="action-buttons">
-                        <a href="deposit.html" className="action-btn deposit"><i className="bi bi-plus-circle-fill"></i> Deposit</a>
-                        <a href="withdraw.html" className="action-btn withdraw"><i className="bi bi-arrow-down-circle-fill"></i> Withdraw</a>
+                        <a href="deposit" className="action-btn deposit"><i className="bi bi-plus-circle-fill"></i> Deposit</a>
+                        <a href="withdraw" className="action-btn withdraw"><i className="bi bi-arrow-down-circle-fill"></i> Withdraw</a>
                     </div>
 
                     {/* Settings List */}
                     <div className="settings-list">
-                        <a href="transactions.html" className="settings-item"><i className="bi bi-list-ul"></i> View Transactions <i className="bi bi-chevron-right chevron"></i></a>
-                        <a href="settings.html" className="settings-item"><i className="bi bi-gear"></i> Account Settings <i className="bi bi-chevron-right chevron"></i></a>
-                        <a href="faq.html" className="settings-item"><i className="bi bi-question-circle"></i> Help & FAQ <i className="bi bi-chevron-right chevron"></i></a>
+                        <a href="transactions" className="settings-item"><i className="bi bi-list-ul"></i> View Transactions <i className="bi bi-chevron-right chevron"></i></a>
+                        <a href="settings" className="settings-item"><i className="bi bi-gear"></i> Account Settings <i className="bi bi-chevron-right chevron"></i></a>
+                        <a href="faq" className="settings-item"><i className="bi bi-question-circle"></i> Help & FAQ <i className="bi bi-chevron-right chevron"></i></a>
                         <a href="https://wa.me/265885699967" target="_blank" rel="noreferrer" className="settings-item"><i className="bi bi-whatsapp"></i> Live Support <i className="bi bi-chevron-right chevron"></i></a>
-                        <a href="terms.html" className="settings-item"><i className="bi bi-file-text"></i> Terms & Conditions <i className="bi bi-chevron-right chevron"></i></a>
+                        <a href="terms" className="settings-item"><i className="bi bi-file-text"></i> Terms & Conditions <i className="bi bi-chevron-right chevron"></i></a>
                         <a href="download/Tidye265.apk" className="settings-item" download><i className="bi bi-download"></i> Download APK <i className="bi bi-chevron-right chevron"></i></a>
                     </div>
 
