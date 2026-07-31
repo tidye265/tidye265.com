@@ -353,8 +353,8 @@ const AccountPage = () => {
 
                     {/* Action Buttons */}
                     <div className="action-buttons">
-                        <a href="deposit" className="action-btn deposit"><i className="bi bi-plus-circle-fill"></i> Deposit</a>
-                        <a href="withdraw" className="action-btn withdraw"><i className="bi bi-arrow-down-circle-fill"></i> Withdraw</a>
+                        <a href="deposit" className="action-btn deposit"><i className="bi bi-plus-circle-fill"></i> DEPOSIT</a>
+                        <a href="withdraw" className="action-btn withdraw"><i className="bi bi-arrow-down-circle-fill"></i> WITHDRAW</a>
                     </div>
 
                     {/* Settings List */}
