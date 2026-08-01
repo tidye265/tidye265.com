@@ -4,7 +4,6 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import HomePage from './pages/Home';
 import AccountPage from './pages/Account';
 
-
 function App() {
   return (
     <BrowserRouter>
@@ -16,8 +15,7 @@ function App() {
         {/* Account Route */}
         <Route path="/account" element={<AccountPage />} />
         
-        
-        {/* Additional routes mutha kuwonjezera pano */}
+        {/* Additional routes - Withdraw yachotsedwa */}
       </Routes>
     </BrowserRouter>
   );
