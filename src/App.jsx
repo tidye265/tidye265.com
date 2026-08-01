@@ -3,7 +3,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import HomePage from './pages/Home';
 import AccountPage from './pages/Account';
-import WithdrawPage from './pages/Withdraw';
+
 
 function App() {
   return (
@@ -16,8 +16,6 @@ function App() {
         {/* Account Route */}
         <Route path="/account" element={<AccountPage />} />
         
-        {/* Withdraw Route */}
-        <Route path="/withdraw" element={<WithdrawPage />} />
         
         {/* Additional routes mutha kuwonjezera pano */}
       </Routes>
