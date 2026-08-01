@@ -371,7 +371,7 @@ const WithdrawPage = () => {
             <div className={`fullscreen-modal ${isInfoModalOpen ? 'active' : ''}`} onClick={(e) => { if(e.target === e.currentTarget) setIsInfoModalOpen(false); }}>
                 <div className="modal-card">
                     <div className="modal-header">
-                        <span><i className="bi bi-cash-stack" style={{ color: '#FFD700' }}></i> Withdraw Funds</span>
+                        <span><i className="bi bi-cash-stack" style={{ color: '#FFD700' }}></i> WITHDRAW FUND</span>
                         <button className="modal-close" onClick={() => setIsInfoModalOpen(false)}><i className="bi bi-x-lg"></i></button>
                     </div>
                     <div>
