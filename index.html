@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>tiDye265</title>
+    <meta name="theme-color" content="#121212" />
+    <meta name="description" content="tiDye265 Play Smart. Win Big. Feel the Thrill. Bet from MK 20 and enjoy up to 1500% WiN BIG BONUS, premium casino games, eSports & sports — all in one smart entertainment platform, Let's Enjoy together." />
+    <meta name="keywords" content="Malawi gaming, Betting,tiDye265, tidye265, tidyebet, tidye, P2P games, Bawo, Chess, Tidye265, secure casino, sports betting Malawi, online games Malawi" />
+    <meta name="robots" content="index, follow" />
+    <meta name="author" content="Tidye265" />
+
+    <link rel="canonical" href="https://www.tidye265.com" />
+
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png" />
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png" />
+    
+    <link rel="icon" type="image/png" sizes="192x192" href="/android-chrome-192x192.png" />
+    <link rel="icon" type="image/png" sizes="512x512" href="/android-chrome-512x512.png" />
+    
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta property="og:title" content="tiDye265 | Play Smart. Win Big." />
+    <meta property="og:description" content="tiDye265 Play Smart. Win Big. Feel the Thrill. Bet from MK 20 and enjoy up to 1500% WiN BIG BONUS, premium casino games, eSports & sports — all in one smart entertainment platform, Let's Enjoy together." />
+    <meta property="og:image" content="https://www.tidye265.com/logo1.png" />
+    <meta property="og:url" content="https://www.tidye265.com" />
+    <meta property="og:type" content="website" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="tiDye265 | Play Smart. Win Big." />
+    <meta name="twitter:description" content="tiDye265 Play Smart. Win Big. Feel the Thrill. Bet from MK 20 and enjoy up to 1500% WiN BIG BONUS, premium casino games, eSports & sports — all in one smart entertainment platform, Let's Enjoy together." />
+    <meta name="twitter:image" content="https://www.tidye265.com/logo1.png" />
+
+    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://challenges.cloudflare.com https://*.supabase.co https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; font-src https://fonts.gstatic.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; img-src 'self' https: data: blob:; connect-src 'self' https://*.supabase.co https://api.example.com; frame-src https://challenges.cloudflare.com;" />
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lexend:wght@400;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Tidye265",
+        "url": "https://www.tidye265.com",
+        "description": "tiDye265 Play Smart. Win Big. Feel the Thrill. Bet from MK 20 and enjoy up to 1500% WiN BIG BONUS, premium casino games, eSports & sports — all in one smart entertainment platform, Let's Enjoy together.",
+        "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://www.tidye265.com/?search={search_term_string}",
+            "query-input": "required name=search_term_string"
+        }
+    }
+    </script>
+
+    <style>
+        /* ========== DASHBOARD-LIKE THEME ========== */
+        :root {
+            --bg: #F4F6F8;
+            --primary: #FFD700;
+            --card-bg: #FFFFFF;
+            --text-light: #1a1d21;
+            --text-dim: #6b7280;
+            --border: #eef2f6;
+            --header-bg: #29282b;
+            --sub-header-bg: #29282b;
+            --dark-skeleton-base: #363538;
+            --dark-skeleton-shine: #29282b;
+        }
+
+        * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+
+        body {
+            background: var(--bg);
+            color: var(--text-light);
+            font-family: 'Inter', sans-serif;
+            padding-bottom: 95px; /* room for bottom nav */
+            overflow-x: hidden;
+        }
+
+        .skeleton {
+            background: linear-gradient(90deg, var(--dark-skeleton-base) 25%, var(--dark-skeleton-shine) 50%, var(--dark-skeleton-base) 75%);
+            background-size: 200% 100%;
+            animation: skeleton-loading 1.5s infinite;
+        }
+        @keyframes skeleton-loading {
+            0%{background-position:200% 0}
+            100%{background-position:-200% 0}
+        }
+
+        /* ── Sticky Header (Dark) ── */
+        .sticky-nav-holder {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: var(--header-bg);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        header {
+            padding: 0 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #3a3a3a;
+            height: 70px;
+            position: relative;
+            background: var(--header-bg);
+        }
+
+        .logo-container img {
+            height: 46px;
+            border-radius: 5px;
+            object-fit: contain;
+        }
+
+        .search-wrapper {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--header-bg);
+            display: flex;
+            align-items: center;
+            padding: 0 15px;
+            gap: 12px;
+            transform: translateY(-100%);
+            opacity: 0;
+            pointer-events: none;
+            transition: 0.35s cubic-bezier(0.4,0,0.2,1);
+            z-index: 20;
+        }
+        .search-wrapper.active {
+            transform: translateY(0);
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .search-inner-box {
+            flex: 1;
+            background: #2c2d30;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            padding: 0 15px;
+            border: 1px solid #3a3b3f;
+        }
+        .search-inner-box input {
+            background: transparent;
+            border: none;
+            outline: none;
+            width: 100%;
+            font-size: 15px;
+            font-family: 'Lexend', sans-serif;
+            margin-left: 10px;
+            color: #f0f0f0;
+        }
+        .search-inner-box input::placeholder { color: #aaa; }
+        .search-inner-box i { color: #9ca3af; }
+        .search-close-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: #e0e0e0;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            padding: 5px;
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 10;
+        }
+        .auth-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #3A3A3D;
+            padding: 4px;
+            border-radius: 10px;
+            border: 1px solid #4a4a4a;
+        }
+        .btn-login {
+            text-decoration: none;
+            color: #e0e0e0;
+            font-family: 'Lexend';
+            font-weight: 700;
+            font-size: 12px;
+            padding: 7px 14px;
+            border-radius: 8px;
+            background: transparent;
+            transition: 0.2s;
+            cursor: pointer;
+            border: none;
+        }
+        .btn-login:hover { background: #4a4a4a; }
+        .btn-join {
+            text-decoration: none;
+            background: var(--primary);
+            color: #1a1d21;
+            font-family: 'Lexend';
+            font-weight: 800;
+            font-size: 12px;
+            padding: 7px 16px;
+            border-radius: 8px;
+            transition: 0.2s;
+            cursor: pointer;
+            border: none;
+        }
+        .btn-join:hover { filter: brightness(1.1); }
+
+        /* ── Compact Auth Bar ── */
+        .compact-auth-bar {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.35s ease, padding 0.35s ease, border 0.35s ease;
+            background: #1e1f22;
+            border-bottom: 0 solid transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            padding: 0 15px;
+            flex-wrap: wrap;
+            color: #fff;
+        }
+        .compact-auth-bar.active {
+            max-height: 64px;
+            padding: 12px 15px;
+            border-bottom: 1px solid #2a2a2d;
+        }
+        .compact-auth-text {
+            font-family: 'Lexend';
+            font-size: 13px;
+            color: #b0b0b0;
+            font-weight: 500;
+        }
+        .compact-auth-buttons {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #3A3A3D;
+            padding: 3px;
+            border-radius: 10px;
+            border: 1px solid #4a4a4a;
+        }
+        .compact-auth-buttons .btn-login,
+        .compact-auth-buttons .btn-join {
+            font-size: 11px;
+            padding: 6px 12px;
+        }
+        .compact-auth-close {
+            background: none;
+            border: none;
+            font-size: 18px;
+            color: #9ca3af;
+            cursor: pointer;
+            padding: 4px 8px;
+            line-height: 1;
+        }
+
+        /* ── Sub‑header (Categories) ── */
+        .sub-header {
+            display: flex;
+            overflow-x: auto;
+            white-space: nowrap;
+            padding: 10px 12px;
+            gap: 16px;
+            background: var(--sub-header-bg);
+            border-bottom: 1px solid #1a1a1a;
+            scrollbar-width: none;
+            align-items: center;
+        }
+        .sub-header::-webkit-scrollbar { display: none; }
+        .sub-item {
+            font-family: 'Lexend', sans-serif;
+            font-size: 11px;
+            font-weight: 600;
+            color: #b0b0b0;
+            text-decoration: none;
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            position: relative;
+            transition: 0.25s;
+            cursor: pointer;
+            background: none;
+            border: none;
+            flex-shrink: 0;
+            padding: 4px 6px 2px;
+        }
+        .sub-item.active {
+            color: #FFD700 !important;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 0;
+        }
+        .sub-item:hover { color: #fff; }
+        .sub-item .category-icon {
+            width: 20px;
+            height: 20px;
+            object-fit: contain;
+            filter: brightness(0) invert(1);
+        }
+        .sub-item.active .category-icon { filter: brightness(0) invert(1); }
+
+        /* ── INDEX SPECIFIC CONTENT ── */
+        .welcome-section { text-align: center; padding: 25px 20px 5px; background: #fff; }
+        .welcome-title {
+            font-family: 'Lexend', sans-serif; font-weight: 800; font-size: 28px;
+            color: var(--text-light); margin-bottom: 8px; letter-spacing: -0.5px;
+        }
+        .welcome-title span { color: var(--primary); background: #1a1d21; padding: 2px 8px; border-radius: 6px; }
+        .welcome-sub { font-size: 14px; color: var(--text-dim); font-weight: 500; margin-bottom: 5px; }
+        .premium-badge {
+            display: inline-block; background: #1a1d21; color: var(--primary); font-family: 'Lexend';
+            font-weight: 700; font-size: 11px; padding: 6px 15px; border-radius: 20px; letter-spacing: 0.5px;
+            margin-top: 10px; text-transform: uppercase;
+        }
+
+        .quick-stats-strip {
+            display: flex; flex-wrap: wrap; gap: 10px; padding: 15px 20px; justify-content: center;
+            background: #fff; border-top: 1px solid #eee;
+        }
+        .stat-chip {
+            display: flex; align-items: center; gap: 8px; background: #f4f6f8;
+            border: 1px solid #e5e7eb; border-radius: 12px; padding: 8px 14px;
+            font-family: 'Lexend'; font-size: 12px; font-weight: 600; color: var(--text-light);
+        }
+        .stat-chip i { color: var(--primary); font-size: 16px; background: #1a1d21; border-radius: 50%; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; }
+
+        .live-ticker-bar {
+            background: #1a1d21; color: #fff; padding: 10px 0; margin: 10px 20px;
+            border-radius: 12px; overflow: hidden; display: flex; align-items: center;
+        }
+        .live-ticker-label {
+            background: #e53935; color: #fff; font-family: 'Lexend'; font-weight: 800; font-size: 11px;
+            padding: 6px 14px; border-radius: 4px; margin-left: 12px; animation: pulse-live 1.5s infinite;
+        }
+        @keyframes pulse-live { 0%,100%{ opacity:1; } 50%{ opacity:0.6; } }
+        .live-ticker-scroll { overflow: hidden; flex: 1; height: 28px; margin: 0 12px; }
+        .live-ticker-track {
+            display: flex; gap: 30px; white-space: nowrap;
+            animation: ticker-scroll 35s linear infinite;
+            font-family: 'Inter'; font-size: 13px; font-weight: 500; align-items: center; height: 100%;
+        }
+        @keyframes ticker-scroll { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+        .live-ticker-item { display: flex; align-items: center; gap: 8px; }
+        .live-ticker-odds { background: var(--primary); color: #000; padding: 3px 10px; border-radius: 4px; font-weight: 700; font-size: 12px; }
+
+        .two-box-section {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 20px; margin: 10px 0 20px;
+        }
+        .feature-box {
+            position: relative; height: 62vh; min-height: 340px; border-radius: 20px;
+            overflow: hidden; text-decoration: none; display: flex; align-items: flex-end; padding: 20px;
+            border: 2px solid #eef2f6; transition: 0.2s; background: #1a1d21;
+        }
+        .feature-box img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; }
+        .feature-box::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.25) 40%, rgba(0,0,0,0.15) 100%); z-index: 2; }
+        .feature-box-label { position: relative; z-index: 3; font-family: 'Lexend', sans-serif; font-weight: 800; font-size: 28px; color: #fff; text-shadow: 0 2px 8px rgba(0,0,0,0.7); }
+        .feature-box-badge { position: absolute; top: 16px; right: 16px; z-index: 4; background: rgba(0,0,0,0.65); color: #FFD700; font-family: 'Lexend'; font-weight: 700; font-size: 10px; padding: 5px 10px; border-radius: 20px; }
+
+        .betting-features-section {
+            padding: 10px 20px 20px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
+        }
+        .betting-feature-card {
+            background: rgba(255,255,255,0.85); backdrop-filter: blur(8px); border: 1px solid #e5e7eb;
+            border-radius: 14px; padding: 16px 14px; text-align: center; transition: 0.2s; cursor: pointer;
+            text-decoration: none; color: var(--text-light); display: flex; flex-direction: column; align-items: center; gap: 8px;
+        }
+        .betting-feature-card:hover { border-color: var(--primary); transform: translateY(-3px); }
+        .betting-feature-icon { width: 44px; height: 44px; background: #1a1d21; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; color: var(--primary); }
+
+        .important-links { padding: 20px; text-align: center; background: rgba(255,255,255,0.8); margin: 20px; border-radius: 14px; border: 1px solid #e5e7eb; }
+        .important-links a { color: var(--text-light); margin: 0 12px; font-weight: 600; text-decoration: none; font-size: 14px; }
+
+        .cookie-consent-bar {
+            position: fixed; bottom: 0; left: 0; width: 100%; background: #ffffff; border-top: 1px solid #e5e7eb;
+            z-index: 10001; display: flex; align-items: center; justify-content: center; gap: 20px; padding: 14px 20px;
+            flex-wrap: wrap; transform: translateY(100%); transition: 0.35s; pointer-events: none;
+        }
+        .cookie-consent-bar.visible { transform: translateY(0); pointer-events: auto; }
+
+        .hp-field-wrap { opacity:0; position:absolute; top:-9999px; left:-9999px; height:0; width:0; z-index:-999; }
+        .system-alert { background:#fef2f2; color:#991b1b; border:1px solid #fecaca; padding:15px; margin:20px; border-radius:14px; display:none; }
+
+        @media (max-width:600px) {
+            .two-box-section { grid-template-columns: 1fr; }
+            .feature-box { height: 38vh; min-height: 220px; }
+            .betting-features-section { grid-template-columns: repeat(2,1fr); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Honeypot -->
+    <div class="hp-field-wrap" aria-hidden="true"><input type="text" name="hp_name" id="hpField" tabindex="-1" autocomplete="off"></div>
+
+    <!-- ── LOADER (skeleton) ── -->
+    <div id="loader" aria-hidden="true">
+        <div class="sk-header" style="display:flex; align-items:center; gap:12px; padding:0 15px; height:70px; background:#29282b;">
+            <div class="skeleton" style="width:48px; height:48px; border-radius:8px;"></div>
+            <div class="skeleton" style="width:34px; height:34px; border-radius:50%; margin-left:auto;"></div>
+            <div class="skeleton" style="width:90px; height:36px; border-radius:20px;"></div>
+        </div>
+        <div class="skeleton" style="height:45px; width:100%; background:#29282b; margin-bottom:0;"></div>
+        <div style="background:#fff; padding:25px 20px 5px; display:flex; flex-direction:column; align-items:center; gap:10px;">
+            <div class="skeleton" style="width:260px; height:28px;"></div>
+            <div class="skeleton" style="width:200px; height:16px;"></div>
+            <div class="skeleton" style="width:160px; height:28px; border-radius:20px;"></div>
+        </div>
+        <div class="skeleton" style="height:12px; margin:15px 20px; border-radius:12px;"></div>
+        <div class="sk-two-box-grid" style="display:grid; grid-template-columns:1fr 1fr; gap:15px; padding:20px;">
+            <div class="skeleton" style="height:50vh; min-height:300px; border-radius:20px;"></div>
+            <div class="skeleton" style="height:50vh; min-height:300px; border-radius:20px;"></div>
+        </div>
+    </div>
+
+    <!-- ── STICKY HEADER ── -->
+    <div class="sticky-nav-holder">
+        <header id="mainHeader">
+            <a href="index.html" class="logo-container"><img src="./logoo.jpg" alt="Tidye265 Logo"></a>
+            <div class="search-wrapper" id="searchBar">
+                <div class="search-inner-box"><i class="bi bi-search"></i><input type="text" placeholder="Search..." id="searchInput"></div>
+                <button class="search-close-btn" id="searchClose"><i class="bi bi-x-lg"></i></button>
+            </div>
+            <div class="header-controls">
+                <button class="search-trigger" id="searchToggle" style="background:none; border:none; color:#b0b0b0; font-size:17px; padding:8px;"><i class="bi bi-search"></i></button>
+                <nav class="auth-actions" id="authActions">
+                    <a href="login.html" class="btn-login" id="btnLoginHeader">LOGIN</a>
+                    <a href="register.html" class="btn-join" id="btnJoinHeader">JOIN</a>
+                </nav>
+            </div>
+        </header>
+
+        <div class="compact-auth-bar" id="compactAuthBar">
+            <span class="compact-auth-text">Sign in to access this feature</span>
+            <div class="compact-auth-buttons">
+                <a href="login.html" class="btn-login">LOGIN</a>
+                <a href="register.html" class="btn-join">JOIN</a>
+            </div>
+            <button class="compact-auth-close" id="compactAuthClose">&times;</button>
+        </div>
+
+        <nav class="sub-header" id="categoryNav">
+            <a href="live.html" class="sub-item" data-category="live">
+                <img src="live.svg" class="category-icon" onerror="this.outerHTML='<i class=\'bi bi-broadcast\' style=\'font-size:16px;color:#b0b0b0;\'></i>';">
+                <span>Live</span>
+            </a>
+            <a href="matches.html" class="sub-item" data-category="matches">
+                <img src="matches.svg" class="category-icon">
+                <span>Matches</span>
+            </a>
+            <a href="aviator.html" class="sub-item" data-category="aviator">
+                <img src="aviator.svg" class="category-icon">
+                <span>Aviator</span>
+            </a>
+            <a href="casino.html" class="sub-item" data-category="casino">
+                <img src="casino.svg" class="category-icon">
+                <span>Casino</span>
+            </a>
+            <a href="games.html" class="sub-item" data-category="games">
+                <img src="games.svg" class="category-icon">
+                <span>Games</span>
+            </a>
+        </nav>
+    </div>
+
+    <!-- ── MAIN CONTENT ── -->
+    <main id="mainContent">
+        <section id="errorContainer" class="system-alert" role="alert"></section>
+
+        <div class="welcome-section">
+            <h1 class="welcome-title">WELCOME TO <span>tiDye265</span> !!</h1>
+            <p class="welcome-sub">Malawi's Most Advanced Betting Platform</p>
+            <div class="premium-badge">tiDye265 Lets enjoy</div>
+        </div>
+
+        <div class="quick-stats-strip">
+            <div class="stat-chip"><i class="bi bi-broadcast"></i><span>Live Now</span><span class="stat-value">24+</span></div>
+            <div class="stat-chip"><i class="bi bi-cash-coin"></i><span>Min Bet</span><span class="stat-value">MK 20</span></div>
+            <div class="stat-chip"><i class="bi bi-star-fill"></i><span>Bonus</span><span class="stat-value">Up to 1500%</span></div>
+            <div class="stat-chip"><i class="bi bi-shield-check"></i><span>Platform</span><span class="stat-value">100% Secure</span></div>
+        </div>
+
+        <!-- LIVE TICKER -->
+        <div class="live-ticker-bar">
+            <span class="live-ticker-label">🔴 LIVE</span>
+            <div class="live-ticker-scroll">
+                <div class="live-ticker-track" id="liveTickerTrack">
+                    <span class="live-ticker-no-data">Loading live matches...</span>
+                </div>
+            </div>
+        </div>
+
+        <section class="two-box-section">
+            <a href="casino.html" class="feature-box" id="casinoBox">
+                <span class="feature-box-badge">HOT 🔥</span>
+                <img src="casino.jpg" alt="Casino">
+                <div class="feature-box-label">Casino</div>
+            </a>
+            <a href="matches.html" class="feature-box" id="sportBox">
+                <span class="feature-box-badge">LIVE ⚡</span>
+                <img src="sports.jpg" alt="Sport">
+                <div class="feature-box-label">Sport</div>
+            </a>
+        </section>
+
+        <section class="betting-features-section">
+            <a href="live.html" class="betting-feature-card"><div class="betting-feature-icon"><i class="bi bi-broadcast-pin"></i></div>Live Betting</a>
+            <a href="casino.html" class="betting-feature-card"><div class="betting-feature-icon"><i class="bi bi-dice-5"></i></div>Live Casino</a>
+            <a href="aviator.html" class="betting-feature-card"><div class="betting-feature-icon"><i class="bi bi-airplane-engines"></i></div>Aviator</a>
+            <a href="matches.html" class="betting-feature-card"><div class="betting-feature-icon"><i class="bi bi-trophy-fill"></i></div>Sportsbook</a>
+            <a href="#" class="betting-feature-card" id="featureJackpot"><div class="betting-feature-icon"><i class="bi bi-gem"></i></div>Jackpots</a>
+            <a href="#" class="betting-feature-card" id="featureVirtuals"><div class="betting-feature-icon"><i class="bi bi-cpu"></i></div>Virtuals</a>
+            <a href="#" class="betting-feature-card" id="featurePromos"><div class="betting-feature-icon"><i class="bi bi-gift-fill"></i></div>Promotions</a>
+            <a href="#" class="betting-feature-card" id="featureCashout"><div class="betting-feature-icon"><i class="bi bi-cash-stack"></i></div>Quick Cashout</a>
+        </section>
+
+        <div class="important-links">
+            <a href="faq.html"><i class="bi bi-question-circle"></i> FAQ</a>
+            <a href="terms.html"><i class="bi bi-file-text"></i> Terms</a>
+            <a href="privacy.html"><i class="bi bi-shield-lock"></i> Privacy</a>
+            <a href="login.html"><i class="bi bi-box-arrow-in-right"></i> Login</a>
+            <a href="register.html"><i class="bi bi-person-plus"></i> Register</a>
+        </div>
+    </main>
+
+    <!-- Footer placeholder (injected from footer.html) -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Cookie consent -->
+    <div class="cookie-consent-bar" id="cookieConsentBar">
+        <span class="cookie-consent-text">This site uses essential cookies. By continuing, you agree to our Privacy Policy.</span>
+        <button class="cookie-consent-btn" id="cookieAcceptBtn" style="background:#1a1d21;color:#FFD700;padding:10px 20px;border-radius:8px;font-weight:700;">GOT IT</button>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase.js"></script>
+    <script>
+        // ========== SESSION REDIRECT ==========
+        (function() {
+            const token = localStorage.getItem('tidye_session_token');
+            if (token) window.location.replace('dashboard.html');
+        })();
+
+        // Secure Logger
+        const SecureLogger = { info: (m,d) => console.log('[INFO]',m,d), warn: (m,d) => console.warn('[WARN]',m,d), error: (m,d) => console.error('[ERROR]',m,d) };
+
+        // State
+        const AppState = {
+            stillLoading: true,
+            cookieConsentGiven: false,
+            authBarVisible: false,
+            rateLimitCount: 0,
+            rateLimitReset: 0
+        };
+
+        // DOM refs
+        const loader = document.getElementById('loader');
+        const errorContainer = document.getElementById('errorContainer');
+        const compactAuthBar = document.getElementById('compactAuthBar');
+        const compactAuthClose = document.getElementById('compactAuthClose');
+        const cookieConsentBar = document.getElementById('cookieConsentBar');
+        const cookieAcceptBtn = document.getElementById('cookieAcceptBtn');
+        const searchToggle = document.getElementById('searchToggle');
+        const searchClose = document.getElementById('searchClose');
+        const searchBar = document.getElementById('searchBar');
+        const searchInput = document.getElementById('searchInput');
+        const hpField = document.getElementById('hpField');
+        const liveTickerTrack = document.getElementById('liveTickerTrack');
+
+        // Cookie consent
+        function checkCookieConsent() {
+            const consent = localStorage.getItem('tidye_cookie_consent');
+            if (consent === 'accepted') {
+                AppState.cookieConsentGiven = true;
+                cookieConsentBar?.classList.remove('visible');
+            } else {
+                setTimeout(() => cookieConsentBar?.classList.add('visible'), 800);
+            }
+        }
+        cookieAcceptBtn?.addEventListener('click', () => {
+            localStorage.setItem('tidye_cookie_consent', 'accepted');
+            AppState.cookieConsentGiven = true;
+            cookieConsentBar?.classList.remove('visible');
+        });
+
+        // Honeypot
+        function checkHoneypot() { return hpField && hpField.value.trim() !== ''; }
+        hpField?.addEventListener('input', () => { if (checkHoneypot()) SecureLogger.warn('Bot detected'); });
+
+        // Compact auth bar
+        function showCompactAuthBar(category = '') {
+            const now = Date.now();
+            if (AppState.rateLimitReset > 0 && now < AppState.rateLimitReset && AppState.rateLimitCount >= 5) return;
+            if (now >= AppState.rateLimitReset) { AppState.rateLimitCount = 0; AppState.rateLimitReset = now + 60000; }
+            AppState.rateLimitCount++;
+            compactAuthBar?.classList.add('active');
+            AppState.authBarVisible = true;
+        }
+        function hideCompactAuthBar() {
+            compactAuthBar?.classList.remove('active');
+            AppState.authBarVisible = false;
+        }
+        compactAuthClose?.addEventListener('click', hideCompactAuthBar);
+        document.addEventListener('click', (e) => {
+            if (AppState.authBarVisible && !e.target.closest('#compactAuthBar') && !e.target.closest('.feature-box') && !e.target.closest('#categoryNav .sub-item')) {
+                hideCompactAuthBar();
+            }
+        });
+
+        // Live ticker
+        async function fetchLiveMatches() {
+            try {
+                const res = await fetch('https://api.example.com/live-matches');
+                if (!res.ok) throw new Error('API error');
+                const data = await res.json();
+                return data.matches || [];
+            } catch (e) { return []; }
+        }
+        function renderLiveTicker(matches) {
+            if (!liveTickerTrack) return;
+            if (!matches.length) {
+                liveTickerTrack.innerHTML = '<span class="live-ticker-no-data">No live matches</span>';
+                return;
+            }
+            let html = '';
+            matches.forEach(m => html += `<span class="live-ticker-item">⚽ ${m.home_team} vs ${m.away_team} <span class="live-ticker-odds">${m.odds}</span></span>`);
+            liveTickerTrack.innerHTML = html + html;
+        }
+        async function initLiveTicker() {
+            const matches = await fetchLiveMatches();
+            renderLiveTicker(matches);
+        }
+
+        // Turnstile
+        function initTurnstile() {
+            if (typeof turnstile === 'undefined') { setTimeout(initTurnstile, 1000); return; }
+            try {
+                turnstile.render('#turnstileContainer', {
+                    sitekey: '0x4AAAAAADQhPHJB5viRCO84',
+                    callback: (token) => { AppState.turnstileVerified = true; AppState.turnstileToken = token; },
+                    'error-callback': () => { AppState.turnstileVerified = false; },
+                    theme: 'light'
+                });
+            } catch(e) {}
+        }
+
+        // Sub-header click interception
+        function interceptSubHeaderClicks() {
+            document.querySelectorAll('#categoryNav .sub-item').forEach(item => {
+                item.addEventListener('click', function(e) {
+                    if (!localStorage.getItem('tidye_session_token')) {
+                        e.preventDefault();
+                        showCompactAuthBar(this.getAttribute('data-category') || '');
+                    }
+                });
+            });
+        }
+        function interceptFeatureBoxes() {
+            ['casinoBox','sportBox'].forEach(id => {
+                const box = document.getElementById(id);
+                if (box) box.addEventListener('click', function(e) {
+                    if (!localStorage.getItem('tidye_session_token')) {
+                        e.preventDefault();
+                        showCompactAuthBar(box.id === 'casinoBox' ? 'casino' : 'sport');
+                    }
+                });
+            });
+        }
+        function interceptBettingFeatures() {
+            document.querySelectorAll('.betting-feature-card').forEach(card => {
+                card.addEventListener('click', function(e) {
+                    if (!localStorage.getItem('tidye_session_token')) {
+                        e.preventDefault();
+                        showCompactAuthBar('features');
+                    }
+                });
+            });
+        }
+
+        // Footer injection
+        async function injectFooter() {
+            try {
+                const res = await fetch('footer.html');
+                if (res.ok) {
+                    const html = await res.text();
+                    const placeholder = document.getElementById('footer-placeholder');
+                    if (placeholder) {
+                        placeholder.innerHTML = html;
+                        // Re-run any scripts inside footer.html
+                        placeholder.querySelectorAll('script').forEach(old => {
+                            const newScript = document.createElement('script');
+                            newScript.textContent = old.textContent;
+                            document.body.appendChild(newScript).remove();
+                        });
+                    }
+                }
+            } catch(e) { SecureLogger.error('Footer injection', e); }
+        }
+
+        // Search logic
+        searchToggle?.addEventListener('click', () => { searchBar.classList.add('active'); searchInput.focus(); });
+        searchClose?.addEventListener('click', () => { searchBar.classList.remove('active'); searchInput.value = ''; });
+        searchInput?.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && searchInput.value.trim()) {
+                window.location.href = `matches.html?search=${encodeURIComponent(searchInput.value.trim())}`;
+            }
+        });
+
+        // Dismiss loader
+        function dismissLoader() {
+            AppState.stillLoading = false;
+            if (loader) { loader.style.opacity = '0'; setTimeout(() => loader.remove(), 400); }
+        }
+
+        // Init on DOM ready
+        document.addEventListener('DOMContentLoaded', () => {
+            checkCookieConsent();
+            updateSubHeaderActive();
+            interceptSubHeaderClicks();
+            interceptFeatureBoxes();
+            interceptBettingFeatures();
+            initLiveTicker();
+            injectFooter();
+            setTimeout(dismissLoader, 800);
+            initTurnstile();
+        });
+
+        function updateSubHeaderActive() {
+            const currentPath = window.location.pathname.split('/').pop() || 'index.html';
+            document.querySelectorAll('#categoryNav .sub-item').forEach(item => {
+                const href = item.getAttribute('href') || '';
+                item.classList.remove('active');
+                if (href && currentPath.includes(href.replace('.html',''))) item.classList.add('active');
+            });
+        }
+
+        // Turnstile container
+        const turnstileDiv = document.createElement('div');
+        turnstileDiv.id = 'turnstileContainer';
+        turnstileDiv.style.cssText = 'position:fixed;top:-9999px;left:-9999px;width:300px;height:65px;z-index:-1;opacity:0;';
+        document.body.appendChild(turnstileDiv);
+    </script>
+</body>
+</html>
